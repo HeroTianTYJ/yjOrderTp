@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcbee2331f0e7530c03f84efb64f85847
+class ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61
 {
     public static $files = array (
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
@@ -129,6 +129,8 @@ class ComposerStaticInitcbee2331f0e7530c03f84efb64f85847
     );
 
     public static $classMap = array (
+        'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
@@ -137,10 +139,10 @@ class ComposerStaticInitcbee2331f0e7530c03f84efb64f85847
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcbee2331f0e7530c03f84efb64f85847::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcbee2331f0e7530c03f84efb64f85847::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr0 = ComposerStaticInitcbee2331f0e7530c03f84efb64f85847::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInitcbee2331f0e7530c03f84efb64f85847::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61::$classMap;
 
         }, null, ClassLoader::class);
     }
