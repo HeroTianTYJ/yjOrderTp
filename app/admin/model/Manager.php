@@ -186,7 +186,7 @@ class Manager extends Model
         $validate = new valid();
         if ($validate->only($scene)->check($data)) {
             if (Request::post('pass')) {
-                $data['pass'] = sha1(Request::post('pass'));
+                $data['pass'] = passEncode(Request::post('pass'));
             }
             if ($this->repeat(true)) {
                 return '此帐号已存在！';
