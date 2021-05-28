@@ -161,9 +161,7 @@ class Manager extends Model
     {
         $scene = ['name'];
         $data = [
-            'name' => Request::post('name'),
-            'level' => Request::post('level'),
-            'is_activation' => Request::post('is_activation')
+            'name' => Request::post('name')
         ];
         if (Request::post('pass')) {
             $data['pass'] = Request::post('pass');
@@ -172,6 +170,8 @@ class Manager extends Model
             $scene[] = 'repass';
         }
         if (Request::get('id') != 1) {
+            $data['level'] = Request::post('level');
+            $data['is_activation'] = Request::post('is_activation');
             if (Request::post('level') == 1) {
                 $data['permit_group_id'] = 0;
                 $data['order_permit'] = 0;
