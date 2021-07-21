@@ -55,6 +55,9 @@ class Output extends Base
     public function zip()
     {
         if (Request::isPost()) {
+			if (Config::get('app.demo')) {
+				return $this->failed('演示站，数据无法打包！');
+			}
             if (Request::post('files')) {
                 $dir = ROOT_PATH . '/' . Config::get('app.output_dir');
                 $ZipArchive = new ZipArchive();
@@ -70,14 +73,12 @@ class Output extends Base
                             !strstr($value, '%5C') || !strstr($value, '%2F')
                         ) {
                             $ZipArchive->addFromString($value, file_get_contents($dir . $value));
+                            if (Request::post('del')) {
+                                unlink($dir . $value);
+                            }
                         }
                     }
                     $ZipArchive->close();
-                }
-                if (Request::post('del')) {
-                    foreach (Request::post('files') as $value) {
-                        unlink($dir . $value);
-                    }
                 }
                 return $this->success(Config::get('app.prev_url'), '文件压缩成功！');
             } else {
