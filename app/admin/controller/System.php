@@ -29,20 +29,20 @@ return [
     'pass_key' => '" . Config::get('system.pass_key') . "',  //密码的盐
     'reset_pass_key' => '" . Config::get('system.reset_pass_key') . "',  //重置密码的密钥
     'admin_mail' => '" . str_replace("'", "\'", Request::post('admin_mail')) . "',  //管理员邮箱
-    'www' => '" . Request::post('www', 0) . "',  //是否强制www
-    'https' => '" . Request::post('https', 0) . "',  //是否强制https
+    'www' => '" . str_replace("'", "\'", Request::post('www', 0)) . "',  //是否强制www
+    'https' => '" . str_replace("'", "\'", Request::post('https', 0)) . "',  //是否强制https
     'manage_enter' => '" . str_replace("'", "\'", Request::post('manage_enter')) . "',  //后台入口
-    'manage_skin' => '" . Request::post('manage_skin') . "',  //后台皮肤
-    'index_php' => '" . Request::post('index_php') . "',  //隐藏index.php
+    'manage_skin' => '" . str_replace("'", "\'", Request::post('manage_skin')) . "',  //后台皮肤
+    'index_php' => '" . str_replace("'", "\'", Request::post('index_php')) . "',  //隐藏index.php
     'copyright_top' => '" . str_replace("'", "\'", Request::post('copyright_top')) . "',  //左上角版权
     'copyright_start' => '" . str_replace("'", "\'", Request::post('copyright_start', '', 'stripslashes')) .
                     "',  //起始页版权
     'copyright_footer' => '" . str_replace("'", "\'", Request::post('copyright_footer', '', 'stripslashes')) .
                     "',  //页面底部版权
-    'order_db' => '" . Request::post('order_db') . "',  //订单入库
-    'order_time' => '" . Request::post('order_time') . "',  //防刷单间隔
-    'order_search' => '" . Request::post('order_search') . "',  //订单查询
-    'order_search_step' => '" . Request::post('order_search_step') . "',  //跨模板查询
+    'order_db' => '" . str_replace("'", "\'", Request::post('order_db')) . "',  //订单入库
+    'order_time' => '" . str_replace("'", "\'", Request::post('order_time')) . "',  //防刷单间隔
+    'order_search' => '" . str_replace("'", "\'", Request::post('order_search')) . "',  //订单查询
+    'order_search_step' => '" . str_replace("'", "\'", Request::post('order_search_step')) . "',  //跨模板查询
     'alipay_appid' => '" . str_replace("'", "\'", Request::post('alipay_appid')) . "',  //支付宝APPID
     'alipay_merchant_private_key' => '" . str_replace("'", "\'", Request::post('alipay_merchant_private_key')) .
                     "',  //支付宝应用私钥
