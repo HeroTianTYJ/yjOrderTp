@@ -17,13 +17,16 @@ class ValidateFile extends Base
             if (!$name) {
                 return $this->failed('文件名不得为空且不得包含特殊字符！');
             }
+            if (!isset($this->extension[Request::post('extension')])) {
+                return $this->failed('无效的文件扩展名！');
+            }
             if (!Request::post('content')) {
                 return $this->failed('文件内容不得为空！');
             }
             $output = "<?php return [
 	'name'=>'" . $name . "',  //文件名
-	'content'=>'" . str_replace("'", "\'", Request::post('content')) . "',  //文件内容
 	'extension'=>'" . Request::post('extension') . "',  //文件扩展名
+	'content'=>'" . str_replace("'", "\'", Request::post('content')) . "',  //文件内容
 ];";
             if (
                 file_put_contents(
