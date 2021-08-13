@@ -3,8 +3,8 @@
 namespace app\admin\controller;
 
 use app\admin\model;
-use think\facade\Route;
 use think\facade\Request;
+use think\facade\Route;
 use think\facade\View;
 
 class District extends Base
@@ -12,27 +12,37 @@ class District extends Base
     public function index()
     {
         $District = new model\District();
-        $object = $District->all($this->page($District->total()));
-        foreach ($object as $key => $value) {
-            $object[$key]['child'] = $District->one2($value['id']);
+        if (Request::get('parent_id') && !$District->one(Request::get('parent_id'))) {
+            return $this->failed('不存在此行政区划！');
         }
-        View::assign(['All' => $object]);
+        $whole = $this->whole(Request::get('parent_id'));
+        if ($whole['level'] > 4) {
+            return $this->failed('仅支持4级行政区划！');
+        }
+        $districtAll = $District->all($this->page($District->total()));
+        foreach ($districtAll as $key => $value) {
+            $districtAll[$key]['child'] = $District->one2($value['id']);
+        }
+        View::assign(['All' => $districtAll, 'Map' => $whole]);
         if (Request::get('parent_id', 0)) {
-            View::assign([
-                'Map' => $this->whole(Request::get('parent_id')),
-                'ParentId' => $District->one(Request::get('parent_id'))['parent_id']
-            ]);
+            View::assign(['ParentId' => $District->one(Request::get('parent_id'))['parent_id']]);
         }
         return $this->view();
     }
 
     public function add()
     {
+        $District = new model\District();
+        if (Request::get('parent_id') && !$District->one(Request::get('parent_id'))) {
+            return $this->failed('不存在此行政区划！');
+        }
+        if ($this->whole(Request::get('parent_id'))['level'] > 4) {
+            return $this->failed('仅支持4级行政区划！');
+        }
         if (Request::isPost()) {
-            $District = new model\District();
-            $object = $District->add();
-            if (is_numeric($object)) {
-                return $object > 0 ?
+            $districtAdd = $District->add();
+            if (is_numeric($districtAdd)) {
+                return $districtAdd > 0 ?
                     $this->success(
                         Route::buildUrl(
                             '/' . parse_name(Request::controller()) . '/index',
@@ -41,10 +51,38 @@ class District extends Base
                         '行政区划添加成功！'
                     ) : $this->failed('行政区划添加失败！');
             } else {
-                return $this->failed($object);
+                return $this->failed($districtAdd);
             }
         }
         View::assign(['Map' => $this->whole(Request::get('parent_id'))]);
+        return $this->view();
+    }
+
+    public function multi()
+    {
+        $District = new model\District();
+        if (Request::get('parent_id') && !$District->one(Request::get('parent_id'))) {
+            return $this->failed('不存在此行政区划！');
+        }
+        $whole = $this->whole(Request::get('parent_id'));
+        if ($whole['level'] > 4) {
+            return $this->failed('仅支持4级行政区划！');
+        }
+        if (Request::isPost()) {
+            $districtMulti = $District->multi();
+            if (is_numeric($districtMulti)) {
+                return $districtMulti > 0 ? $this->success(
+                    Route::buildUrl(
+                        '/' . parse_name(Request::controller()) . '/index',
+                        ['parent_id' => Request::get('parent_id')]
+                    ),
+                    '行政区划批量添加成功！'
+                ) : $this->failed('行政区划批量添加失败！');
+            } else {
+                return $this->failed($districtMulti);
+            }
+        }
+        View::assign(['Map' => $whole]);
         return $this->view();
     }
 
@@ -52,24 +90,24 @@ class District extends Base
     {
         if (Request::get('id')) {
             $District = new model\District();
-            $object = $District->one();
-            if (!$object) {
+            $districtOne = $District->one();
+            if (!$districtOne) {
                 return $this->failed('不存在此行政区划！');
             }
             if (Request::isPost()) {
-                $object2 = $District->modify($object['parent_id']);
-                return is_numeric($object2) ?
+                $districtModify = $District->modify($districtOne['parent_id']);
+                return is_numeric($districtModify) ?
                     $this->success(
                         Route::buildUrl(
                             '/' . parse_name(Request::controller()) . '/index',
-                            ['parent_id' => $object['parent_id']]
+                            ['parent_id' => $districtOne['parent_id']]
                         ),
                         '行政区划修改成功！'
-                    ) : $this->failed($object2);
+                    ) : $this->failed($districtModify);
             }
             View::assign([
-                'One' => $object,
-                'Map' => $this->whole($object['parent_id'])
+                'One' => $districtOne,
+                'Map' => $this->whole($districtOne['parent_id'])
             ]);
             return $this->view();
         } else {
@@ -100,14 +138,18 @@ class District extends Base
     private function whole($parentId = 0)
     {
         $name = '';
-        $District = new model\District();
-        $object = $District->one($parentId);
-        if ($object) {
-            $name .= $object['name'];
-            if ($object['parent_id']) {
-                $name = $this->whole($object['parent_id']) . ' - ' . $name;
+        if ($parentId) {
+            $District = new model\District();
+            $districtOne = $District->one($parentId);
+            if ($districtOne) {
+                $name .= $districtOne['name'];
+                if ($districtOne['parent_id']) {
+                    $name = $this->whole($districtOne['parent_id'])['name'] . ' - ' . $name;
+                }
             }
+        } else {
+            $name = '一级区划';
         }
-        return $name;
+        return ['name' => $name, 'level' => $name == '' ? 1 : substr_count($name, ' - ') + 2];
     }
 }
