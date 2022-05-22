@@ -2,7 +2,7 @@
 
 namespace app\admin\model;
 
-use app\admin\validate\Template as valid;
+use app\admin\validate\Template as validate;
 use Exception;
 use think\facade\Config;
 use think\facade\Db;
@@ -11,23 +11,15 @@ use think\Model;
 
 class Template extends Model
 {
-    //查询总记录
-    public function total()
-    {
-        return $this->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])->count();
-    }
-
     //查询所有
-    public function all($firstRow)
+    public function all()
     {
         try {
-            return $this->field('id,name,manager_id,template,template_style_id,order_state_id,is_show_search,' .
-                'is_show_send,is_captcha,is_qq,is_default,date')
-                ->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])
+            return $this->field('id,name,manager_id,template,template_style_id,is_show_search,is_show_send,' .
+                'is_captcha,is_default,date')
+                ->where('name', 'LIKE', '%' . Request::get('keyword') . '%')
                 ->order(['date' => 'DESC'])
-                ->limit($firstRow, Config::get('app.page_size'))
-                ->select()
-                ->toArray();
+                ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -49,10 +41,10 @@ class Template extends Model
     public function one($id = 0)
     {
         try {
-            $map['id'] = $id ? $id : Request::get('id');
-            return $this->field('name,manager_id,template,template_style_id,product,field,pay,order_state_id,' .
-                'is_show_search,is_show_send,is_captcha,is_qq,success,success2,often,is_default')
-                ->where($map)
+            return $this->field('id,name,manager_id,template,template_style_id,product_type,product_sort_ids,' .
+                'product_ids,product_default,product_view_type,field_ids,payment_ids,payment_default,is_show_search,' .
+                'is_show_send,is_captcha,success,success2,often,is_default,date')
+                ->where(['id' => $id ?: Request::post('id')])
                 ->find();
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -67,34 +59,37 @@ class Template extends Model
             'name' => Request::post('name'),
             'manager_id' => Request::post('manager_id'),
             'template' => Request::post('template'),
-            'template_style_id' => Request::post('template') == 1 ? 0 : Request::post('template_style_id'),
-            'field' => Request::post('field') ? implode(',', Request::post('field')) : '',
-            'pay' => Request::post('pay') ?
-                Request::post('selectedPay') . '|' . implode(',', Request::post('pay')) : Request::post('selectedPay'),
-            'order_state_id' => Request::post('order_state_id'),
+            'template_style_id' => Request::post('template_style_id'),
+            'product_type' => Request::post('product_type'),
+            'product_default' => Request::post('product_default'),
+            'product_view_type' => Request::post('product_view_type'),
+            'field_ids' => implode(',', Request::post('field_ids', [])),
+            'payment_ids' => implode(',', Request::post('payment_ids', [])),
+            'payment_default' => Request::post('payment_default'),
             'is_show_search' => Request::post('is_show_search'),
-            'is_show_send' => Request::post('template') == 1 ? 0 : Request::post('is_show_send'),
+            'is_show_send' => Request::post('is_show_send'),
             'is_captcha' => Request::post('is_captcha'),
-            'is_qq' => Request::post('is_qq'),
             'success' => Request::post('success', '', 'stripslashes'),
             'success2' => Request::post('success2', '', 'stripslashes'),
             'often' => Request::post('often', '', 'stripslashes'),
             'date' => time()
         ];
-        if (Request::post('product_type') == 0) {
+        if ($data['product_type'] == 0) {
             if (!Request::post('product_ids1')) {
-                return '请至少选择一个产品！';
+                return '请至少选择一个商品！';
             }
-            $data['product'] = '0|' . Request::post('sort1') . '|' . Request::post('product_ids1') .
-                '|' . Request::post('selected1') . '|' . Request::post('view_type');
-        } elseif (Request::post('product_type') == 1) {
+            $data['product_sort_ids'] = Request::post('product_sort_id');
+            $data['product_ids'] = Request::post('product_ids1');
+            $data['product_default'] = Request::post('product_default1');
+        } elseif ($data['product_type'] == 1) {
             if (!Request::post('product_ids2')) {
-                return '请至少选择一个产品！';
+                return '请至少选择一个商品！';
             }
-            $data['product'] = '1|' . Request::post('sort2') . '|' . Request::post('product_ids2') .
-                '|' . Request::post('selected2') . '|' . Request::post('view_type');
+            $data['product_sort_ids'] = Request::post('product_sort_ids');
+            $data['product_ids'] = Request::post('product_ids2');
+            $data['product_default'] = Request::post('product_default2');
         }
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->check($data)) {
             if ($this->repeat()) {
                 return '此模板名已存在！';
@@ -112,38 +107,40 @@ class Template extends Model
             'name' => Request::post('name'),
             'manager_id' => Request::post('manager_id'),
             'template' => Request::post('template'),
-            'template_style_id' => Request::post('template') == 1 ? 0 : Request::post('template_style_id'),
-            'field' => Request::post('field') ? implode(',', Request::post('field')) : '',
-            'pay' => Request::post('pay') ?
-                Request::post('selectedPay') . '|' . implode(',', Request::post('pay')) : Request::post('selectedPay'),
-            'order_state_id' => Request::post('order_state_id'),
+            'template_style_id' => Request::post('template_style_id'),
+            'product_type' => Request::post('product_type'),
+            'product_view_type' => Request::post('product_view_type'),
+            'field_ids' => implode(',', Request::post('field_ids', [])),
+            'payment_ids' => implode(',', Request::post('payment_ids', [])),
+            'payment_default' => Request::post('payment_default'),
             'is_show_search' => Request::post('is_show_search'),
-            'is_show_send' => Request::post('template') == 1 ? 0 : Request::post('is_show_send'),
+            'is_show_send' => Request::post('is_show_send'),
             'is_captcha' => Request::post('is_captcha'),
-            'is_qq' => Request::post('is_qq'),
             'success' => Request::post('success', '', 'stripslashes'),
             'success2' => Request::post('success2', '', 'stripslashes'),
             'often' => Request::post('often', '', 'stripslashes')
         ];
-        if (Request::post('product_type') == 0) {
+        if ($data['product_type'] == 0) {
             if (!Request::post('product_ids1')) {
-                return '请至少选择一个产品！';
+                return '请至少选择一个商品！';
             }
-            $data['product'] = '0|' . Request::post('sort1') . '|' . Request::post('product_ids1') .
-                '|' . Request::post('selected1') . '|' . Request::post('view_type');
-        } elseif (Request::post('product_type') == 1) {
+            $data['product_sort_ids'] = Request::post('product_sort_id');
+            $data['product_ids'] = Request::post('product_ids1');
+            $data['product_default'] = Request::post('product_default1');
+        } elseif ($data['product_type'] == 1) {
             if (!Request::post('product_ids2')) {
-                return '请至少选择一个产品！';
+                return '请至少选择一个商品！';
             }
-            $data['product'] = '1|' . Request::post('sort2') . '|' . Request::post('product_ids2') .
-                '|' . Request::post('selected2') . '|' . Request::post('view_type');
+            $data['product_sort_ids'] = Request::post('product_sort_ids');
+            $data['product_ids'] = Request::post('product_ids2');
+            $data['product_default'] = Request::post('product_default2');
         }
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->check($data)) {
             if ($this->repeat(true)) {
                 return '此模板名已存在！';
             }
-            return $this->where(['id' => Request::get('id')])->update($data);
+            return $this->where(['id' => Request::post('id')])->update($data);
         } else {
             return $validate->getError();
         }
@@ -153,14 +150,14 @@ class Template extends Model
     public function isDefault()
     {
         $this->where(['is_default' => 1])->update(['is_default' => 0]);
-        return $this->where(['id' => Request::get('id')])->update(['is_default' => 1]);
+        return $this->where(['id' => Request::post('id')])->update(['is_default' => 1]);
     }
 
     //删除
     public function remove()
     {
         try {
-            $affectedRows = $this->where(['id' => Request::get('id')])->delete();
+            $affectedRows = $this->where('id', 'IN', Request::post('id') ?: Request::post('ids'))->delete();
             if ($affectedRows) {
                 Db::execute('OPTIMIZE TABLE `' . $this->getTable() . '`');
             }
@@ -175,21 +172,11 @@ class Template extends Model
     private function repeat($update = false)
     {
         try {
-            $object = $this->field('id')->where(['name' => Request::post('name')]);
-            return $update ? $object->where('id', '<>', Request::get('id'))->find() : $object->find();
+            $one = $this->field('id')->where(['name' => Request::post('name')]);
+            return $update ? $one->where('id', '<>', Request::post('id'))->find() : $one->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
         }
-    }
-
-    //搜索
-    private function map()
-    {
-        return [
-            'field' => 'name',
-            'condition' => 'LIKE',
-            'value' => '%' . Request::get('keyword') . '%'
-        ];
     }
 }

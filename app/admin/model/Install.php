@@ -2,7 +2,7 @@
 
 namespace app\admin\model;
 
-use app\admin\validate\Install as valid;
+use app\admin\validate\Install as validate;
 use think\facade\Request;
 use think\Model;
 
@@ -19,7 +19,7 @@ class Install extends Model
             'db_pwd' => Request::post('db_pwd'),
             'db_prefix' => Request::post('db_prefix')
         ];
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->scene('step2')->check($data)) {
             return $data;
         } else {
@@ -32,18 +32,18 @@ class Install extends Model
     {
         $data = [
             'web_name' => Request::post('web_name'),
-            'manage_enter' => Request::post('manage_enter')
+            'manager_enter' => Request::post('manager_enter')
         ];
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->scene('step3')->check($data)) {
-            if (substr(Request::post('manage_enter'), -4) != '.php') {
+            if (substr(Request::post('manager_enter'), -4) != '.php') {
                 return '后台入口必须以.php结尾！';
             }
-            if (Request::post('manage_enter', '', 'strtolower') == 'admin.php') {
+            if (Request::post('manager_enter', '', 'strtolower') == 'admin.php') {
                 return '后台入口不得是admin.php！';
             }
-            if (is_file(ROOT_PATH . '/' . Request::post('manage_enter'))) {
-                return '系统根目录中已存在' . Request::post('manage_enter') . '文件，请重新指定一个后台入口！';
+            if (is_file(ROOT_DIR . '/' . Request::post('manager_enter'))) {
+                return '系统根目录中已存在' . Request::post('manager_enter') . '文件，请重新指定一个后台入口！';
             }
             return 1;
         } else {

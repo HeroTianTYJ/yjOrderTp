@@ -1,0 +1,40 @@
+@charset "utf-8";
+*{
+	margin:0;
+	padding:0;
+}
+body{
+	background:#F3F3F3;
+	font-family:"宋体",serif;
+}
+.tip{
+	background:#f9f9f9;
+	max-width:750px;
+	min-height:300px;
+	margin:0 auto;
+	padding:50px 20px;
+	box-sizing:border-box;
+	text-align:center;
+}
+.tip p{
+	margin:0 0 15px 0;
+	line-height:25px;
+}
+.tip p.iconfont{
+	margin:0 0 22px 0;
+	font-size:60px;
+	height:60px;
+	line-height:60px;
+}
+.tip p a{
+	text-decoration:underline;
+	color:#666;
+}
+.tip p.location a{
+	font-size:12px;
+}
+@media(max-width:767px){
+	.tip p.location a{
+		font-size:14px;
+	}
+}

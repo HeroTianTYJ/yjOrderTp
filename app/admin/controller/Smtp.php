@@ -2,105 +2,119 @@
 
 namespace app\admin\controller;
 
-use think\facade\Route;
-use think\facade\Request;
-use think\facade\Config;
-use think\facade\View;
 use app\admin\model;
+use think\facade\Config;
+use think\facade\Request;
+use think\facade\View;
 
 class Smtp extends Base
 {
     public function index()
     {
-        $Smtp = new model\Smtp();
-        $object = $Smtp->all($this->page($Smtp->total()));
-        View::assign(['All' => $object]);
+        $smtpAll = (new model\Smtp())->all();
+        if (Request::isAjax()) {
+            foreach ($smtpAll as $key => $value) {
+                $smtpAll[$key] = $this->listItem($value);
+            }
+            return $smtpAll->items() ? json_encode($smtpAll->items(), JSON_NUMERIC_CHECK) : '';
+        }
+        View::assign(['Total' => $smtpAll->total()]);
         return $this->view();
     }
 
     public function add()
     {
-        if (Request::isPost()) {
-            if (Config::get('app.demo')) {
-                return $this->failed('演示站，数据无法添加！');
-            }
-            $Smtp = new model\Smtp();
-            $object = $Smtp->add();
-            if (is_numeric($object)) {
-                return $object > 0 ?
-                    $this->success(
-                        Route::buildUrl('/' . parse_name(Request::controller()) . '/index'),
-                        'SMTP服务器添加成功！'
-                    ) : $this->failed('SMTP服务器添加失败！');
-            } else {
-                return $this->failed($object);
-            }
-        }
-        return $this->view();
-    }
-
-    public function state()
-    {
-        $Smtp = new model\Smtp();
-        $object = [];
-        if ($Smtp->total() > 0) {
-            foreach (range(0, 23) as $value) {
-                $temp = $Smtp->one3($value);
-                if ($value < 10) {
-                    $value = '0' . $value;
+        if (Request::isAjax()) {
+            if (Request::get('action') == 'do') {
+                if (Config::get('app.demo')) {
+                    return showTip('演示站，SMTP服务器无法添加！', 0);
                 }
-                $temp['hour'] = $value;
-                $object[] = $temp;
+                $smtpAdd = (new model\Smtp())->add();
+                if (is_numeric($smtpAdd)) {
+                    return $smtpAdd > 0 ? showTip('SMTP服务器添加成功！') : showTip('SMTP服务器添加失败！', 0);
+                } else {
+                    return showTip($smtpAdd, 0);
+                }
             }
+            return $this->view();
+        } else {
+            return showTip('非法操作！', 0);
         }
-        View::assign(['All' => $object]);
-        return $this->view();
     }
 
     public function update()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && Request::post('id')) {
             $Smtp = new model\Smtp();
-            $object = $Smtp->one();
-            if (!$object) {
-                return $this->failed('不存在此SMTP服务器！');
+            $smtpOne = $Smtp->one();
+            if (!$smtpOne) {
+                return showTip('不存在此SMTP服务器！', 0);
             }
-            if (Request::isPost()) {
+            if (Request::get('action') == 'do') {
                 if (Config::get('app.demo')) {
-                    return $this->failed('演示站，数据无法修改！');
+                    return showTip('演示站，SMTP服务器无法修改！', 0);
                 }
-                $object = $Smtp->modify();
-                return is_numeric($object) ?
-                    $this->success(
-                        Route::buildUrl('/' . parse_name(Request::controller()) . '/index'),
-                        'SMTP服务器修改成功！'
-                    ) : $this->failed($object);
+                $smtpModify = $Smtp->modify();
+                return is_numeric($smtpModify) ?
+                    showTip(['msg' => 'SMTP服务器修改成功！', 'data' => $this->listItem($Smtp->one())]) :
+                    showTip($smtpModify, 0);
             }
-            View::assign(['One' => $object]);
+            View::assign(['One' => $smtpOne]);
             return $this->view();
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 
     public function delete()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
             if (Config::get('app.demo')) {
-                return $this->failed('演示站，数据无法删除！');
+                return showTip('演示站，SMTP服务器无法删除！', 0);
             }
             $Smtp = new model\Smtp();
-            if (!$Smtp->one()) {
-                return $this->failed('不存在此SMTP服务器！');
+            if (Request::post('id')) {
+                if (!$Smtp->one()) {
+                    return showTip('不存在此SMTP服务器！', 0);
+                }
+            } elseif (Request::post('ids')) {
+                foreach (explode(',', Request::post('ids')) as $value) {
+                    if (!$Smtp->one($value)) {
+                        return showTip('不存在您勾选的SMTP服务器！', 0);
+                    }
+                }
             }
-            if (Request::isPost()) {
-                return $Smtp->remove() ?
-                    $this->success(Request::post('prev'), 'SMTP服务器删除成功！') :
-                    $this->failed('SMTP服务器删除失败！');
-            }
-            return $this->confirm('您真的要删除这条数据么？');
+            return $Smtp->remove() ? showTip('SMTP服务器删除成功！') : showTip('SMTP服务器删除失败！', 0);
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
+    }
+
+    public function state()
+    {
+        $Smtp = new model\Smtp();
+        if (Request::isAjax()) {
+            $smtpAll = [];
+            if ($Smtp->count() > 0) {
+                foreach (range(0, 23) as $key => $value) {
+                    $smtpAll[$key] = $Smtp->one3($value);
+                    $hour = ($value < 10 ? '0' : '') . $value;
+                    $smtpAll[$key]['hour'] = $hour . ':00 ～ ' . $hour . ':59';
+                    $smtpAll[$key]['current'] = $value == date('H');
+                }
+            }
+            return $smtpAll ? json_encode($smtpAll) : '';
+        }
+        View::assign(['Total' => $Smtp->count() == 0 ? 0 : 24]);
+        return $this->view();
+    }
+
+    private function listItem($item)
+    {
+        $item['smtp'] = keyword($item['smtp']);
+        $item['port'] = keyword($item['port']);
+        $item['email'] = keyword($item['email']);
+        $item['user'] = keyword($item['user']);
+        return $item;
     }
 }

@@ -1,7 +1,0 @@
-@charset "utf-8";
-.list table tr th.name{
-	width:200px;
-}
-.list table tr th.is_default{
-	width:110px;
-}

@@ -2,7 +2,7 @@
 
 namespace app\admin\model;
 
-use app\admin\validate\Product as valid;
+use app\admin\validate\Product as validate;
 use Exception;
 use think\facade\Config;
 use think\facade\Db;
@@ -11,36 +11,43 @@ use think\Model;
 
 class Product extends Model
 {
-    //查询总记录
-    public function total()
+    //按分类查询记录数
+    public function totalCount($productSortId = 0)
     {
-        return $this->where($this->map()['where'], $this->map()['value'])->count();
+        return $this->where(['product_sort_id' => $productSortId])->count();
     }
 
-    //查询运作产品数
-    public function total2()
+    //按是否运作查询记录数
+    public function totalCount2($isView = 0)
     {
-        $map['is_view'] = 1;
-        return $this->where($map)->count();
+        return $isView ? $this->where(['is_view' => 1])->count() : $this->count();
     }
 
     //查询所有
-    public function all($firstRow)
+    public function all()
     {
         try {
+            $map = [
+                'where' => '`name` LIKE :name',
+                'value' => [
+                    'name' => '%' . Request::get('keyword') . '%'
+                ]
+            ];
+            if (Request::get('product_sort_id')) {
+                $map['where'] .= ' AND `product_sort_id`=:product_sort_id';
+                $map['value']['product_sort_id'] = Request::get('product_sort_id');
+            }
             return $this->field('id,name,product_sort_id,price,color,sort,is_view,is_default,date')
-                ->where($this->map()['where'], $this->map()['value'])
+                ->where($map['where'], $map['value'])
                 ->order(['sort' => 'ASC'])
-                ->limit($firstRow, Config::get('app.page_size'))
-                ->select()
-                ->toArray();
+                ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
         }
     }
 
-    //查询分类下的产品
+    //查询分类下的商品
     public function all2($productSortId = 0)
     {
         try {
@@ -59,8 +66,9 @@ class Product extends Model
     public function one($id = 0)
     {
         try {
-            $map['id'] = $id ? $id : Request::get('id');
-            return $this->field('name,product_sort_id,price,color,is_view')->where($map)->find();
+            return $this->field('id,name,product_sort_id,price,color,sort,is_view,is_default,date')
+                ->where(['id' => $id ?: Request::post('id')])
+                ->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -78,10 +86,10 @@ class Product extends Model
             'sort' => $this->nextId(),
             'date' => time()
         ];
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->check($data)) {
             if ($this->repeat()) {
-                return '此产品已存在！';
+                return '此商品已存在！';
             }
             return $this->insertGetId($data);
         } else {
@@ -98,12 +106,12 @@ class Product extends Model
             'price' => Request::post('price'),
             'color' => Request::post('color')
         ];
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->check($data)) {
             if ($this->repeat(true)) {
-                return '此产品已存在！';
+                return '此商品已存在！';
             }
-            return $this->where(['id' => Request::get('id')])->update($data);
+            return $this->where(['id' => Request::post('id')])->update($data);
         } else {
             return $validate->getError();
         }
@@ -113,13 +121,13 @@ class Product extends Model
     public function isDefault()
     {
         $this->where(['is_default' => 1])->update(['is_default' => 0]);
-        return $this->where(['id' => Request::get('id')])->update(['is_default' => 1]);
+        return $this->where(['id' => Request::post('id')])->update(['is_default' => 1]);
     }
 
     //确认和取消显示
-    public function isView($isView = 0)
+    public function isView($isView)
     {
-        return $this->where(['id' => Request::get('id')])->update(['is_view' => $isView]);
+        return $this->where(['id' => Request::post('id')])->update(['is_view' => $isView]);
     }
 
     //排序
@@ -132,7 +140,7 @@ class Product extends Model
     public function remove()
     {
         try {
-            $affectedRows = $this->where(['id' => Request::get('id')])->delete();
+            $affectedRows = $this->where('id', 'IN', Request::post('id') ?: Request::post('ids'))->delete();
             if ($affectedRows) {
                 Db::execute('OPTIMIZE TABLE `' . $this->getTable() . '`');
             }
@@ -147,9 +155,9 @@ class Product extends Model
     private function nextId()
     {
         try {
-            $object = Db::query('SHOW TABLE STATUS FROM `' . Config::get('database.connections.mysql.database') .
+            $query = Db::query('SHOW TABLE STATUS FROM `' . Config::get('database.connections.mysql.database') .
                 '` LIKE \'' . $this->getTable() . '\'');
-            return $object[0]['Auto_increment'];
+            return $query[0]['Auto_increment'];
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -160,29 +168,14 @@ class Product extends Model
     private function repeat($update = false)
     {
         try {
-            $object = $this->field('id')->where([
+            $one = $this->field('id')->where([
                 'name' => Request::post('name'),
                 'product_sort_id' => Request::post('product_sort_id')
             ]);
-            return $update ? $object->where('id', '<>', Request::get('id'))->find() : $object->find();
+            return $update ? $one->where('id', '<>', Request::post('id'))->find() : $one->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
         }
-    }
-
-    //搜索
-    private function map()
-    {
-        $map['where'] = '(`name` LIKE :name OR `price` LIKE :price)';
-        $map['value'] = [
-            'name' => '%' . Request::get('keyword') . '%',
-            'price' => '%' . Request::get('keyword') . '%'
-        ];
-        if (Request::get('product_sort_id')) {
-            $map['where'] .= ' AND `product_sort_id`=:product_sort_id';
-            $map['value']['product_sort_id'] = Request::get('product_sort_id');
-        }
-        return $map;
     }
 }

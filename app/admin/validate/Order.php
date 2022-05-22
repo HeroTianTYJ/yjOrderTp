@@ -7,7 +7,6 @@ use think\Validate;
 class Order extends Validate
 {
     protected $rule = [
-        'template_id' => 'require',
         'product_id' => 'require',
         'price' => 'require|regex:/^\d+(\.\d+)?$/',
         'count' => 'require|number',
@@ -22,15 +21,12 @@ class Order extends Validate
         'county2' => 'max:15',
         'town2' => 'max:25',
         'address' => 'require|min:5|max:200',
-        'post' => 'regex:/^\d{6}$/',
         'note' => 'max:255',
         'email' => 'email',
-        'logistics_number' => 'max:30',
-        'pay' => 'require|in:1,2,4,6',
+        'express_number' => 'max:30',
     ];
     protected $message = [
-        'template_id' => '请先在模板管理模块中添加一个模板！',
-        'product_id' => '请先在产品管理模块中添加一个产品！',
+        'product_id' => '请先在商品管理模块中添加一个商品！',
         'price' => '成交单价必须是数字！',
         'count' => '订购数量必须是数字！',
         'name' => '姓名不得小于2位或大于20位！',
@@ -44,10 +40,8 @@ class Order extends Validate
         'county2' => '区/县不得大于15位！',
         'town2' => '乡镇/街道不得大于25位！',
         'address' => '详细地址不得小于5位或大于200位！',
-        'post' => '邮政编码必须是6位的数字！',
-        'note' => '备注不得大于250位！',
+        'note' => '备注不得大于255位！',
         'email' => '电子邮箱格式不合法！',
-        'logistics_number' => '物流编号不得大于30位！',
-        'pay' => '支付方式有误，请重新选择！',
+        'express_number' => '快递单号不得大于30位！',
     ];
 }

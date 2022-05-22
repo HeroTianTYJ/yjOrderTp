@@ -2,7 +2,7 @@
 
 namespace app\admin\model;
 
-use app\admin\validate\Order as valid;
+use app\admin\validate\Order as validate;
 use Exception;
 use think\facade\Config;
 use think\facade\Db;
@@ -12,16 +12,10 @@ use think\Model;
 
 class Order extends Model
 {
-    //查询总记录
-    public function total()
-    {
-        return $this->where($this->map()['where'], $this->map()['value'])->count();
-    }
-
     //按订单状态查询总记录
-    public function total2($orderStateId = 0)
+    public function totalCount($orderStateId = 0)
     {
-        $map['recycle'] = 0;
+        $map['is_recycle'] = 0;
         if ($orderStateId) {
             $map['order_state_id'] = $orderStateId;
         }
@@ -29,17 +23,15 @@ class Order extends Model
     }
 
     //查询所有
-    public function all($firstRow)
+    public function all()
     {
         try {
             return $this->field('id,order_id,manager_id,template_id,product_id,price,count,name,tel,province,city,' .
-                'county,town,address,post,note,email,ip,referrer,pay,pay_id,pay_scene,pay_date,order_state_id,' .
-                'logistics_id,logistics_number,date')
+                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene,pay_date,order_state_id,' .
+                'express_id,express_number,date')
                 ->where($this->map()['where'], $this->map()['value'])
                 ->order(['date' => 'DESC'])
-                ->limit($firstRow, Config::get('app.page_size'))
-                ->select()
-                ->toArray();
+                ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -51,8 +43,8 @@ class Order extends Model
     {
         try {
             return $this->field('id,order_id,manager_id,template_id,product_id,price,count,name,tel,province,city,' .
-                'county,town,address,post,note,email,ip,referrer,pay,pay_id,pay_scene,pay_date,order_state_id,' .
-                'logistics_id,logistics_number,date')
+                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene,pay_date,order_state_id,' .
+                'express_id,express_number,date')
                 ->where($this->map()['where'], $this->map()['value'])
                 ->order(['date' => 'DESC'])
                 ->select()
@@ -68,10 +60,25 @@ class Order extends Model
     {
         try {
             return $this->field('id,order_id,manager_id,template_id,product_id,price,count,name,tel,province,city,' .
-                'county,town,address,post,note,email,ip,referrer,pay,pay_id,pay_scene,pay_date,order_state_id,' .
-                'logistics_id,logistics_number,date')
+                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene,pay_date,order_state_id,' .
+                'express_id,express_number,date')
                 ->where('id', 'IN', Request::post('ids'))
-                ->where('recycle', Request::controller() == 'OrderRecycle' ? 1 : 0)
+                ->where('is_recycle', Request::controller() == 'OrderRecycle' ? 1 : 0)
+                ->where($this->managerId())
+                ->order(['date' => 'DESC'])
+                ->select()
+                ->toArray();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            return [];
+        }
+    }
+    public function all4()
+    {
+        try {
+            return $this->field('order_id')
+                ->where('id', 'IN', Request::post('ids'))
+                ->where('is_recycle', Request::controller() == 'OrderRecycle' ? 1 : 0)
                 ->where($this->managerId())
                 ->order(['date' => 'DESC'])
                 ->select()
@@ -83,13 +90,15 @@ class Order extends Model
     }
 
     //按自定义时间统计
-    public function diyTime($time1, $time2)
+    public function diyTime($time1 = 0, $time2 = 0)
     {
         try {
             $map = $this->map();
-            $map['where'] .= ' AND `date`>=:date3 AND `date`<=:date4';
-            $map['value']['date3'] = strtotime($time1 . ' 00:00:00');
-            $map['value']['date4'] = strtotime($time2 . ' 23:59:59');
+            if ($time1 && $time2) {
+                $map['where'] .= ' AND `date`>=:date3 AND `date`<=:date4';
+                $map['value']['date3'] = strtotime($time1 . ' 00:00:00') . '';
+                $map['value']['date4'] = strtotime($time2 . ' 23:59:59') . '';
+            }
             return $this->field('COUNT(CASE WHEN `order_state_id`=1 THEN `id` END) `count1`,' .
                 'SUM(CASE WHEN `order_state_id`=1 THEN `price`*`count` ELSE 0 END) `sum1`,' .
                 'COUNT(CASE WHEN `order_state_id`=2 THEN `id` END) `count2`,' .
@@ -97,10 +106,14 @@ class Order extends Model
                 'COUNT(CASE WHEN `order_state_id`=3 THEN `id` END) `count3`,' .
                 'SUM(CASE WHEN `order_state_id`=3 THEN `price`*`count` ELSE 0 END) `sum3`,' .
                 'COUNT(CASE WHEN `order_state_id`=4 THEN `id` END) `count4`,' .
-                'SUM(CASE WHEN `order_state_id`=4 THEN `price`*`count` ELSE 0 END) `sum4`')
+                'SUM(CASE WHEN `order_state_id`=4 THEN `price`*`count` ELSE 0 END) `sum4`,' .
+                'COUNT(CASE WHEN `order_state_id`=5 THEN `id` END) `count5`,' .
+                'SUM(CASE WHEN `order_state_id`=5 THEN `price`*`count` ELSE 0 END) `sum5`,' .
+                'COUNT(CASE WHEN `order_state_id`=6 THEN `id` END) `count6`,' .
+                'SUM(CASE WHEN `order_state_id`=6 THEN `price`*`count` ELSE 0 END) `sum6`')
                 ->where($map['where'], $map['value'])
                 ->select()
-                ->toArray();
+                ->toArray()[0];
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -108,7 +121,7 @@ class Order extends Model
     }
 
     //按天、月、年统计
-    public function dayMonthYear($time, $firstRow = -1)
+    public function dayMonthYear($time, $paginate = true)
     {
         try {
             switch (Request::get('order')) {
@@ -125,21 +138,33 @@ class Order extends Model
                     $order = 'count4';
                     break;
                 case 5:
-                    $order = 'sum1';
+                    $order = 'count5';
                     break;
                 case 6:
-                    $order = 'sum2';
+                    $order = 'count6';
                     break;
                 case 7:
-                    $order = 'sum3';
+                    $order = 'sum1';
                     break;
                 case 8:
+                    $order = 'sum2';
+                    break;
+                case 9:
+                    $order = 'sum3';
+                    break;
+                case 10:
                     $order = 'sum4';
+                    break;
+                case 11:
+                    $order = 'sum5';
+                    break;
+                case 12:
+                    $order = 'sum6';
                     break;
                 default:
                     $order = 'time';
             }
-            $object = $this->field('COUNT(CASE WHEN `order_state_id`=1 THEN `id` END) `count1`,' .
+            $all = $this->field('COUNT(CASE WHEN `order_state_id`=1 THEN `id` END) `count1`,' .
                 'SUM(CASE WHEN `order_state_id`=1 THEN `price`*`count` ELSE 0 END) `sum1`,' .
                 'COUNT(CASE WHEN `order_state_id`=2 THEN `id` END) `count2`,' .
                 'SUM(CASE WHEN `order_state_id`=2 THEN `price`*`count` ELSE 0 END) `sum2`,' .
@@ -147,13 +172,15 @@ class Order extends Model
                 'SUM(CASE WHEN `order_state_id`=3 THEN `price`*`count` ELSE 0 END) `sum3`,' .
                 'COUNT(CASE WHEN `order_state_id`=4 THEN `id` END) `count4`,' .
                 'SUM(CASE WHEN `order_state_id`=4 THEN `price`*`count` ELSE 0 END) `sum4`,' .
+                'COUNT(CASE WHEN `order_state_id`=5 THEN `id` END) `count5`,' .
+                'SUM(CASE WHEN `order_state_id`=5 THEN `price`*`count` ELSE 0 END) `sum5`,' .
+                'COUNT(CASE WHEN `order_state_id`=6 THEN `id` END) `count6`,' .
+                'SUM(CASE WHEN `order_state_id`=6 THEN `price`*`count` ELSE 0 END) `sum6`,' .
                 'FROM_UNIXTIME(`date`,\'' . $time . '\') `time`')
-                ->group('time')
+                ->group('FROM_UNIXTIME(`date`,\'' . $time . '\')')
                 ->where($this->map()['where'], $this->map()['value'])
                 ->order([$order => 'DESC']);
-            return $firstRow >= 0 ?
-                $object->limit($firstRow, Config::get('app.page_size'))->select()->toArray() :
-                $object->select()->toArray();
+            return $paginate ? $all->paginate(Config::get('app.page_size')) : $all->select()->toArray();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -164,26 +191,15 @@ class Order extends Model
     public function one($id = 0)
     {
         try {
-            $map['id'] = $id ? $id : Request::get('id');
-            $map['recycle'] = Request::controller() == 'OrderRecycle' ? 1 : 0;
-            return $this->field('order_id,manager_id,template_id,product_id,price,count,name,tel,province,city,' .
-                'county,town,address,post,note,email,ip,qqau,referrer,pay,pay_id,pay_scene,pay_date,order_state_id,' .
-                'logistics_id,logistics_number,date')
-                ->where($map)
+            return $this->field('id,order_id,manager_id,template_id,product_id,price,count,name,tel,province,city,' .
+                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene,pay_date,order_state_id,' .
+                'express_id,express_number,date')
+                ->where([
+                    'id' => $id ?: Request::post('id'),
+                    'is_recycle' => Request::controller() == 'OrderRecycle' ? 1 : 0
+                ])
                 ->where($this->managerId())
                 ->find();
-        } catch (Exception $e) {
-            echo $e->getMessage();
-            return [];
-        }
-    }
-
-    public function one2()
-    {
-        try {
-            $map['id'] = Request::get('id');
-            $map['recycle'] = Request::controller() == 'OrderRecycle' ? 1 : 0;
-            return $this->field('manager_id')->where($map)->where($this->managerId())->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -194,8 +210,11 @@ class Order extends Model
     public function older()
     {
         try {
-            $map['recycle'] = 0;
-            return $this->field('date')->where($map)->where($this->managerId())->order(['date' => 'ASC'])->find();
+            return $this->field('date')
+                ->where(['is_recycle' => 0])
+                ->where($this->managerId())
+                ->order(['date' => 'ASC'])
+                ->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -206,8 +225,11 @@ class Order extends Model
     public function newer()
     {
         try {
-            $map['recycle'] = 0;
-            return $this->field('date')->where($map)->where($this->managerId())->order(['date' => 'DESC'])->find();
+            return $this->field('date')
+                ->where(['is_recycle' => 0])
+                ->where($this->managerId())
+                ->order(['date' => 'DESC'])
+                ->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -217,31 +239,26 @@ class Order extends Model
     //添加
     public function add()
     {
-        $scene = [
-            'template_id',
-            'product_id',
-            'price',
-            'count',
-            'logistics_number'
-        ];
-        $session = Session::get(Config::get('system.session_key'));
+        $templateOne = (new Template())->one(Request::post('template_id'));
+        if (!$templateOne) {
+            return '请先在模板管理模块中添加一个模板！';
+        }
+        $scene = ['template_id', 'product_id', 'price', 'count', 'express_number'];
         $data = [
             'order_id' => time() . rand(100, 999),
+            'manager_id' => Session::get(Config::get('system.session_key_admin') . '.manage_info.id'),
             'template_id' => Request::post('template_id'),
             'product_id' => Request::post('product_id'),
-            'manager_id' => $session['id'],
             'price' => Request::post('price'),
             'count' => Request::post('count'),
-            'pay' => Request::post('pay'),
+            'payment_id' => Request::post('payment_id'),
             'order_state_id' => Request::post('order_state_id'),
-            'logistics_id' => Request::post('logistics_id'),
-            'logistics_number' => Request::post('logistics_number'),
+            'express_id' => Request::post('express_id'),
+            'express_number' => Request::post('express_number'),
             'ip' => getUserIp(),
             'date' => time()
         ];
-        $Template = new Template();
-        $object = $Template->one(Request::post('template_id'));
-        $fieldTemp = explode(',', $object['field']);
+        $fieldTemp = explode(',', $templateOne['field_ids']);
         if (in_array(2, $fieldTemp) || Request::post('name')) {
             $data['name'] = Request::post('name');
             $scene[] = 'name';
@@ -251,7 +268,7 @@ class Order extends Model
             $scene[] = 'tel';
         }
         if (in_array(4, $fieldTemp) && in_array(5, $fieldTemp)) {
-            if (Request::post('type') == 'a') {
+            if (Request::post('district_type') == 0) {
                 $data['province'] = Request::post('province');
                 $data['city'] = Request::post('city');
                 $data['county'] = Request::post('county');
@@ -260,7 +277,7 @@ class Order extends Model
                 $scene[] = 'city';
                 $scene[] = 'county';
                 $scene[] = 'town';
-            } elseif (Request::post('type') == 'b') {
+            } elseif (Request::post('district_type') == 1) {
                 $data['province'] = $data['province2'] = Request::post('province2');
                 $data['city'] = $data['city2'] = Request::post('city2');
                 $data['county'] = $data['county2'] = Request::post('county2');
@@ -308,24 +325,17 @@ class Order extends Model
             $data['address'] = Request::post('address');
             $scene[] = 'address';
         }
-        if (in_array(7, $fieldTemp) || Request::post('post')) {
-            $data['post'] = Request::post('post');
-            $scene[] = 'post';
-        }
-        if (in_array(8, $fieldTemp) || Request::post('note')) {
+        if (in_array(7, $fieldTemp) || Request::post('note')) {
             $data['note'] = Request::post('note');
             $scene[] = 'note';
         }
-        if (in_array(9, $fieldTemp) || Request::post('email')) {
+        if (in_array(8, $fieldTemp) || Request::post('email')) {
             $data['email'] = Request::post('email');
             $scene[] = 'email';
         }
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->only($scene)->check($data)) {
-            unset($data['province2']);
-            unset($data['city2']);
-            unset($data['county2']);
-            unset($data['town2']);
+            unset($data['province2'], $data['city2'], $data['county2'], $data['town2']);
             return $this->insertGetId($data);
         } else {
             return $validate->getError();
@@ -335,13 +345,11 @@ class Order extends Model
     //修改
     public function modify()
     {
-        $scene = [
-            'template_id',
-            'product_id',
-            'price',
-            'count',
-            'logistics_number'
-        ];
+        $templateOne = (new Template())->one(Request::post('template_id'));
+        if (!$templateOne) {
+            return '请先在模板管理模块中添加一个模板！';
+        }
+        $scene = ['template_id', 'product_id', 'price', 'count', 'express_number'];
         $data = [
             'template_id' => Request::post('template_id'),
             'product_id' => Request::post('product_id'),
@@ -349,85 +357,107 @@ class Order extends Model
             'count' => Request::post('count'),
             'name' => Request::post('name'),
             'tel' => Request::post('tel'),
-            'province' => Request::post('province2'),
-            'city' => Request::post('city2'),
-            'county' => Request::post('county2'),
-            'town' => Request::post('town2'),
             'address' => Request::post('address'),
-            'post' => Request::post('post'),
             'note' => Request::post('note'),
             'email' => Request::post('email'),
-            'pay' => Request::post('pay'),
+            'payment_id' => Request::post('payment_id'),
             'order_state_id' => Request::post('order_state_id'),
-            'logistics_id' => Request::post('logistics_id'),
-            'logistics_number' => Request::post('logistics_number')
+            'express_id' => Request::post('express_id'),
+            'express_number' => Request::post('express_number')
         ];
-        $Template = new Template();
-        $object2 = $Template->one(Request::post('template_id'));
-        $fieldTemp = explode(',', $object2['field']);
+        $fieldTemp = explode(',', $templateOne['field_ids']);
         if (in_array(2, $fieldTemp) || Request::post('name')) {
             $scene[] = 'name';
         }
         if (in_array(3, $fieldTemp) || Request::post('tel')) {
             $scene[] = 'tel';
         }
-        if (in_array(4, $fieldTemp) || in_array(5, $fieldTemp) || Request::post('province2')) {
-            $scene[] = 'province';
+        if (in_array(4, $fieldTemp) || in_array(5, $fieldTemp) || Request::post('province')) {
+            $data['province'] = $data['province2'] = Request::post('province');
+            $scene[] = 'province2';
         }
-        if (in_array(4, $fieldTemp) || in_array(5, $fieldTemp) || Request::post('city2')) {
-            $scene[] = 'city';
+        if (in_array(4, $fieldTemp) || in_array(5, $fieldTemp) || Request::post('city')) {
+            $data['city'] = $data['city2'] = Request::post('city');
+            $scene[] = 'city2';
         }
-        if (in_array(4, $fieldTemp) || in_array(5, $fieldTemp) || Request::post('county2')) {
-            $scene[] = 'county';
+        if (in_array(4, $fieldTemp) || in_array(5, $fieldTemp) || Request::post('county')) {
+            $data['county'] = $data['county2'] = Request::post('county');
+            $scene[] = 'county2';
         }
-        if (in_array(4, $fieldTemp) || in_array(5, $fieldTemp) || Request::post('town2')) {
-            $scene[] = 'town';
+        if (in_array(4, $fieldTemp) || in_array(5, $fieldTemp) || Request::post('town')) {
+            $data['town'] = $data['town2'] = Request::post('town');
+            $scene[] = 'town2';
         }
         if (in_array(6, $fieldTemp) || Request::post('address')) {
             $scene[] = 'address';
         }
-        if (in_array(7, $fieldTemp) || Request::post('post')) {
-            $scene[] = 'post';
-        }
-        if (in_array(8, $fieldTemp) || Request::post('note')) {
+        if (in_array(7, $fieldTemp) || Request::post('note')) {
             $scene[] = 'note';
         }
-        if (in_array(9, $fieldTemp) || Request::post('email')) {
+        if (in_array(8, $fieldTemp) || Request::post('email')) {
             $scene[] = 'email';
         }
-        $map['id'] = Request::get('id');
-        $map['recycle'] = Request::controller() == 'OrderRecycle' ? 1 : 0;
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->only($scene)->check($data)) {
-            return $this->where($map)->where($this->managerId())->update($data);
+            unset($data['province2'], $data['city2'], $data['county2'], $data['town2']);
+            return $this->where([
+                'id' => Request::post('id'),
+                'is_recycle' => Request::controller() == 'OrderRecycle' ? 1 : 0
+            ])->where($this->managerId())->update($data);
         } else {
             return $validate->getError();
         }
     }
 
+    //批量修改订单状态
+    public function modify2()
+    {
+        return $this->where('id', 'IN', Request::post('ids'))
+            ->where($this->managerId())
+            ->update(['order_state_id' => Request::post('order_state_id')]);
+    }
+
+    //批量修改快递单号
+    public function modify3()
+    {
+        $orderIds = explode("\r\n", Request::post('order_ids'));
+        $expressNumbers = explode("\r\n", Request::post('express_numbers'));
+        if (count($orderIds) != count($expressNumbers)) {
+            return '您输入的快递单号个数和订单号个数不一致！';
+        }
+        foreach ($orderIds as $key => $value) {
+            $this->where(['order_id' => $value])->where($this->managerId())->update([
+                'order_state_id' => 3,
+                'express_id' => Request::post('express_id'),
+                'express_number' => $expressNumbers[$key]
+            ]);
+        }
+        return 1;
+    }
+
     //回收
     public function recycle()
     {
-        return Request::get('id') ?
-            $this->where(['id' => Request::get('id')])->where($this->managerId())->update(['recycle' => 1]) :
-            $this->where('id', 'IN', Request::post('ids'))->where($this->managerId())->update(['recycle' => 1]);
+        return $this->where('id', 'IN', Request::post('id') ?: Request::post('ids'))
+            ->where($this->managerId())
+            ->update(['is_recycle' => 1]);
     }
 
     //还原
     public function recover()
     {
-        return Request::get('id') ?
-            $this->where(['id' => Request::get('id')])->where($this->managerId())->update(['recycle' => 0]) :
-            $this->where('id', 'IN', Request::post('ids'))->where($this->managerId())->update(['recycle' => 0]);
+        return $this->where('id', 'IN', Request::post('id') ?: Request::post('ids'))
+            ->where($this->managerId())
+            ->update(['is_recycle' => 0]);
     }
 
     //删除
     public function remove()
     {
         try {
-            $affectedRows = Request::get('id') ?
-                $this->where(['id' => Request::get('id')])->where($this->managerId())->delete() :
-                $this->where('id', 'IN', Request::post('ids'))->where($this->managerId())->delete();
+            $affectedRows = $this->where('id', 'IN', Request::post('id') ?: Request::post('ids'))
+                ->where($this->managerId())
+                ->delete();
             if ($affectedRows) {
                 Db::execute('OPTIMIZE TABLE `' . $this->getTable() . '`');
             }
@@ -438,107 +468,43 @@ class Order extends Model
         }
     }
 
-    //批量修改订单状态
-    public function state()
-    {
-        return $this->where('id', 'IN', Request::post('ids'))
-            ->where($this->managerId())
-            ->update(['order_state_id' => Request::post('order_state_id')]);
-    }
-
-    //批量修改物流
-    public function multi()
-    {
-        foreach (explode("\r\n", Request::post('multi')) as $value) {
-            $value = explode('|', $value);
-            if (count($value) != 3) {
-                return '批量修改格式有误！';
-            }
-            $this->where(['order_id' => $value[0]])
-                ->where($this->managerId())
-                ->update(['logistics_id' => $value[1], 'logistics_number' => $value[2]]);
-        }
-        return 1;
-    }
-
     //高级搜索
     private function map()
     {
         $map['where'] = '1=1';
         $map['value'] = [];
-        if (Request::get('field') <= 14) {
-            $keyword = [];
+        if (Request::get('keyword')) {
             $map['where'] .= ' AND (';
-            if (in_array(Request::get('field'), [0, 1])) {
-                $keyword[] = 'order_id';
-            }
-            if (in_array(Request::get('field'), [0, 2])) {
-                $keyword[] = 'name';
-            }
-            if (in_array(Request::get('field'), [0, 3])) {
-                $keyword[] = 'tel';
-            }
-            if (in_array(Request::get('field'), [0, 4])) {
-                $keyword[] = 'province';
-            }
-            if (in_array(Request::get('field'), [0, 5])) {
-                $keyword[] = 'city';
-            }
-            if (in_array(Request::get('field'), [0, 6])) {
-                $keyword[] = 'county';
-            }
-            if (in_array(Request::get('field'), [0, 7])) {
-                $keyword[] = 'town';
-            }
-            if (in_array(Request::get('field'), [0, 8])) {
-                $keyword[] = 'address';
-            }
-            if (in_array(Request::get('field'), [0, 9])) {
-                $keyword[] = 'post';
-            }
-            if (in_array(Request::get('field'), [0, 10])) {
-                $keyword[] = 'email';
-            }
-            if (in_array(Request::get('field'), [0, 11])) {
-                $keyword[] = 'ip';
-            }
-            if (in_array(Request::get('field'), [0, 12])) {
-                $keyword[] = 'referrer';
-            }
-            if (in_array(Request::get('field'), [0, 13])) {
-                $keyword[] = 'logistics_number';
-            }
-            if (in_array(Request::get('field'), [0, 14])) {
-                $keyword[] = 'pay_id';
-            }
-            foreach ($keyword as $value) {
+            foreach (
+                ['order_id', 'attr', 'name', 'tel', 'province', 'city', 'county', 'town', 'address', 'email', 'ip',
+                 'referrer', 'pay_id', 'express_number'] as $value
+            ) {
                 $map['where'] .= '`' . $value . '` LIKE :' . $value . ' OR ';
                 $map['value'][$value] = '%' . Request::get('keyword') . '%';
             }
-            $map['where'] = substr($map['where'], 0, -4);
-            $map['where'] .= ')';
+            $map['where'] = substr($map['where'], 0, -4) . ')';
         }
         if (Request::get('manager_id', -1) != -1) {
             $map['where'] .= ' AND `manager_id`=:manager_id';
             $map['value']['manager_id'] = Request::get('manager_id');
         }
-        if (Request::get('template_id')) {
-            $map['where'] .= ' AND `template_id`=:template_id';
-            $map['value']['template_id'] = Request::get('template_id');
+        if (Request::get('user_id')) {
+            $map['where'] .= ' AND `user_id`=:user_id';
+            $map['value']['user_id'] = Request::get('user_id');
         }
         if (Request::get('product_id')) {
             $map['where'] .= ' AND `product_id`=:product_id';
             $map['value']['product_id'] = Request::get('product_id');
         }
-        if (Request::get('pay')) {
-            $map['where'] .= ' AND `pay`=:pay';
-            $map['value']['pay'] = Request::get('pay');
-            if (Request::get('pay') == 3) {
+        if (Request::get('payment_id')) {
+            $map['where'] .= ' AND `payment_id`=:payment_id';
+            $map['value']['payment_id'] = Request::get('payment_id');
+            if (Request::get('payment_id') == 2) {
                 if (Request::get('alipay_scene')) {
                     $map['where'] .= ' AND `pay_scene`=:alipay_scene';
                     $map['value']['alipay_scene'] = Request::get('alipay_scene');
                 }
-            } elseif (Request::get('pay') == 7) {
+            } elseif (Request::get('payment_id') == 3) {
                 if (Request::get('wxpay_scene')) {
                     $map['where'] .= ' AND `pay_scene`=:wxpay_scene';
                     $map['value']['wxpay_scene'] = Request::get('wxpay_scene');
@@ -549,9 +515,9 @@ class Order extends Model
             $map['where'] .= ' AND `order_state_id`=:order_state_id';
             $map['value']['order_state_id'] = Request::get('order_state_id');
         }
-        if (Request::get('logistics_id')) {
-            $map['where'] .= ' AND `logistics_id`=:logistics_id';
-            $map['value']['logistics_id'] = Request::get('logistics_id');
+        if (Request::get('express_id')) {
+            $map['where'] .= ' AND `express_id`=:express_id';
+            $map['value']['express_id'] = Request::get('express_id');
         }
         if (Request::get('price1')) {
             $map['where'] .= ' AND `price`>=:price1';
@@ -593,7 +559,11 @@ class Order extends Model
             $map['where'] .= ' AND `pay_date`<=:pay_date2';
             $map['value']['pay_date2'] = strtotime(Request::get('pay_date2') . ' 23:59:59');
         }
-        $map['where'] .= ' AND `recycle`=' . (Request::controller() == 'OrderRecycle' ? 1 : 0);
+        if (Request::get('is_commission', -1) != -1) {
+            $map['where'] .= ' AND `is_commission`=:is_commission';
+            $map['value']['is_commission'] = Request::get('is_commission');
+        }
+        $map['where'] .= ' AND `is_recycle`=' . (Request::controller() == 'OrderRecycle' ? 1 : 0);
         $map['where'] .= ' AND ' . $this->managerId();
         return $map;
     }
@@ -601,7 +571,7 @@ class Order extends Model
     //管理权限
     private function managerId()
     {
-        $session = Session::get(Config::get('system.session_key'));
+        $session = Session::get(Config::get('system.session_key_admin') . '.manage_info');
         $sqlWhere = [
             1 => '`manager_id`=' . $session['id'],
             2 => '`manager_id` IN (' . $session['id'] . ',0)',

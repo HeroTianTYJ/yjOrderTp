@@ -11,22 +11,17 @@ use think\Model;
 
 class District extends Model
 {
-    //查询总记录
-    public function total()
-    {
-        return $this->where($this->map()['where'], $this->map()['value'])->count();
-    }
-
     //查询所有
-    public function all($firstRow)
+    public function all()
     {
         try {
             return $this->field('id,name')
-                ->where($this->map()['where'], $this->map()['value'])
+                ->where(
+                    '`name` LIKE :name AND `parent_id`=:parent_id',
+                    ['name' => '%' . Request::get('keyword') . '%', 'parent_id' => Request::get('parent_id', 0)]
+                )
                 ->order(['id' => 'ASC'])
-                ->limit($firstRow, Config::get('app.page_size'))
-                ->select()
-                ->toArray();
+                ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -37,7 +32,7 @@ class District extends Model
     public function one($id = 0)
     {
         try {
-            return $this->field('name,parent_id')->where(['id' => $id ? $id : Request::get('id')])->find();
+            return $this->field('id,name,parent_id')->where(['id' => $id ?: Request::post('id')])->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -58,11 +53,11 @@ class District extends Model
     {
         $data = [
             'name' => Request::post('name'),
-            'parent_id' => Request::get('parent_id')
+            'parent_id' => Request::post('parent_id')
         ];
         $validate = new validate();
         if ($validate->check($data)) {
-            if ($this->repeat(Request::get('parent_id'))) {
+            if ($this->repeat(Request::post('parent_id'))) {
                 return '此行政区划已存在！';
             }
             return $this->insertGetId($data);
@@ -78,10 +73,10 @@ class District extends Model
         foreach (explode("\r\n", Request::post('multi')) as $value) {
             $data = [
                 'name' => $value,
-                'parent_id' => Request::get('parent_id')
+                'parent_id' => Request::post('parent_id')
             ];
             if ($validate->check($data)) {
-                if ($this->repeat(Request::get('parent_id'), $value)) {
+                if ($this->repeat(Request::post('parent_id'), $value)) {
                     return '“' . $value . '”行政区划已存在！';
                 }
                 $this->insertGetId($data);
@@ -103,7 +98,7 @@ class District extends Model
             if ($this->repeat($parentId, '', true)) {
                 return '此行政区划已存在！';
             }
-            return $this->where(['id' => Request::get('id')])->update($data);
+            return $this->where(['id' => Request::post('id')])->update($data);
         } else {
             return $validate->getError();
         }
@@ -113,7 +108,7 @@ class District extends Model
     public function remove()
     {
         try {
-            $affectedRows = $this->where(['id' => Request::get('id')])->delete();
+            $affectedRows = $this->where('id', 'IN', Request::post('id') ?: Request::post('ids'))->delete();
             if ($affectedRows) {
                 Db::execute('OPTIMIZE TABLE `' . $this->getTable() . '`');
             }
@@ -134,17 +129,5 @@ class District extends Model
             echo $e->getMessage();
             return [];
         }
-    }
-
-    //搜索
-    private function map()
-    {
-        return [
-            'where' => '`name` LIKE :name AND `parent_id`=:parent_id',
-            'value' => [
-                'name' => '%' . Request::get('keyword') . '%',
-                'parent_id' => Request::get('parent_id', 0)
-            ]
-        ];
     }
 }

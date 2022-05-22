@@ -4,39 +4,44 @@ namespace app\admin\controller;
 
 use app\admin\model;
 use think\facade\Request;
-use think\facade\Config;
 use think\facade\View;
 
 class Field extends Base
 {
     public function index()
     {
-        $Field = new model\Field();
-        $object = $Field->all($this->page($Field->total()));
-        View::assign(['All' => $object]);
+        $fieldAll = (new model\Field())->all();
+        if (Request::isAjax()) {
+            foreach ($fieldAll as $key => $value) {
+                $fieldAll[$key] = $this->listItem($value);
+            }
+            return $fieldAll->items() ? json_encode($fieldAll->items(), JSON_NUMERIC_CHECK) : '';
+        }
+        View::assign(['Total' => $fieldAll->total()]);
         return $this->view();
     }
 
     public function isDefault()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && Request::post('id')) {
             $Field = new model\Field();
-            $object = $Field->one();
-            if (!$object) {
-                return $this->failed('不存在此字段！');
+            $fieldOne = $Field->one();
+            if (!$fieldOne) {
+                return showTip('不存在此字段！', 0);
             }
-            if ($object['is_default'] == 0) {
-                if (!$Field->isDefault(1)) {
-                    return $this->failed('设置默认字段失败！');
-                }
+            if ($fieldOne['is_default'] == 0) {
+                return $Field->isDefault(1) ? showTip('设置默认字段成功！') : showTip('设置默认字段失败！', 0);
             } else {
-                if (!$Field->isDefault(0)) {
-                    return $this->failed('取消默认字段失败！');
-                }
+                return $Field->isDefault(0) ? showTip('取消默认字段成功！') : showTip('取消默认字段失败！', 0);
             }
-            return $this->success(Config::get('app.prev_url'));
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
+    }
+
+    private function listItem($item)
+    {
+        $item['name'] = keyword($item['name']);
+        return $item;
     }
 }

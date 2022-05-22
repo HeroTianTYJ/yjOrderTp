@@ -2,52 +2,54 @@
 
 namespace app\admin\controller;
 
-use think\facade\Request;
-use think\facade\Config;
 use app\admin\model;
+use think\facade\Config;
+use think\facade\Request;
 
 class OrderRecycle extends Order
 {
-    public function add()
-    {
-    }
-
-    public function multi()
-    {
-    }
-
-    public function recycle()
-    {
-    }
-
     public function recover()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
             $Order = new model\Order();
-            if (!$Order->one()) {
-                return $this->failed('不存在此订单，或没有此订单的管理权限！');
+            if (Request::post('id')) {
+                if (!$Order->one()) {
+                    return showTip('不存在此订单！', 0);
+                }
+            } elseif (Request::post('ids')) {
+                foreach (explode(',', Request::post('ids')) as $value) {
+                    if (!$Order->one($value)) {
+                        return showTip('不存在您勾选的订单！', 0);
+                    }
+                }
             }
-            return $Order->recover() ?
-                $this->success(Config::get('app.prev_url'), '订单还原成功！') :
-                $this->failed('订单还原失败！');
+            return $Order->recover() ? showTip('订单还原成功！') : showTip('订单还原失败！', 0);
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 
     public function delete()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
+            if (Config::get('app.demo')) {
+                return showTip('演示站，订单无法删除！', 0);
+            }
             $Order = new model\Order();
-            if (!$Order->one()) {
-                return $this->failed('不存在此订单，或没有此订单的管理权限！');
+            if (Request::post('id')) {
+                if (!$Order->one()) {
+                    return showTip('不存在此订单！', 0);
+                }
+            } elseif (Request::post('ids')) {
+                foreach (explode(',', Request::post('ids')) as $value) {
+                    if (!$Order->one($value)) {
+                        return showTip('不存在您勾选的订单！', 0);
+                    }
+                }
             }
-            if (Request::isPost()) {
-                return $Order->remove() ? $this->success(Request::post('prev'), '订单删除成功！') : $this->failed('订单删除失败！');
-            }
-            return $this->confirm('您真的要删除这条数据么？');
+            return $Order->remove() ? showTip('订单删除成功！') : showTip('订单删除失败！', 0);
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 }

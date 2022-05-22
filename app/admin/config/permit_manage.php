@@ -1,147 +1,144 @@
 <?php
 
 return [
-    'Index' => [
-        'main' => 1
-    ],
     'Order' => [
-        'index' => 2,
-        'add' => 3,
-        'update' => 4,
-        'detail' => 5,
-        'output' => 6,
-        'recycle' => 7,
-        'recycle2' => 8,
-        'state' => 9,
-        'multi' => 10
+        'index' => 1,
+        'add' => 2,
+        'update' => 3,
+        'detail' => 4,
+        'output' => 5,
+        'delete' => 6,
+        'state' => 7,
+        'express' => 8
     ],
     'OrderRecycle' => [
-        'index' => 11,
-        'update' => 12,
-        'detail' => 13,
-        'output' => 14,
-        'recover' => 15,
-        'delete' => 16,
-        'recover2' => 17,
-        'delete2' => 18,
-        'state' => 19
+        'index' => 9,
+        'detail' => 10,
+        'output' => 11,
+        'recover' => 12,
+        'delete' => 13
     ],
     'OrderStatistic' => [
-        'index' => 20,
-        'day' => 21,
-        'month' => 22,
-        'year' => 23,
-        'output' => 24
+        'index' => 14,
+        'day' => 15,
+        'month' => 16,
+        'year' => 17,
+        'output' => 18
     ],
     'OrderState' => [
+        'index' => 19,
+        'add' => 20,
+        'update' => 21,
+        'delete' => 22,
+        'isDefault' => 23,
+        'sort' => 24
+    ],
+    'Express' => [
         'index' => 25,
         'add' => 26,
         'update' => 27,
-        'delete' => 28,
-        'isdefault' => 29,
-        'sort' => 30
-    ],
-    'Logistics' => [
-        'index' => 31,
-        'add' => 32,
-        'multi' => 33,
-        'update' => 34,
-        'delete' => 35
+        'delete' => 28
     ],
     'Product' => [
+        'index' => 29,
+        'add' => 30,
+        'update' => 31,
+        'delete' => 32,
+        'isView' => 33,
+        'isDefault' => 34,
+        'sort' => 35
+    ],
+    'ProductSort' => [
         'index' => 36,
         'add' => 37,
         'update' => 38,
         'delete' => 39,
-        'sort' => 40,
-        'isview' => 41,
-        'isdefault' => 42
-    ],
-    'ProductSort' => [
-        'index' => 43,
-        'add' => 44,
-        'update' => 45,
-        'delete' => 46,
-        'sort' => 47
+        'sort' => 40
     ],
     'Template' => [
-        'index' => 48,
-        'add' => 49,
-        'update' => 50,
-        'delete' => 51,
-        'output' => 52,
-        'isdefault' => 53,
-        'code' => 54
+        'index' => 41,
+        'add' => 42,
+        'update' => 43,
+        'delete' => 44,
+        'code' => 45,
+        'isDefault' => 46
     ],
     'TemplateStyle' => [
-        'index' => 55,
-        'add' => 56,
-        'update' => 57,
-        'delete' => 58
+        '' => 47,
+        'add' => 48,
+        'update' => 49,
+        'delete' => 50
     ],
     'Field' => [
-        'index' => 59,
-        'isdefault' => 60
+        'index' => 51,
+        'isDefault' => 52
     ],
     'Visit' => [
-        'index' => 61,
-        'output' => 62,
-        'js' => 63
+        'index' => 53,
+        'output' => 54,
+        'js' => 55
     ],
-    'Output' => [
-        'index' => 64,
-        'zip' => 65,
-        'delete' => 66
+    'File' => [
+        'index' => 56,
+        'zip' => 57,
+        'download' => 58,
+        'delete' => 59
     ],
     'District' => [
-        'index' => 67,
-        'add' => 68,
-        'update' => 69,
-        'delete' => 70
+        'index' => 60,
+        'add' => 61,
+        'multi' => 62,
+        'update' => 63,
+        'delete' => 64
     ],
     'Manager' => [
-        'index' => 71,
-        'add' => 72,
-        'update' => 73,
-        'delete' => 74,
-        'isactivation' => 75,
-        'qq' => 76
+        'index' => 65,
+        'add' => 66,
+        'update' => 67,
+        'delete' => 68,
+        'isActivation' => 69,
+        'wechatOpenId' => 70,
+        'qqOpenId' => 71
     ],
-    'LoginRecord' => [
-        'index' => 77
+    'LoginRecordManager' => [
+        'index' => 72,
+        'output' => 73
     ],
     'PermitGroup' => [
-        'index' => 79,
-        'add' => 80,
-        'update' => 81,
-        'delete' => 82,
-        'isdefault' => 83
+        'index' => 74,
+        'add' => 75,
+        'update' => 76,
+        'delete' => 77,
+        'isDefault' => 78
     ],
-    'Permit' => [
-        'index' => 84,
-        'isdefault' => 85,
-        'sort' => 86
+    'PermitManage' => [
+        'index' => 79,
+        'isDefault' => 80
+    ],
+    'PermitData' => [
+        'index' => 81,
+        'isDefault' => 82
     ],
     'System' => [
-        'index' => 87
+        'index' => 83
     ],
     'ValidateFile' => [
-        'index' => 88
+        'index' => 84
     ],
     'Smtp' => [
-        'index' => 89,
-        'add' => 90,
-        'update' => 91,
-        'delete' => 92,
-        'state' => 93
+        'index' => 85,
+        'add' => 86,
+        'update' => 87,
+        'delete' => 88,
+        'state' => 89
     ],
-    'Db' => [
-        'index' => 94,
-        'optimize' => 95,
-        'repairautoincrement' => 96,
-        'schema' => 97
+    'Database' => [
+        'index' => 90,
+        'optimize' => 91,
+        'repairAutoIncrement' => 92,
+        'schema' => 93
     ],
-    'Dbbak' => [
-        'index' => 98
+    'DatabaseBackup' => [
+        'index' => 94
     ]
 ];

@@ -15,7 +15,7 @@ class Install extends Validate
         'db_prefix' => 'require',
 
         'web_name' => 'require',
-        'manage_enter' => 'require',
+        'manager_enter' => 'require',
     ];
     protected $message = [
         'db_host' => '数据库服务器不得为空！',
@@ -26,20 +26,10 @@ class Install extends Validate
         'db_prefix' => '数据表前缀不得为空！',
 
         'web_name' => '站点名称不得为空！',
-        'manage_enter' => '后台入口不得为空！',
+        'manager_enter' => '后台入口不得为空！',
     ];
     protected $scene = [
-        'step2' => [
-            'db_host',
-            'db_port',
-            'db_name',
-            'db_user',
-            'db_pwd',
-            'db_prefix'
-        ],
-        'step3' => [
-            'web_name',
-            'manage_enter'
-        ],
+        'step2' => ['db_host', 'db_port', 'db_name', 'db_user', 'db_pwd', 'db_prefix'],
+        'step3' => ['web_name', 'manager_enter'],
     ];
 }

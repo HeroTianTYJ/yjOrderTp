@@ -91,13 +91,12 @@ class Captcha
         }
     }
 
-	/**
-	 * 创建验证码
-	 * @param string $id
-	 * @return array
-	 * @throws Exception
-	 */
-    protected function generate($id=''): array
+    /**
+     * 创建验证码
+     * @return array
+     * @throws Exception
+     */
+    protected function generate(): array
     {
         $bag = '';
 
@@ -126,7 +125,7 @@ class Captcha
 
         $hash = password_hash($key, PASSWORD_BCRYPT, ['cost' => 10]);
 
-        $this->session->set('captcha'.$id, [
+        $this->session->set('captcha', [
             'key' => $hash,
         ]);
 
@@ -136,27 +135,26 @@ class Captcha
         ];
     }
 
-	/**
-	 * 验证验证码是否正确
-	 * @access public
-	 * @param string $code 用户验证码
-	 * @param string $id
-	 * @return bool 用户验证码是否正确
-	 */
-    public function check(string $code,$id=''): bool
+    /**
+     * 验证验证码是否正确
+     * @access public
+     * @param string $code 用户验证码
+     * @return bool 用户验证码是否正确
+     */
+    public function check(string $code): bool
     {
-        if (!$this->session->has('captcha'.$id)) {
+        if (!$this->session->has('captcha')) {
             return false;
         }
 
-        $key = $this->session->get('captcha'.$id.'.key');
+        $key = $this->session->get('captcha.key');
 
         $code = mb_strtolower($code, 'UTF-8');
 
         $res = password_verify($code, $key);
 
         if ($res) {
-            $this->session->delete('captcha'.$id);
+            $this->session->delete('captcha');
         }
 
         return $res;
@@ -173,14 +171,14 @@ class Captcha
     {
         $this->configure($config);
 
-        $generator = $this->generate($config);
+        $generator = $this->generate();
 
         // 图片宽(px)
         $this->imageW || $this->imageW = $this->length * $this->fontSize * 1.5 + $this->length * $this->fontSize / 2;
         // 图片高(px)
         $this->imageH || $this->imageH = $this->fontSize * 2.5;
         // 建立一幅 $this->imageW x $this->imageH 的图像
-        $this->im = imagecreate($this->imageW, $this->imageH);
+        $this->im = imagecreate((int) $this->imageW, (int) $this->imageH);
         // 设置背景
         imagecolorallocate($this->im, $this->bg[0], $this->bg[1], $this->bg[2]);
 

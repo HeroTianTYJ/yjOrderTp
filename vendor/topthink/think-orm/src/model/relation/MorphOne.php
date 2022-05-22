@@ -42,6 +42,12 @@ class MorphOne extends Relation
     protected $type;
 
     /**
+     * 绑定的关联属性
+     * @var array
+     */
+    protected $bindAttr = [];
+
+    /**
      * 构造函数
      * @access public
      * @param  Model  $parent    上级模型对象
@@ -78,7 +84,14 @@ class MorphOne extends Relation
         $relationModel = $this->query->relation($subRelation)->find();
 
         if ($relationModel) {
+            if (!empty($this->bindAttr)) {
+                // 绑定关联属性
+                $this->bindAttr($this->parent, $relationModel);
+            }
+
             $relationModel->setParent(clone $this->parent);
+        } else {
+            $relationModel = $this->getDefaultModel();
         }
 
         return $relationModel;
@@ -147,14 +160,20 @@ class MorphOne extends Relation
             // 关联数据封装
             foreach ($resultSet as $result) {
                 if (!isset($data[$result->$pk])) {
-                    $relationModel = null;
+                    $relationModel = $this->getDefaultModel();
                 } else {
                     $relationModel = $data[$result->$pk];
                     $relationModel->setParent(clone $result);
                     $relationModel->exists(true);
                 }
 
-                $result->setRelation($relation, $relationModel);
+                if (!empty($this->bindAttr)) {
+                    // 绑定关联属性
+                    $this->bindAttr($result, $relationModel);
+                } else {
+                    // 设置关联属性
+                    $result->setRelation($relation, $relationModel);
+                }
             }
         }
     }
@@ -185,10 +204,16 @@ class MorphOne extends Relation
                 $relationModel->setParent(clone $result);
                 $relationModel->exists(true);
             } else {
-                $relationModel = null;
+                $relationModel = $this->getDefaultModel();
             }
 
-            $result->setRelation($relation, $relationModel);
+            if (!empty($this->bindAttr)) {
+                // 绑定关联属性
+                $this->bindAttr($result, $relationModel);
+            } else {
+                // 设置关联属性
+                $result->setRelation($relation, $relationModel);
+            }
         }
     }
 
@@ -277,4 +302,48 @@ class MorphOne extends Relation
         }
     }
 
+    /**
+     * 绑定关联表的属性到父模型属性
+     * @access public
+     * @param  array $attr 要绑定的属性列表
+     * @return $this
+     */
+    public function bind(array $attr)
+    {
+        $this->bindAttr = $attr;
+
+        return $this;
+    }
+
+    /**
+     * 获取绑定属性
+     * @access public
+     * @return array
+     */
+    public function getBindAttr(): array
+    {
+        return $this->bindAttr;
+    }
+
+    /**
+     * 绑定关联属性到父模型
+     * @access protected
+     * @param  Model $result 父模型对象
+     * @param  Model $model  关联模型对象
+     * @return void
+     * @throws Exception
+     */
+    protected function bindAttr(Model $result, Model $model = null): void
+    {
+        foreach ($this->bindAttr as $key => $attr) {
+            $key   = is_numeric($key) ? $attr : $key;
+            $value = $result->getOrigin($key);
+
+            if (!is_null($value)) {
+                throw new Exception('bind attr has exists:' . $key);
+            }
+
+            $result->setAttr($key, $model ? $model->$attr : null);
+        }
+    }
 }

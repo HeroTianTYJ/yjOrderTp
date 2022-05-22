@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2019 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2021 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -131,6 +131,18 @@ abstract class Driver implements CacheInterface, CacheHandlerInterface
     }
 
     /**
+     * 追加TagSet数据
+     * @access public
+     * @param string $name  缓存变量名
+     * @param mixed  $value 存储数据
+     * @return void
+     */
+    public function append(string $name, $value): void
+    {
+        $this->push($name, $value);
+    }
+
+    /**
      * 如果不存在则写入缓存
      * @access public
      * @param string $name   缓存变量名
@@ -237,7 +249,7 @@ abstract class Driver implements CacheInterface, CacheHandlerInterface
      * @param string $data 缓存数据
      * @return mixed
      */
-    protected function unserialize(string $data)
+    protected function unserialize($data)
     {
         if (is_numeric($data)) {
             return $data;

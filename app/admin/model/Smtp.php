@@ -2,31 +2,23 @@
 
 namespace app\admin\model;
 
-use app\admin\validate\Smtp as valid;
+use app\admin\validate\Smtp as validate;
 use Exception;
-use think\facade\Db;
 use think\facade\Config;
+use think\facade\Db;
 use think\facade\Request;
 use think\Model;
 
 class Smtp extends Model
 {
-    //查询总记录
-    public function total()
-    {
-        return $this->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])->count();
-    }
-
     //查询所有
-    public function all($firstRow)
+    public function all()
     {
         try {
             return $this->field('id,smtp,port,email,user')
-                ->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])
+                ->where('smtp|port|email|user', 'LIKE', '%' . Request::get('keyword') . '%')
                 ->order(['id' => 'DESC'])
-                ->limit($firstRow, Config::get('app.page_size'))
-                ->select()
-                ->toArray();
+                ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -37,8 +29,7 @@ class Smtp extends Model
     public function one($id = 0)
     {
         try {
-            $map['id'] = $id ? $id : Request::get('id');
-            return $this->field('smtp,port,email,user')->where($map)->find();
+            return $this->field('id,smtp,port,email,user')->where(['id' => $id ?: Request::post('id')])->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -49,7 +40,7 @@ class Smtp extends Model
     public function one2()
     {
         try {
-            $firstRow = date('H') % $this->total();
+            $firstRow = date('H') % $this->count();
             return $this->field('smtp,port,email,user,pass')
                 ->order(['id' => 'DESC'])
                 ->limit($firstRow, 1)
@@ -60,17 +51,14 @@ class Smtp extends Model
             return [];
         }
     }
-
-    //查询运行中的服务器
     public function one3($hour)
     {
         try {
-            $firstRow = $hour % $this->total();
+            $firstRow = $hour % $this->count();
             return $this->field('id,smtp,port,email,user')
                 ->order(['id' => 'DESC'])
                 ->limit($firstRow, 1)
-                ->select()
-                ->toArray();
+                ->select()[0];
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -87,7 +75,7 @@ class Smtp extends Model
             'user' => Request::post('user'),
             'pass' => Request::post('pass')
         ];
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->check($data)) {
             return $this->insertGetId($data);
         } else {
@@ -107,9 +95,9 @@ class Smtp extends Model
         if (Request::post('pass')) {
             $data['pass'] = Request::post('pass');
         }
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->remove('pass', ['require'])->check($data)) {
-            return $this->where(['id' => Request::get('id')])->update($data);
+            return $this->where(['id' => Request::post('id')])->update($data);
         } else {
             return $validate->getError();
         }
@@ -119,7 +107,7 @@ class Smtp extends Model
     public function remove()
     {
         try {
-            $affectedRows = $this->where(['id' => Request::get('id')])->delete();
+            $affectedRows = $this->where('id', 'IN', Request::post('id') ?: Request::post('ids'))->delete();
             if ($affectedRows) {
                 Db::execute('OPTIMIZE TABLE `' . $this->getTable() . '`');
             }
@@ -128,15 +116,5 @@ class Smtp extends Model
             echo $e->getMessage();
             return [];
         }
-    }
-
-    //搜索
-    private function map()
-    {
-        return [
-            'field' => 'smtp|port|email|user',
-            'condition' => 'LIKE',
-            'value' => '%' . Request::get('keyword') . '%'
-        ];
     }
 }

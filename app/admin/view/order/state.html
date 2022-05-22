@@ -1,0 +1,6 @@
+<form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
+  <input type="hidden" name="ids" value="{:input('post.ids')}">
+  <table>
+    <tr><td>订单状态：</td><td>{$OrderState}</td></tr>
+  </table>
+</form>

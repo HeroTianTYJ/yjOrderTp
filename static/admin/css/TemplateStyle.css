@@ -1,0 +1,10 @@
+@charset "utf-8";
+.main .list table tr td span.bg{
+	display:inline-block;
+	width:40px;
+	height:18px;
+	vertical-align:middle;
+}
+.form table tr td:nth-child(1) {
+	width: 140px;
+}

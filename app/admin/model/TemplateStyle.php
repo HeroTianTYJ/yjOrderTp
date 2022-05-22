@@ -2,7 +2,7 @@
 
 namespace app\admin\model;
 
-use app\admin\validate\TemplateStyle as valid;
+use app\admin\validate\TemplateStyle as validate;
 use Exception;
 use think\facade\Config;
 use think\facade\Db;
@@ -11,22 +11,18 @@ use think\Model;
 
 class TemplateStyle extends Model
 {
-    //查询总记录
-    public function total()
-    {
-        return $this->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])->count();
-    }
-
     //查询所有
-    public function all($firstRow)
+    public function all()
     {
         try {
             return $this->field('id,bg_color,border_color,button_color,select_current_bg_color,date')
-                ->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])
-                ->order(['date' => 'DESC', 'id' => 'DESC'])
-                ->limit($firstRow, Config::get('app.page_size'))
-                ->select()
-                ->toArray();
+                ->where(
+                    'bg_color|border_color|button_color|select_current_bg_color',
+                    'LIKE',
+                    '%' . Request::get('keyword') . '%'
+                )
+                ->order(['id' => 'DESC', 'date' => 'DESC'])
+                ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -48,8 +44,9 @@ class TemplateStyle extends Model
     public function one($id = 0)
     {
         try {
-            $map['id'] = $id ? $id : Request::get('id');
-            return $this->field('bg_color,border_color,button_color,select_current_bg_color')->where($map)->find();
+            return $this->field('id,bg_color,border_color,button_color,select_current_bg_color,date')
+                ->where(['id' => $id ?: Request::post('id')])
+                ->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -66,7 +63,7 @@ class TemplateStyle extends Model
             'select_current_bg_color' => Request::post('select_current_bg_color'),
             'date' => time()
         ];
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->check($data)) {
             return $this->insertGetId($data);
         } else {
@@ -83,9 +80,9 @@ class TemplateStyle extends Model
             'button_color' => Request::post('button_color'),
             'select_current_bg_color' => Request::post('select_current_bg_color')
         ];
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->check($data)) {
-            return $this->where(['id' => Request::get('id')])->update($data);
+            return $this->where(['id' => Request::post('id')])->update($data);
         } else {
             return $validate->getError();
         }
@@ -95,7 +92,7 @@ class TemplateStyle extends Model
     public function remove()
     {
         try {
-            $affectedRows = $this->where(['id' => Request::get('id')])->delete();
+            $affectedRows = $this->where('id', 'IN', Request::post('id') ?: Request::post('ids'))->delete();
             if ($affectedRows) {
                 Db::execute('OPTIMIZE TABLE `' . $this->getTable() . '`');
             }
@@ -104,15 +101,5 @@ class TemplateStyle extends Model
             echo $e->getMessage();
             return [];
         }
-    }
-
-    //搜索
-    private function map()
-    {
-        return [
-            'field' => 'bg_color|border_color|button_color|select_current_bg_color',
-            'condition' => 'LIKE',
-            'value' => '%' . Request::get('keyword') . '%'
-        ];
     }
 }

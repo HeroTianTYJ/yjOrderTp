@@ -2,7 +2,7 @@
 
 namespace app\admin\model;
 
-use app\admin\validate\PermitGroup as valid;
+use app\admin\validate\PermitGroup as validate;
 use Exception;
 use think\facade\Config;
 use think\facade\Db;
@@ -11,22 +11,14 @@ use think\Model;
 
 class PermitGroup extends Model
 {
-    //查询总记录
-    public function total()
-    {
-        return $this->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])->count();
-    }
-
     //查询所有
-    public function all($firstRow)
+    public function all()
     {
         try {
-            return $this->field('id,name,permit_ids,is_default,date')
-                ->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])
+            return $this->field('id,name,permit_manage_ids,permit_data_ids,is_default,date')
+                ->where('name', 'LIKE', '%' . Request::get('keyword') . '%')
                 ->order(['date' => 'DESC'])
-                ->limit($firstRow, Config::get('app.page_size'))
-                ->select()
-                ->toArray();
+                ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -48,8 +40,9 @@ class PermitGroup extends Model
     public function one($id = 0)
     {
         try {
-            $map['id'] = $id ? $id : Request::get('id');
-            return $this->field('name,permit_ids,is_default')->where($map)->find();
+            return $this->field('id,name,permit_manage_ids,permit_data_ids,is_default,date')
+                ->where(['id' => $id ?: Request::post('id')])
+                ->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -63,14 +56,21 @@ class PermitGroup extends Model
             'name' => Request::post('name'),
             'date' => time()
         ];
-        $permitIds = Request::post('permit_ids');
-        if ($permitIds) {
-            asort($permitIds);
-            $data['permit_ids'] = implode(',', $permitIds);
+        $permitManageIds = Request::post('permit_manage_ids');
+        if ($permitManageIds) {
+            asort($permitManageIds);
+            $data['permit_manage_ids'] = implode(',', $permitManageIds);
         } else {
-            $data['permit_ids'] = '';
+            $data['permit_manage_ids'] = '';
         }
-        $validate = new valid();
+        $permitDataIds = Request::post('permit_data_ids');
+        if ($permitDataIds) {
+            asort($permitDataIds);
+            $data['permit_data_ids'] = implode(',', $permitDataIds);
+        } else {
+            $data['permit_data_ids'] = '';
+        }
+        $validate = new validate();
         if ($validate->check($data)) {
             if ($this->repeat()) {
                 return '此权限组已存在！';
@@ -87,19 +87,26 @@ class PermitGroup extends Model
         $data = [
             'name' => Request::post('name')
         ];
-        $permitIds = Request::post('permit_ids');
-        if ($permitIds) {
-            asort($permitIds);
-            $data['permit_ids'] = implode(',', $permitIds);
+        $permitManageIds = Request::post('permit_manage_ids');
+        if ($permitManageIds) {
+            asort($permitManageIds);
+            $data['permit_manage_ids'] = implode(',', $permitManageIds);
         } else {
-            $data['permit_ids'] = '';
+            $data['permit_manage_ids'] = '';
         }
-        $validate = new valid();
+        $permitDataIds = Request::post('permit_data_ids');
+        if ($permitDataIds) {
+            asort($permitDataIds);
+            $data['permit_data_ids'] = implode(',', $permitDataIds);
+        } else {
+            $data['permit_data_ids'] = '';
+        }
+        $validate = new validate();
         if ($validate->check($data)) {
             if ($this->repeat(true)) {
                 return '此权限组已存在！';
             }
-            return $this->where(['id' => Request::get('id')])->update($data);
+            return $this->where(['id' => Request::post('id')])->update($data);
         } else {
             return $validate->getError();
         }
@@ -109,14 +116,14 @@ class PermitGroup extends Model
     public function isDefault()
     {
         $this->where(['is_default' => 1])->update(['is_default' => 0]);
-        return $this->where(['id' => Request::get('id')])->update(['is_default' => 1]);
+        return $this->where(['id' => Request::post('id')])->update(['is_default' => 1]);
     }
 
     //删除
     public function remove()
     {
         try {
-            $affectedRows = $this->where(['id' => Request::get('id')])->delete();
+            $affectedRows = $this->where('id', 'IN', Request::post('id') ?: Request::post('ids'))->delete();
             if ($affectedRows) {
                 Db::execute('OPTIMIZE TABLE `' . $this->getTable() . '`');
             }
@@ -131,21 +138,11 @@ class PermitGroup extends Model
     private function repeat($update = false)
     {
         try {
-            $object = $this->field('id')->where(['name' => Request::post('name')]);
-            return $update ? $object->where('id', '<>', Request::get('id'))->find() : $object->find();
+            $one = $this->field('id')->where(['name' => Request::post('name')]);
+            return $update ? $one->where('id', '<>', Request::post('id'))->find() : $one->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
         }
-    }
-
-    //搜索
-    private function map()
-    {
-        return [
-            'field' => 'name',
-            'condition' => 'LIKE',
-            'value' => '%' . Request::get('keyword') . '%'
-        ];
     }
 }

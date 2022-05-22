@@ -9,22 +9,14 @@ use think\Model;
 
 class Field extends Model
 {
-    //查询总记录
-    public function total()
-    {
-        return $this->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])->count();
-    }
-
     //查询所有
-    public function all($firstRow = 0)
+    public function all()
     {
         try {
             return $this->field('id,name,is_default')
-                ->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])
+                ->where('name', 'LIKE', '%' . Request::get('keyword') . '%')
                 ->order(['id' => 'ASC'])
-                ->limit($firstRow, Config::get('app.page_size'))
-                ->select()
-                ->toArray();
+                ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -57,8 +49,7 @@ class Field extends Model
     public function one($id = 0)
     {
         try {
-            $map['id'] = $id ? $id : Request::get('id');
-            return $this->field('is_default')->where($map)->find();
+            return $this->field('is_default')->where(['id' => $id ?: Request::post('id')])->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -68,16 +59,6 @@ class Field extends Model
     //设置和取消默认
     public function isDefault($isDefault)
     {
-        return $this->where(['id' => Request::get('id')])->update(['is_default' => $isDefault]);
-    }
-
-    //搜索
-    private function map()
-    {
-        return [
-            'field' => 'name',
-            'condition' => 'LIKE',
-            'value' => '%' . Request::get('keyword') . '%'
-        ];
+        return $this->where(['id' => Request::post('id')])->update(['is_default' => $isDefault]);
     }
 }

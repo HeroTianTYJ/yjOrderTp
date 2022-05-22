@@ -5,7 +5,7 @@ return [
     'disks' => [
         'local' => [
             'type' => 'local',
-            'root' => ROOT_PATH . '/uploads',
+            'root' => ROOT_DIR . '/uploads',
         ]
     ]
 ];

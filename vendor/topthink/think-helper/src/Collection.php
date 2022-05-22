@@ -20,6 +20,7 @@ use JsonSerializable;
 use think\contract\Arrayable;
 use think\contract\Jsonable;
 use think\helper\Arr;
+use Traversable;
 
 /**
  * 数据集管理类
@@ -142,7 +143,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     public function intersect($items, string $indexKey = null)
     {
         if ($this->isEmpty() || is_scalar($this->items[0])) {
-            return new static(array_diff($this->items, $this->convertToArray($items)));
+            return new static(array_intersect($this->items, $this->convertToArray($items)));
         }
 
         $intersect  = [];
@@ -242,15 +243,17 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * @access public
      * @param mixed  $value 元素
      * @param string $key   KEY
-     * @return void
+     * @return $this
      */
-    public function push($value, string $key = null): void
+    public function push($value, string $key = null)
     {
         if (is_null($key)) {
             $this->items[] = $value;
         } else {
             $this->items[$key] = $value;
         }
+
+        return $this;
     }
 
     /**
@@ -277,15 +280,17 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * @access public
      * @param mixed  $value 元素
      * @param string $key   KEY
-     * @return void
+     * @return $this
      */
-    public function unshift($value, string $key = null): void
+    public function unshift($value, string $key = null)
     {
         if (is_null($key)) {
             array_unshift($this->items, $value);
         } else {
             $this->items = [$key => $value] + $this->items;
         }
+
+        return $this;
     }
 
     /**
@@ -477,7 +482,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * @param string|null $indexKey  作为索引值的列
      * @return array
      */
-    public function column(?string $columnKey, string $indexKey = null)
+    public function column( ? string $columnKey, string $indexKey = null)
     {
         return array_column($this->items, $columnKey, $indexKey);
     }
@@ -515,7 +520,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
             $fieldA = $a[$field] ?? null;
             $fieldB = $b[$field] ?? null;
 
-            return 'desc' == strtolower($order) ? $fieldB > $fieldA : $fieldA > $fieldB;
+            return 'desc' == strtolower($order) ? intval($fieldB > $fieldA) : intval($fieldA > $fieldB);
         });
     }
 
@@ -535,7 +540,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
-     * 获取最第一个单元数据
+     * 获取第一个单元数据
      *
      * @access public
      * @param callable|null $callback
@@ -575,16 +580,19 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     // ArrayAccess
-    public function offsetExists($offset)
+    #[\ReturnTypeWillChange]
+    public function offsetExists($offset) : bool
     {
         return array_key_exists($offset, $this->items);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->items[$offset];
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -594,24 +602,27 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
         }
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->items[$offset]);
     }
 
     //Countable
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }
 
     //IteratorAggregate
-    public function getIterator()
+    #[\ReturnTypeWillChange]
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->items);
     }
 
     //JsonSerializable
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->toArray();

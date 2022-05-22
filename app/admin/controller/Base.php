@@ -2,13 +2,11 @@
 
 namespace app\admin\controller;
 
+use think\facade\Config;
+use think\facade\Request;
 use think\facade\Route;
 use think\facade\Session;
-use think\facade\Request;
-use think\facade\Config;
 use think\facade\View;
-
-use function think\_runtime;
 
 class Base extends \app\common\controller\Base
 {
@@ -17,59 +15,194 @@ class Base extends \app\common\controller\Base
     {
         parent::initialize();
         $this->checkLogin();
-        $this->checkPermit(Request::controller(), strtolower(Request::action()));
+        $this->checkPermit(Request::controller(), Request::action());
+        $this->publicAssign();
+    }
+
+    //公共变量
+    private function publicAssign()
+    {
+        $data = [];
+        if (Session::has(Config::get('system.session_key_admin') . '.manage_info')) {
+            $data['Navigator'] = $this->navigator();
+        }
+        View::assign($data);
     }
 
     //登录验证
-    protected function checkLogin()
+    private function checkLogin()
     {
         if (
-            Session::has(Config::get('system.session_key')) &&
+            Session::has(Config::get('system.session_key_admin') . '.manage_info') &&
             Request::controller() == 'Login' &&
             Request::action() != 'logout'
         ) {
-            $this->success(Route::buildUrl('/index/index'));
+            $this->succeed(Route::buildUrl('/index/index'));
         } elseif (
-            !Session::has(Config::get('system.session_key')) &&
+            !Session::has(Config::get('system.session_key_admin') . '.manage_info') &&
             Request::controller() == 'Index'
         ) {
-            $this->success(Route::buildUrl('/login/index'));
+            $this->succeed(Route::buildUrl('/login/index'));
         } elseif (
-            !Session::has(Config::get('system.session_key')) &&
-            Request::controller() != 'Login'
+            !Session::has(Config::get('system.session_key_admin') . '.manage_info') &&
+            !in_array(Request::controller(), ['Login', 'Reset'])
         ) {
             $this->error('非法登录！', 5, 1, Route::buildUrl('/login/index'));
         }
     }
 
     //权限验证
-    protected function checkPermit($controller, $action)
+    private function checkPermit($controller, $action)
     {
-        $session = Session::get(Config::get('system.session_key'));
+        $session = Session::get(Config::get('system.session_key_admin') . '.manage_info');
         if ($session && $session['level'] != 1) {
             $currentPermitManageId = Config::get('permit_manage.' . $controller . '.' . strtolower($action), 0);
             if ($currentPermitManageId && !in_array($currentPermitManageId, $session['permit_manage'])) {
-                in_array(strtolower($action), ['index', 'main']) ? $this->error('权限不足！', 0, 2) : $this->error('权限不足！');
+                if (Request::isAjax()) {
+                    exit(showTip('权限不足！', 0));
+                } else {
+                    strtolower($action) == 'index' ? $this->error('权限不足！', 0, 2) : $this->error('权限不足！');
+                }
             }
         }
     }
 
     //模板引入方法重写
-    protected function view($template = '')
+    protected function view($template = '', $code = 200)
     {
-        $run = '<script type="text/javascript">
-let run=window.parent.document.getElementById(\'run\');
-if(run!=null)run.innerHTML=\'执行耗时：' . (_runtime() - START_TIME) . '秒\';
-</script>';
+        $run = '';
         if (Config::get('app.demo')) {
-            $run .= '<p style="display:none;">
-<script type="text/javascript" src="//js.users.51.la/19104960.js?' . staticCache() . '"></script><noscript>
-<img alt="" src="//img.users.51.la/19104960.asp?' . staticCache() . '">
-</noscript></p>
-<script type="text/javascript" src="' . Config::get('app.web_url') . 'public/home/js/Visit.js?' .
-                staticCache() . '"></script>';
+            $run .= '<script type="text/javascript">
+(function() {
+  let hm = document.createElement(\'script\');
+  hm.src = \'https://hm.baidu.com/hm.js?6a53567a73cbf2e97dd826c2cdf8bd33\';
+  let s = document.getElementsByTagName(\'script\')[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<script type="text/javascript" src="static/index/js/Visit.js?' . staticCache() . '"></script>';
         }
         View::assign(['Run' => $run]);
-        return parent::view($template);
+        return parent::view($template, $code);
+    }
+
+    //后台导航
+    private function navigator()
+    {
+        $navigator = [
+            'index' => [
+                'one' => '首页',
+                'two' => []
+            ]
+        ];
+        if (permitIntersect(['Order', 'OrderRecycle', 'OrderStatistic', 'OrderState', 'Express'])) {
+            $navigator['order']['one'] = '订单';
+            if (isPermission('index', 'Order')) {
+                $navigator['order']['two']['Order/index'] = '订单管理';
+            }
+            if (isPermission('index', 'OrderRecycle')) {
+                $navigator['order']['two']['OrderRecycle/index'] = '订单回收站';
+            }
+            if (isPermission('index', 'OrderStatistic')) {
+                $navigator['order']['two']['OrderStatistic/index'] = '订单统计';
+            }
+            if (isPermission('index', 'OrderState')) {
+                $navigator['order']['two']['OrderState/index'] = '订单状态';
+            }
+            if (isPermission('index', 'Express')) {
+                $navigator['order']['two']['Express/index'] = '快递公司';
+            }
+        }
+        if (permitIntersect(['Product', 'ProductSort'])) {
+            $navigator['product']['one'] = '商品';
+            if (isPermission('index', 'Product')) {
+                $navigator['product']['two']['Product/index'] = '商品管理';
+            }
+            if (isPermission('index', 'ProductSort')) {
+                $navigator['product']['two']['ProductSort/index'] = '商品分类';
+            }
+        }
+        if (permitIntersect(['Template', 'TemplateStyle', 'Field'])) {
+            $navigator['template']['one'] = '模板';
+            if (isPermission('index', 'Template')) {
+                $navigator['template']['two']['Template/index'] = '模板管理';
+            }
+            if (isPermission('index', 'TemplateStyle')) {
+                $navigator['template']['two']['TemplateStyle/index'] = '模板样式';
+            }
+            if (isPermission('index', 'Field')) {
+                $navigator['template']['two']['Field/index'] = '下单字段';
+            }
+        }
+        $navigator['web'] = [
+            'one' => '单页',
+            'two' => [],
+            'url' => 'https://www.yjrj.top/web.php'
+        ];
+        if (permitIntersect(['Visit', 'File', 'District'])) {
+            $navigator['data']['one'] = '数据';
+            if (isPermission('index', 'Visit')) {
+                $navigator['data']['two']['Visit/index'] = '访问统计';
+            }
+            if (isPermission('index', 'File')) {
+                $navigator['data']['two']['File/index'] = '文件管理';
+            }
+            if (isPermission('index', 'District')) {
+                $navigator['data']['two']['District/index'] = '行政区划';
+            }
+        }
+        if (permitIntersect(['Manager', 'LoginRecordManager', 'PermitGroup', 'PermitManage', 'PermitData'])) {
+            $navigator['manage']['one'] = '管理';
+            if (isPermission('index', 'Manager')) {
+                $navigator['manage']['two']['Manager/index'] = '管理员';
+            }
+            if (isPermission('index', 'LoginRecordManager')) {
+                $navigator['manage']['two']['LoginRecordManager/index'] = '登录记录';
+            }
+            if (isPermission('index', 'PermitGroup')) {
+                $navigator['manage']['two']['PermitGroup/index'] = '权限组';
+            }
+            if (isPermission('index', 'PermitManage')) {
+                $navigator['manage']['two']['PermitManage/index'] = '管理权限';
+            }
+            if (isPermission('index', 'PermitData')) {
+                $navigator['manage']['two']['PermitData/index'] = '数据权限';
+            }
+        }
+        if (permitIntersect(['System', 'ValidateFile', 'Smtp'])) {
+            $navigator['setting']['one'] = '系统';
+            if (isPermission('index', 'System')) {
+                $navigator['setting']['two']['System/index'] = '系统设置';
+            }
+            if (isPermission('index', 'ValidateFile')) {
+                $navigator['setting']['two']['ValidateFile/index'] = '生成验证文件';
+            }
+            if (isPermission('index', 'Smtp')) {
+                $navigator['setting']['two']['Smtp/index'] = 'SMTP服务器';
+            }
+        }
+        if (permitIntersect(['Database'])) {
+            $navigator['database']['one'] = '数据库';
+            if (isPermission('index', 'Database')) {
+                $navigator['database']['two']['Database/index'] = '数据表状态';
+            }
+            if (isPermission('index', 'DatabaseBackup')) {
+                $navigator['database']['two']['DatabaseBackup/index'] = '数据库备份';
+            }
+        }
+        $navigator['profile'] = [
+            'one' => '',
+            'two' => [
+                'Profile/index' => ['个人资料'],
+                'Profile/loginRecord' => ['登录记录']
+            ]
+        ];
+        foreach ($navigator as $key => $value) {
+            $navigator[$key]['active'] = $value['two'] ?
+                (in_array(Request::controller() . '/' . Request::action(), keyToArray($value['two'])) ||
+                    in_array(Request::controller() . '/index', keyToArray($value['two']))) :
+                parse_name(Request::controller()) == $key;
+        }
+        return $navigator;
     }
 }

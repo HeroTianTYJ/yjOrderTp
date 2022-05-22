@@ -2,7 +2,7 @@
 
 namespace app\admin\model;
 
-use app\admin\validate\ProductSort as valid;
+use app\admin\validate\ProductSort as validate;
 use Exception;
 use think\facade\Config;
 use think\facade\Db;
@@ -11,22 +11,14 @@ use think\Model;
 
 class ProductSort extends Model
 {
-    //查询总记录
-    public function total()
-    {
-        return $this->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])->count();
-    }
-
     //查询所有
-    public function all($firstRow)
+    public function all()
     {
         try {
             return $this->field('id,name,color,sort,date')
-                ->where($this->map()['field'], $this->map()['condition'], $this->map()['value'])
+                ->where('name', 'LIKE', '%' . Request::get('keyword') . '%')
                 ->order(['sort' => 'ASC'])
-                ->limit($firstRow, Config::get('app.page_size'))
-                ->select()
-                ->toArray();
+                ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -37,8 +29,8 @@ class ProductSort extends Model
     public function all2($ids = '')
     {
         try {
-            $object = $this->field('id,name,color')->order(['sort' => 'ASC']);
-            return $ids ? $object->where('id', 'IN', $ids)->select()->toArray() : $object->select()->toArray();
+            $all = $this->field('id,name,color')->order(['sort' => 'ASC']);
+            return $ids ? $all->where('id', 'IN', $ids)->select()->toArray() : $all->select()->toArray();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -49,8 +41,7 @@ class ProductSort extends Model
     public function one($id = 0)
     {
         try {
-            $map['id'] = $id ? $id : Request::get('id');
-            return $this->field('name,color')->where($map)->find();
+            return $this->field('id,name,color,sort,date')->where(['id' => $id ?: Request::post('id')])->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -66,10 +57,10 @@ class ProductSort extends Model
             'sort' => $this->nextId(),
             'date' => time()
         ];
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->check($data)) {
             if ($this->repeat()) {
-                return '此产品分类已存在！';
+                return '此商品分类已存在！';
             }
             return $this->insertGetId($data);
         } else {
@@ -84,12 +75,12 @@ class ProductSort extends Model
             'name' => Request::post('name'),
             'color' => Request::post('color')
         ];
-        $validate = new valid();
+        $validate = new validate();
         if ($validate->check($data)) {
             if ($this->repeat(true)) {
-                return '此产品分类已存在！';
+                return '此商品分类已存在！';
             }
-            return $this->where(['id' => Request::get('id')])->update($data);
+            return $this->where(['id' => Request::post('id')])->update($data);
         } else {
             return $validate->getError();
         }
@@ -105,7 +96,7 @@ class ProductSort extends Model
     public function remove()
     {
         try {
-            $affectedRows = $this->where(['id' => Request::get('id')])->delete();
+            $affectedRows = $this->where('id', 'IN', Request::post('id') ?: Request::post('ids'))->delete();
             if ($affectedRows) {
                 Db::execute('OPTIMIZE TABLE `' . $this->getTable() . '`');
             }
@@ -120,8 +111,8 @@ class ProductSort extends Model
     private function repeat($update = false)
     {
         try {
-            $object = $this->field('id')->where(['name' => Request::post('name')]);
-            return $update ? $object->where('id', '<>', Request::get('id'))->find() : $object->find();
+            $one = $this->field('id')->where(['name' => Request::post('name')]);
+            return $update ? $one->where('id', '<>', Request::post('id'))->find() : $one->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -132,22 +123,12 @@ class ProductSort extends Model
     private function nextId()
     {
         try {
-            $object = Db::query('SHOW TABLE STATUS FROM `' . Config::get('database.connections.mysql.database') .
+            $query = Db::query('SHOW TABLE STATUS FROM `' . Config::get('database.connections.mysql.database') .
                 '` LIKE \'' . $this->getTable() . '\'');
-            return $object[0]['Auto_increment'];
+            return $query[0]['Auto_increment'];
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
         }
-    }
-
-    //搜索
-    private function map()
-    {
-        return [
-            'field' => 'name',
-            'condition' => 'LIKE',
-            'value' => '%' . Request::get('keyword') . '%'
-        ];
     }
 }

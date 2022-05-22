@@ -2,112 +2,126 @@
 
 namespace app\admin\controller;
 
-use think\facade\Route;
-use think\facade\Request;
-use think\facade\Config;
-use think\facade\View;
 use app\admin\model;
+use think\facade\Config;
+use think\facade\Request;
+use think\facade\View;
 
 class OrderState extends Base
 {
     public function index()
     {
-        $OrderState = new model\OrderState();
-        View::assign(['All' => $OrderState->all($this->page($OrderState->total()))]);
+        $orderStateAll = (new model\OrderState())->all();
+        if (Request::isAjax()) {
+            foreach ($orderStateAll as $key => $value) {
+                $orderStateAll[$key] = $this->listItem($value);
+            }
+            return $orderStateAll->items() ? json_encode($orderStateAll->items(), JSON_NUMERIC_CHECK) : '';
+        }
+        View::assign(['Total' => $orderStateAll->total()]);
         return $this->view();
     }
 
     public function add()
     {
-        if (Request::isPost()) {
-            $OrderState = new model\OrderState();
-            $object = $OrderState->add();
-            if (is_numeric($object)) {
-                return $object > 0 ?
-                    $this->success(Route::buildUrl('/' . parse_name(Request::controller()) . '/index'), '订单状态添加成功！') :
-                    $this->failed('订单状态添加失败！');
-            } else {
-                return $this->failed($object);
+        if (Request::isAjax()) {
+            if (Request::get('action') == 'do') {
+                $orderStateAdd = (new model\OrderState())->add();
+                if (is_numeric($orderStateAdd)) {
+                    return $orderStateAdd > 0 ? showTip('订单状态添加成功！') : showTip('订单状态添加失败！', 0);
+                } else {
+                    return showTip($orderStateAdd, 0);
+                }
             }
+            return $this->view();
+        } else {
+            return showTip('非法操作！', 0);
         }
-        return $this->view();
     }
 
     public function update()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && Request::post('id')) {
             $OrderState = new model\OrderState();
-            $object = $OrderState->one();
-            if (!$object) {
-                return $this->failed('不存在此订单状态！');
+            $orderStateOne = $OrderState->one();
+            if (!$orderStateOne) {
+                return showTip('不存在此订单状态！', 0);
             }
-            if (Request::isPost()) {
-                if (Config::get('app.demo') && Request::get('id') <= 4) {
-                    return $this->failed('演示站，id<=4的订单状态无法修改！');
+            if (Request::get('action') == 'do') {
+                if (Config::get('app.demo') && Request::post('id') <= 6) {
+                    return showTip('演示站，id<=6的订单状态无法修改！', 0);
                 }
-                $object = $OrderState->modify();
-                return is_numeric($object) ?
-                    $this->success(Route::buildUrl('/' . parse_name(Request::controller()) . '/index'), '订单状态修改成功！') :
-                    $this->failed($object);
+                $orderStateModify = $OrderState->modify();
+                return is_numeric($orderStateModify) ?
+                    showTip(['msg' => '订单状态修改成功！', 'data' => $this->listItem($OrderState->one())]) :
+                    showTip($orderStateOne, 0);
             }
-            View::assign(['One' => $object]);
+            View::assign(['One' => $orderStateOne]);
             return $this->view();
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
+        }
+    }
+
+    public function delete()
+    {
+        if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
+            if (Config::get('app.demo')) {
+                return showTip('演示站，订单状态无法删除！', 0);
+            }
+            $OrderState = new model\OrderState();
+            if (Request::post('id')) {
+                if (!$OrderState->one()) {
+                    return showTip('不存在此订单状态！', 0);
+                }
+            } elseif (Request::post('ids')) {
+                foreach (explode(',', Request::post('ids')) as $value) {
+                    if (!$OrderState->one($value)) {
+                        return showTip('不存在您勾选的订单状态！', 0);
+                    }
+                }
+            }
+            return $OrderState->remove() ? showTip('订单状态删除成功！') : showTip('订单状态删除失败！', 0);
+        } else {
+            return showTip('非法操作！', 0);
         }
     }
 
     public function isDefault()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && Request::post('id')) {
             if (Config::get('app.demo')) {
-                return $this->failed('演示站，无法设置默认订单状态！');
+                return showTip('演示站，订单状态无法设置默认！', 0);
             }
             $OrderState = new model\OrderState();
             if (!$OrderState->one()) {
-                return $this->failed('不存在此订单状态！');
+                return showTip('不存在此订单状态！', 0);
             }
-            if (!$OrderState->isDefault()) {
-                return $this->failed('设置默认订单状态失败！');
-            }
-            return $this->success(Config::get('app.prev_url'));
+            return $OrderState->isDefault() ? showTip('设置默认订单状态成功！') : showTip('设置默认订单状态失败！', 0);
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 
     public function sort()
     {
-        if (Request::isPost()) {
+        if (Request::isAjax()) {
             $OrderState = new model\OrderState();
             foreach (Request::post('sort') as $key => $value) {
                 if (is_numeric($value)) {
                     $OrderState->sort($key, $value);
                 }
             }
-            return $this->success(Config::get('app.prev_url'), '订单状态排序成功！');
+            return showTip('订单状态排序成功！');
+        } else {
+            return showTip('非法操作！', 0);
         }
-        return '';
     }
 
-    public function delete()
+    private function listItem($item)
     {
-        if (Request::get('id')) {
-            if (Config::get('app.demo') && Request::get('id') <= 4) {
-                return $this->failed('演示站，id<=4的订单状态无法删除！');
-            }
-            $OrderState = new model\OrderState();
-            if (!$OrderState->one()) {
-                return $this->failed('不存在此订单状态！');
-            }
-            if (Request::isPost()) {
-                return $OrderState->remove() ?
-                    $this->success(Request::post('prev'), '订单状态删除成功！') :
-                    $this->failed('订单状态删除失败！');
-            }
-            return $this->confirm('您真的要删除这条数据么？');
-        } else {
-            return $this->failed('非法操作！');
-        }
+        $item['name'] = keyword($item['name']);
+        $item['date'] = dateFormat($item['date']);
+        return $item;
     }
 }

@@ -8,7 +8,7 @@
 
 ## 一、在线演示
 
-https://www.yvjie.cn/product/demo.html
+https://www.yjrj.top/product/demo.html
 
 ## 二、更新日志
 

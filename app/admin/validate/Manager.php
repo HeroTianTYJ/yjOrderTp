@@ -18,14 +18,4 @@ class Manager extends Validate
         'repass' => '两次输入的密码不相同！',
         'admin_mail' => '管理员邮箱不得为空！',
     ];
-    protected $scene = [
-        'one' => [
-            'name',
-            'pass'
-        ],
-        'two' => [
-            'name',
-            'email'
-        ],
-    ];
 }

@@ -2,144 +2,161 @@
 
 namespace app\admin\controller;
 
-use think\facade\Route;
-use think\facade\Request;
-use think\facade\Config;
-use think\facade\View;
 use app\admin\model;
+use app\admin\library\Html;
+use think\facade\Request;
+use think\facade\View;
 
 class PermitGroup extends Base
 {
     public function index()
     {
-        $PermitGroup = new model\PermitGroup();
-        $object = $PermitGroup->all($this->page($PermitGroup->total()));
-        if ($object) {
-            $Permit = new model\Permit();
-            foreach ($object as $key => $value) {
-                $permitStr = '';
-                if ($value['permit_ids']) {
-                    $object2 = $Permit->all2($value['permit_ids']);
-                    foreach ($object2 as $v) {
-                        $permitStr .= '' . $v['name'] . '：<span class="blue">';
-                        $object3 = $Permit->all5($value['permit_ids'], $v['id']);
-                        foreach ($object3 as $v2) {
-                            $permitStr .= $v2['name'] . '、';
-                        }
-                        $permitStr = (substr($permitStr, -3) == '、' ? substr($permitStr, 0, -3) : $permitStr) .
-                            '</span><br>';
-                    }
-                }
-                $object[$key]['permit'] = $permitStr;
+        $permitGroupAll = (new model\PermitGroup())->all();
+        if (Request::isAjax()) {
+            foreach ($permitGroupAll as $key => $value) {
+                $permitGroupAll[$key] = $this->listItem($value);
             }
+            return $permitGroupAll->items() ? json_encode($permitGroupAll->items(), JSON_NUMERIC_CHECK) : '';
         }
-        View::assign(['All' => $object]);
+        View::assign(['Total' => $permitGroupAll->total()]);
         return $this->view();
     }
 
     public function add()
     {
-        if (Request::isPost()) {
-            $PermitGroup = new model\PermitGroup();
-            $object = $PermitGroup->add();
-            if (is_numeric($object)) {
-                return $object > 0 ?
-                    $this->success(Route::buildUrl('/' . parse_name(Request::controller()) . '/index'), '权限组添加成功！') :
-                    $this->failed('权限组添加失败！');
-            } else {
-                return $this->failed($object);
+        if (Request::isAjax()) {
+            if (Request::get('action') == 'do') {
+                $permitGroupAdd = (new model\PermitGroup())->add();
+                if (is_numeric($permitGroupAdd)) {
+                    return $permitGroupAdd > 0 ? showTip('权限组添加成功！') : showTip('权限组添加失败！', 0);
+                } else {
+                    return showTip($permitGroupAdd, 0);
+                }
             }
+            Html::permitManage();
+            Html::permitData();
+            return $this->view();
+        } else {
+            return showTip('非法操作！', 0);
         }
-        $this->permit();
-        return $this->view();
     }
 
     public function update()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && Request::post('id')) {
             $PermitGroup = new model\PermitGroup();
-            $object = $PermitGroup->one();
-            if (!$object) {
-                return $this->failed('不存在此权限组！');
+            $permitGroupOne = $PermitGroup->one();
+            if (!$permitGroupOne) {
+                return showTip('不存在此权限组！', 0);
             }
-            if (Request::isPost()) {
-                $object = $PermitGroup->modify();
-                return is_numeric($object) ?
-                    $this->success(Route::buildUrl('/' . parse_name(Request::controller()) . '/index'), '权限组修改成功！') :
-                    $this->failed($object);
+            if (Request::get('action') == 'do') {
+                $permitGroupModify = $PermitGroup->modify();
+                return is_numeric($permitGroupModify) ?
+                    showTip(['msg' => '权限组修改成功！', 'data' => $this->listItem($PermitGroup->one())]) :
+                    showTip($permitGroupModify, 0);
             }
-            $this->permit($object['permit_ids']);
-            View::assign(['One' => $object]);
+            Html::permitManage($permitGroupOne['permit_manage_ids']);
+            Html::permitData($permitGroupOne['permit_data_ids']);
+            View::assign(['One' => $permitGroupOne]);
             return $this->view();
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 
     public function isDefault()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && Request::post('id')) {
             $PermitGroup = new model\PermitGroup();
             if (!$PermitGroup->one()) {
-                return $this->failed('不存在此权限组！');
+                return showTip('不存在此权限组！', 0);
             }
-            if (!$PermitGroup->isDefault()) {
-                return $this->failed('设置默认权限组失败！');
-            }
-            return $this->success(Config::get('app.prev_url'));
+            return $PermitGroup->isDefault() ? showTip('设置默认权限组成功！') : showTip('设置默认权限组失败！', 0);
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 
     public function delete()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
             $PermitGroup = new model\PermitGroup();
-            $object = $PermitGroup->one();
-            if (!$object) {
-                return $this->failed('不存在此权限组！');
+            if (Request::post('id')) {
+                if (!$PermitGroup->one()) {
+                    return showTip('不存在此权限组！', 0);
+                }
+            } elseif (Request::post('ids')) {
+                foreach (explode(',', Request::post('ids')) as $value) {
+                    if (!$PermitGroup->one($value)) {
+                        return showTip('不存在您勾选的权限组！', 0);
+                    }
+                }
             }
-            if (Request::isPost()) {
-                return $PermitGroup->remove() ?
-                    $this->success(Request::post('prev'), '权限组删除成功！') :
-                    $this->failed('权限组删除失败！');
-            }
-            return $this->confirm('您真的要删除这条数据么？');
+            return $PermitGroup->remove() ? showTip('权限组删除成功！') : showTip('权限组删除失败！', 0);
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 
-    private function permit($ids = [])
+    public function a()
     {
-        $Permit = new model\Permit();
-        $isDefault = arrToStr($Permit->all4(), 'id');
-        $ids = is_array($ids) ? $isDefault : $ids;
-        $html = '';
-        $object = $Permit->all2();
-        if ($object) {
-            $html .= '<table>';
-            foreach ($object as $value) {
-                $html .= '<tr><td><div class="check-box"><label' .
-                    (in_array($value['id'], explode(',', $isDefault)) ? ' class="red"' : '') .
-                    '><input type="checkbox" name="permit_ids[]" ' .
-                    (in_array($value['id'], explode(',', $ids)) ? 'checked' : '') . ' value="' . $value['id'] . '">' .
-                    $value['name'] . '</label></div></td><td>';
-                $object2 = $Permit->all3($value['id']);
-                if ($object2) {
-                    foreach ($object2 as $v) {
-                        $html .= '<div class="check-box"><label class="' .
-                            (in_array($v['id'], explode(',', $isDefault)) ? ' red' : 'blue') .
-                            '"><input type="checkbox" name="permit_ids[]" ' .
-                            (in_array($v['id'], explode(',', $ids)) ? 'checked' : '') . ' value="' . $v['id'] . '">' .
-                            $v['name'] . '</label></div>';
+        $PermitManage = new model\PermitManage();
+        $html = '<meta charset="utf-8">';
+        $permitManageAll = $PermitManage->all2();
+        if (count($permitManageAll)) {
+            //$html .= '<table cellspacing="0" style="border:1px solid #E5EDF0;">';
+            $html .= '<table class="list">';
+            foreach ($permitManageAll as $value) {
+                //$html .= '<tr><td style="background:#E5EDF0;font-weight:bold;text-align:right;padding:5px ;' .
+                //'width:104px;">'.$value['name'].'：</td><td>';
+                $html .= '<tr><td>' . $value['name'] . '：</td><td>';
+                $permitManageAll2 = $PermitManage->all3($value['id']);
+                if (count($permitManageAll2)) {
+                    foreach ($permitManageAll2 as $v) {
+                        $html .= $v['name'] . '、';
                     }
+                    $html = substr($html, 0, -3);
                 }
                 $html .= '</td></tr>';
             }
             $html .= '</table>';
         }
-        View::assign(['Permit' => $html]);
+        return $html;
+    }
+
+    private function listItem($item)
+    {
+        $item['name'] = keyword($item['name']);
+
+        $permitManageStr = '';
+        if ($item['permit_manage_ids']) {
+            $PermitManage = new model\PermitManage();
+            foreach ($PermitManage->all2($item['permit_manage_ids']) as $v) {
+                $permitManageStr .= $v['name'] . '：<span class="blue">';
+                foreach ($PermitManage->all4($item['permit_manage_ids'], $v['id']) as $v2) {
+                    $permitManageStr .= $v2['name'] . '、';
+                }
+                $permitManageStr = (substr($permitManageStr, -3) == '、' ?
+                        substr($permitManageStr, 0, -3) : $permitManageStr) . '</span><br>';
+            }
+        }
+        $item['permit_manage'] = $permitManageStr;
+
+        $permitDataStr = '';
+        if ($item['permit_data_ids']) {
+            $PermitData = new model\PermitData();
+            foreach ($PermitData->all2($item['permit_data_ids']) as $v) {
+                $permitDataStr .= '' . $v['name'] . '：<span class="blue">';
+                foreach ($PermitData->all4($item['permit_data_ids'], $v['id']) as $v2) {
+                    $permitDataStr .= $v2['name'] . '、';
+                }
+                $permitDataStr = (substr($permitDataStr, -3) == '、' ?
+                        substr($permitDataStr, 0, -3) : $permitDataStr) . '</span><br>';
+            }
+        }
+        $item['permit_data'] = $permitDataStr;
+
+        $item['date'] = dateFormat($item['date']);
+        return $item;
     }
 }

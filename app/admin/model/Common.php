@@ -5,6 +5,7 @@ namespace app\admin\model;
 use Exception;
 use think\facade\Config;
 use think\facade\Db;
+use think\facade\Request;
 use think\Model;
 
 class Common extends Model
@@ -13,8 +14,9 @@ class Common extends Model
     public function info()
     {
         try {
-            return Db::query('SHOW TABLE STATUS FROM `' . Config::get('database.connections.mysql.database') .
-                '` LIKE \'' . Config::get('database.connections.mysql.prefix') . '%\'');
+            $mysql = Config::get('database.connections.mysql');
+            return Db::query('SHOW TABLE STATUS FROM `' . $mysql['database'] . '` LIKE \'' . $mysql['prefix'] . '%' .
+                str_replace($mysql['prefix'], '', Request::get('keyword', '')) . '%\'');
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];

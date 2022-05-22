@@ -1,0 +1,62 @@
+@charset "utf-8";
+.main {
+	width: calc(100% - 322px);
+	margin: 15px 15px 0 15px;
+	background: #F5F5F5;
+}
+.main .card{
+	margin: 0 0 20px 0;
+	background: #fff;
+	border-radius: 2px;
+	padding: 16px 16px 20px 16px;
+}
+.main .card h3{
+	font-size: 14px;
+	margin: 0 0 20px 0;
+}
+.main .card dl{
+	text-align: center;
+	border-right: 1px solid #E8E8E8;
+	box-sizing: border-box;
+	float: left;
+}
+.main .card dl.last{
+	border: none;
+}
+.main .card dl dt{
+	color: rgba(0, 0, 0, 0.55);
+	margin: 0 0 4px 0;
+}
+.main .card dl dd{
+	font-weight: bold;
+	font-size: 18px;
+	font-family:PingFangSC-Regular, PingFang SC,"微软雅黑",serif;
+}
+.main .important dl{
+	border: none;
+	width: 50%;
+	text-align: left;
+	padding: 5px 0 20px 40px;
+}
+.main .important dl dd.amount{
+	font-size: 36px;
+	margin: 10px 0;
+}
+.main .important dl dd.compare{
+	font-size: 14px;
+	font-weight: normal;
+}
+.main .important .important-left{
+	width: 50%;
+	float: left;
+	border-right: 1px solid #E8E8E8;
+	box-sizing: border-box;
+}
+.main .important .important-right{
+	width: 50%;
+	float: left;
+	box-sizing: border-box;
+}
+.main .important .important-right dl{
+	padding-left: 56px;
+}

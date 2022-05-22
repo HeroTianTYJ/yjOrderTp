@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2019 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2021 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -1180,10 +1180,10 @@ class Validate
         if (is_string($rule) && strpos($rule, ',')) {
             [$rule, $param] = explode(',', $rule);
         } elseif (is_array($rule)) {
-            $param = $rule[1] ?? null;
+            $param = $rule[1] ?? 0;
             $rule  = $rule[0];
         } else {
-            $param = null;
+            $param = 0;
         }
 
         return false !== filter_var($value, is_int($rule) ? $rule : filter_id($rule), $param);
@@ -1591,7 +1591,7 @@ class Validate
      * @param string $msg   错误信息
      * @param mixed  $rule  验证规则数据
      * @param string $title 字段描述名
-     * @return string
+     * @return string|array
      */
     protected function parseErrorMsg(string $msg, $rule, string $title)
     {
@@ -1603,6 +1603,11 @@ class Validate
 
         if (is_array($msg)) {
             return $this->errorMsgIsArray($msg, $rule, $title);
+        }
+
+        // rule若是数组则转为字符串
+        if (is_array($rule)) {
+            $rule = implode(',', $rule);
         }
 
         if (is_scalar($rule) && false !== strpos($msg, ':')) {

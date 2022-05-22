@@ -95,10 +95,10 @@ trait Attribute
     protected $strict = true;
 
     /**
-     * 修改器执行记录
+     * 获取器数据
      * @var array
      */
-    private $set = [];
+    private $get = [];
 
     /**
      * 动态获取器
@@ -251,6 +251,17 @@ trait Attribute
     }
 
     /**
+     * 刷新对象原始数据（为当前数据）
+     * @access public
+     * @return $this
+     */
+    public function refreshOrigin()
+    {
+        $this->origin = $this->data;
+        return $this;
+    }
+
+    /**
      * 获取对象原始数据 如果不存在指定字段返回null
      * @access public
      * @param  string $name 字段名 留空获取全部
@@ -262,11 +273,13 @@ trait Attribute
             return $this->origin;
         }
 
-        return array_key_exists($name, $this->origin) ? $this->origin[$name] : null;
+        $fieldName = $this->getRealFieldName($name);
+
+        return array_key_exists($fieldName, $this->origin) ? $this->origin[$fieldName] : null;
     }
 
     /**
-     * 获取对象原始数据 如果不存在指定字段返回false
+     * 获取当前对象数据 如果不存在指定字段返回false
      * @access public
      * @param  string $name 字段名 留空获取全部
      * @return mixed
@@ -326,6 +339,7 @@ trait Attribute
         $name = $this->getRealFieldName($name);
 
         $this->data[$name] = $value;
+        unset($this->get[$name]);
     }
 
     /**
@@ -354,34 +368,28 @@ trait Attribute
     {
         $name = $this->getRealFieldName($name);
 
-        if (isset($this->set[$name])) {
-            return;
-        }
+        // 检测修改器
+        $method = 'set' . Str::studly($name) . 'Attr';
 
-        if (is_null($value) && $this->autoWriteTimestamp && in_array($name, [$this->createTime, $this->updateTime])) {
-            // 自动写入的时间戳字段
-            $value = $this->autoWriteTimestamp();
-        } else {
-            // 检测修改器
-            $method = 'set' . Str::studly($name) . 'Attr';
+        if (method_exists($this, $method)) {
+            $array = $this->data;
 
-            if (method_exists($this, $method)) {
-                $array = $this->data;
+            $value = $this->$method($value, array_merge($this->data, $data));
 
-                $value = $this->$method($value, array_merge($this->data, $data));
-
-                $this->set[$name] = true;
-                if (is_null($value) && $array !== $this->data) {
-                    return;
-                }
-            } elseif (isset($this->type[$name])) {
-                // 类型转换
-                $value = $this->writeTransform($value, $this->type[$name]);
+            if (is_null($value) && $array !== $this->data) {
+                return;
             }
+        } elseif (isset($this->type[$name])) {
+            // 类型转换
+            $value = $this->writeTransform($value, $this->type[$name]);
+        } elseif (is_object($value) && method_exists($value, '__toString')) {
+            // 对象类型
+            $value = $value->__toString();
         }
 
         // 设置数据对象属性
         $this->data[$name] = $value;
+        unset($this->get[$name]);
     }
 
     /**
@@ -487,8 +495,12 @@ trait Attribute
     {
         // 检测属性获取器
         $fieldName = $this->getRealFieldName($name);
-        $method    = 'get' . Str::studly($name) . 'Attr';
 
+        if (array_key_exists($fieldName, $this->get)) {
+            return $this->get[$fieldName];
+        }
+
+        $method = 'get' . Str::studly($name) . 'Attr';
         if (isset($this->withAttr[$fieldName])) {
             if ($relation) {
                 $value = $this->getRelationValue($relation);
@@ -498,7 +510,9 @@ trait Attribute
                 $value = $this->getJsonValue($fieldName, $value);
             } else {
                 $closure = $this->withAttr[$fieldName];
-                $value   = $closure($value, $this->data);
+                if ($closure instanceof \Closure) {
+                    $value = $closure($value, $this->data);
+                }
             }
         } elseif (method_exists($this, $method)) {
             if ($relation) {
@@ -517,6 +531,8 @@ trait Attribute
             $this->relation[$name] = $value;
         }
 
+        $this->get[$fieldName] = $value;
+
         return $value;
     }
 
@@ -529,6 +545,10 @@ trait Attribute
      */
     protected function getJsonValue($name, $value)
     {
+        if (is_null($value)) {
+            return $value;
+        }
+
         foreach ($this->withAttr[$name] as $key => $closure) {
             if ($this->jsonAssoc) {
                 $value[$key] = $closure($value[$key], $value);
@@ -631,11 +651,11 @@ trait Attribute
      * @param  callable     $callback   闭包获取器
      * @return $this
      */
-    public function withAttribute($name, callable $callback = null)
+    public function withAttr($name, callable $callback = null)
     {
         if (is_array($name)) {
             foreach ($name as $key => $val) {
-                $this->withAttribute($key, $val);
+                $this->withAttr($key, $val);
             }
         } else {
             $name = $this->getRealFieldName($name);

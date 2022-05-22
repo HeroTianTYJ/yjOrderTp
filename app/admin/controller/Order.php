@@ -2,562 +2,368 @@
 
 namespace app\admin\controller;
 
+use app\admin\model;
+use app\admin\library\Html;
 use Exception;
 use PHPMailer\PHPMailer\PHPMailer;
-use extend\QQWry;
 use think\facade\Config;
-use think\facade\Route;
 use think\facade\Request;
-use think\facade\Session;
 use think\facade\View;
-use app\admin\model;
+use yjrj\QQWry;
 
 class Order extends Base
 {
-    private $payScene = [
-        0 => [
-            0 => '',
-            1 => '支付宝红包',
-            2 => '支付宝余额',
-            3 => '集分宝',
-            4 => '折扣券',
-            5 => '预付卡',
-            6 => '余额宝',
-            7 => '商家储值卡',
-            8 => '商户优惠券',
-            9 => '商户红包',
-            10 => '蚂蚁花呗'
-        ],
-        1 => [
-            0 => '',
-            1 => '公众号支付',
-            2 => '扫码支付',
-            3 => 'APP支付',
-            4 => 'H5支付',
-            5 => '小程序支付'
-        ]
-    ];
-
     public function index()
     {
-        $Order = new model\Order();
-        if (Request::isPost()) {
-            if (Request::post('type') == 0) {
-                $this->output($Order->all2());
-            } else {
-                if (Request::post('ids')) {
-                    if (Request::post('type') == 1) {
-                        $this->output($Order->all3());
-                    } elseif (Request::post('type') == 2) {
-                        if (Config::get('app.demo')) {
-                            return $this->failed('演示站，数据无法批量删除！');
-                        }
-                        $this->checkPermit('Order', 'recycle2');
-                        return $Order->recycle() ?
-                            $this->success(
-                                Route::buildUrl('/' . parse_name(Request::controller()) . '/index'),
-                                '订单已被批量移入回收站！'
-                            ) : $this->failed('订单批量移入回收站失败！');
-                    } elseif (Request::post('type') == 3) {
-                        $this->checkPermit('OrderRecycle', 'recover2');
-                        return $Order->recover() ?
-                            $this->success(
-                                Route::buildUrl('/' . parse_name(Request::controller()) . '/index'),
-                                '订单批量还原成功！'
-                            ) : $this->failed('订单批量还原失败！');
-                    } elseif (Request::post('type') == 4) {
-                        if (Config::get('app.demo')) {
-                            return $this->failed('演示站，数据无法批量删除！');
-                        }
-                        $this->checkPermit('OrderRecycle', 'remove2');
-                        return $Order->remove() ?
-                            $this->success(
-                                Route::buildUrl('/' . parse_name(Request::controller()) . '/index'),
-                                '订单批量删除成功！'
-                            ) : $this->failed('订单批量删除失败！');
-                    } elseif (Request::post('type') == 5) {
-                        $this->checkPermit(Request::controller(), 'state');
-                        return $Order->state() ?
-                            $this->success(
-                                Route::buildUrl('/' . parse_name(Request::controller()) . '/index'),
-                                '订单状态修改成功！'
-                            ) : $this->failed('订单状态修改失败！');
-                    }
-                } else {
-                    return $this->failed('您未勾选任何订单！');
-                }
+        $orderAll = (new model\Order())->all();
+        if (Request::isAjax()) {
+            foreach ($orderAll as $key => $value) {
+                $orderAll[$key] = $this->listItem($value);
             }
+            return $orderAll->items() ? json_encode($orderAll->items()) : '';
         }
-        $object = $Order->all($this->page($Order->total()));
-        if ($object) {
-            $Template = new model\Template();
-            $Manager = new model\Manager();
-            $Product = new model\Product();
-            $Logistics = new model\Logistics();
-            $OrderState = new model\OrderState();
-            include ROOT_PATH . '/extend/QQWry.php';
-            $QQWry = QQWry::getInstance();
-            foreach ($object as $key => $value) {
-                if ($value['manager_id']) {
-                    $object2 = $Manager->one($value['manager_id']);
-                    $object[$key]['manager'] = $object2 ? $object2['name'] : '此管理员已被删除';
-                } else {
-                    $object[$key]['manager'] = '前台下单';
-                }
-                $object3 = $Product->one($value['product_id']);
-                $object[$key]['pro'] = $object3 ?
-                    '<span style="color:' . $object3['color'] . ';">' . $object3['name'] . '（' . $object3['price'] .
-                    '元）</span>' : '此产品已被删除';
-                $object[$key]['total'] = number_format($value['price'] * $value['count'], 2, '.', '');
-                $object[$key]['address'] = $value['province'] . ' ' . $value['city'] . ' ' . $value['county'] . ' ' .
-                    $value['address'];
-                $object4 = $Logistics->one($value['logistics_id']);
-                $object[$key]['logistics_name'] = $object4 ? $object4['name'] : '';
-                $object[$key]['logistics_code'] = $object4 ? $object4['code'] : '';
-                $object5 = $Template->one($value['template_id']);
-                $object[$key]['template'] = $object5 ? $object5['name'] : '此模板已被删除';
-                $object6 = $OrderState->one($value['order_state_id']);
-                $object[$key]['order_state'] = $object6 ?
-                    '<span style="color:' . $object6['color'] . ';">' . $object6['name'] . '</span>' : '此状态已被删除';
-                $object[$key]['pay'] = Config::get('app.pay1')[$value['pay']];
-                if ($value['pay'] == 3) {
-                    $object[$key]['pay_scene'] = $this->payScene[0][$value['pay_scene']];
-                } elseif ($value['pay'] == 7) {
-                    $object[$key]['pay_scene'] = $this->payScene[1][$value['pay_scene']];
-                } else {
-                    $object[$key]['pay_scene'] = '';
-                }
-                $object[$key]['ip_address'] = $QQWry->getAddr($value['ip']);
-            }
-        }
-        $this->field(Request::get('field'));
-        $this->manager(Request::get('manager_id', -1));
-        $this->product(Request::get('product_id'));
-        $this->logistics(Request::get('logistics_id'));
-        $this->template(Request::get('template_id'));
-        $this->orderState(Request::get('order_state_id'));
-        $this->pay(Request::get('pay'));
-        $this->alipayScene(Request::get('alipay_scene'));
-        $this->wxpayScene(Request::get('wxpay_scene'));
-        View::assign(['All' => $object]);
+        View::assign(['Total' => $orderAll->total()]);
+        Html::product(Request::get('product_id'), 0, true);
+        Html::manager(Request::get('manager_id', -1));
+        Html::orderPaymentSelect(Request::get('payment_id'));
+        Html::alipayScene(Request::get('alipay_scene', -1));
+        Html::wxpayScene(Request::get('wxpay_scene', -1));
+        Html::orderState(Request::get('order_state_id'));
+        Html::express(Request::get('express_id'));
+        Html::template2(Request::get('template_id'));
         return $this->view('order/index');
     }
 
     public function add()
     {
-        if (Request::isPost()) {
-            $Order = new model\Order();
-            $object = $Order->add();
-            if (is_numeric($object)) {
-                return $object > 0 ?
-                    $this->success(Route::buildUrl('/' . parse_name(Request::controller()) . '/index'), '订单添加成功！') :
-                    $this->failed('订单添加失败！');
-            } else {
-                return $this->failed($object);
+        if (Request::isAjax()) {
+            if (Request::get('action') == 'do') {
+                $orderAdd = (new model\Order())->add();
+                if (is_numeric($orderAdd)) {
+                    return $orderAdd ? showTip('订单添加成功！') : showTip('订单添加失败！', 0);
+                } else {
+                    return showTip($orderAdd, 0);
+                }
             }
+            Html::template2(0, 1);
+            Html::product(0, 1, true);
+            Html::express();
+            Html::orderPaymentRadio(1);
+            Html::orderStateRadio();
+            return $this->view();
+        } else {
+            return showTip('非法操作！', 0);
         }
-        $this->product(0, 1);
-        $this->logistics(0, 1);
-        $this->template(0, 1);
-        $this->pay();
-        $this->orderState2();
-        View::assign(['Pay' => Config::get('app.pay1')]);
-        return $this->view();
     }
 
-    public function multi()
+    public function state()
     {
-        if (Request::isPost()) {
-            $Order = new model\Order();
-            $object = $Order->multi();
-            return is_numeric($object) ?
-                $this->success(Route::buildUrl('/' . parse_name(Request::controller()) . '/index'), '物流单号修改成功！') :
-                $this->failed($object);
+        if (Request::isAjax()) {
+            if (Request::get('action') == 'do') {
+                $orderModify = (new model\Order())->modify2();
+                return is_numeric($orderModify) ? showTip('订单状态修改成功！') : showTip($orderModify, 0);
+            }
+            Html::orderStateRadio();
+            return $this->view();
+        } else {
+            return showTip('非法操作！', 0);
         }
-        return $this->view();
+    }
+
+    public function express()
+    {
+        if (Request::isAjax()) {
+            $Order = new model\Order();
+            if (Request::get('action') == 'do') {
+                $orderModify = $Order->modify3();
+                return is_numeric($orderModify) ? showTip('快递单号修改成功！') : showTip($orderModify, 0);
+            }
+            $orderIds = '';
+            foreach ($Order->all4() as $value) {
+                $orderIds .= $value['order_id'] . '
+';
+            }
+            View::assign(['OrderIds' => substr($orderIds, 0, -2)]);
+            Html::express();
+            return $this->view();
+        } else {
+            return showTip('非法操作！', 0);
+        }
     }
 
     public function update()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && Request::post('id')) {
             $Order = new model\Order();
-            if (Request::isPost()) {
-                $object = $Order->modify();
-                if (is_numeric($object)) {
-                    if (Request::post('sendmail') == 1) {
-                        $this->sendmail(Config::get('system.mail_pay_subject'), Config::get('system.mail_pay_content'));
-                    } elseif (Request::post('sendmail') == 2) {
-                        $this->sendmail(
-                            Config::get('system.mail_send_subject'),
-                            Config::get('system.mail_send_content')
+            $orderOne = $Order->one();
+            if (!$orderOne) {
+                return showTip('不存在此订单！', 0);
+            }
+            if (Request::get('action') == 'do') {
+                $orderModify = $Order->modify();
+                if (is_numeric($orderModify)) {
+                    if (Request::post('send_mail')) {
+                        if (Request::post('send_mail') == 1) {
+                            $this->sendmail(
+                                Request::post('email'),
+                                Config::get('system.mail_pay_subject'),
+                                Config::get('system.mail_pay_content')
+                            );
+                        } elseif (Request::post('send_mail') == 2) {
+                            $this->sendmail(
+                                Request::post('email'),
+                                Config::get('system.mail_send_subject'),
+                                Config::get('system.mail_send_content')
+                            );
+                        }
+                    }
+                    if (Request::post('send_sms') == 1) {
+                        sendSms(
+                            Request::post('tel'),
+                            strip_tags($this->mail(Config::get('system.sms_backend_content')))
                         );
                     }
-                    return $this->success(
-                        Request::get('from') == 1 ?
-                            Route::buildUrl(
-                                '/' . parse_name(Request::controller()) . '/detail',
-                                ['id' => Request::get('id')]
-                            ) : Route::buildUrl('/' . parse_name(Request::controller()) . '/index'),
-                        '订单修改成功！'
-                    );
+                    return showTip(['msg' => '订单修改成功！', 'data' => $this->listItem($Order->one())]);
                 } else {
-                    return $this->failed($object);
+                    return showTip($orderModify, 0);
                 }
             }
-            $object = $Order->one();
-            if (!$object) {
-                return $this->failed('不存在此订单，或没有此订单的管理权限！');
-            }
-            $this->product($object['product_id']);
-            $this->logistics($object['logistics_id'], 1);
-            $this->template($object['template_id'], 1);
-            $this->pay($object['pay']);
-            $this->orderState2($object['order_state_id']);
-            $object['payUrl'] = $this->payUrl($object['order_id']);
-            View::assign([
-                'One' => $object,
-                'Pay' => Config::get('app.pay1')
-            ]);
+            Html::template2($orderOne['template_id']);
+            Html::product($orderOne['product_id'], 0, true);
+            Html::express($orderOne['express_id']);
+            Html::orderPaymentRadio($orderOne['payment_id']);
+            Html::orderStateRadio($orderOne['order_state_id']);
+            $orderOne['pay_url'] = $this->payUrl($orderOne['order_id']);
+            View::assign(['One' => $orderOne]);
             return $this->view('order/update');
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 
     public function detail()
     {
-        if (Request::get('id')) {
+        if (Request::post('id')) {
             $Order = new model\Order();
-            $object = $Order->one();
-            if (!$object) {
-                return $this->failed('不存在此订单，或没有此订单的管理权限！');
+            $orderOne = $Order->one();
+            if (!$orderOne) {
+                return showTip('不存在此订单！', 0);
             }
 
-            if ($object['manager_id']) {
-                $Manager = new model\Manager();
-                $object2 = $Manager->one($object['manager_id']);
-                $object['manager'] = $object2 ? $object2['name'] : '此管理员已被删除';
+            if ($orderOne['manager_id']) {
+                $managerOne = (new model\Manager())->one($orderOne['manager_id']);
+                $orderOne['manager'] = $managerOne ? $managerOne['name'] : '此管理员已被删除';
             } else {
-                $object['manager'] = '前台下单';
+                $orderOne['manager'] = '终端客户';
             }
-
-            $Product = new model\Product();
-            $object3 = $Product->one($object['product_id']);
-            $object['product'] = $object3 ?
-                '<span style="color:' . $object3['color'] . ';">' . $object3['name'] . '（' . $object3['price'] .
-                '元）</span>' : '此产品已被删除';
-
-            $object['total'] = number_format($object['price'] * $object['count'], 2, '.', '');
-
-            if ($object['logistics_id']) {
-                $Logistics = new model\Logistics();
-                $object4 = $Logistics->one($object['logistics_id']);
-                $object['logistics_name'] = $object4 ? $object4['name'] : '此物流已被删除';
-                $object['logistics_code'] = $object4 ? $object4['code'] : '';
+            $templateOne = (new model\Template())->one($orderOne['template_id']);
+            $orderOne['template'] = $templateOne ? $templateOne['name'] : '此模板已被删除';
+            $productOne = (new model\Product())->one($orderOne['product_id']);
+            $orderOne['product'] = $productOne ? $productOne['name'] : '此商品已被删除';
+            $orderOne['total'] = number_format($orderOne['price'] * $orderOne['count'], 2, '.', '');
+            $payScene = '';
+            if ($orderOne['order_state_id'] != 1) {
+                if ($orderOne['payment_id'] == 2) {
+                    $payScene = Config::get('pay_scene.alipay.' . $orderOne['pay_scene']);
+                } elseif ($orderOne['payment_id'] == 3) {
+                    $payScene = Config::get('pay_scene.wxpay.' . $orderOne['pay_scene']);
+                }
+            }
+            $orderOne['pay_scene'] = $payScene;
+            $orderOne['pay_url'] = $this->payUrl($orderOne['order_id']);
+            $orderStateOne = (new model\OrderState())->one($orderOne['order_state_id']);
+            $orderOne['order_state'] = $orderStateOne ?
+                '<span style="color:' . $orderStateOne['color'] . ';">' . $orderStateOne['name'] . '</span>' :
+                '此状态已被删除';
+            if ($orderOne['express_id']) {
+                $expressOne = (new model\Express())->one($orderOne['express_id']);
+                $orderOne['express_name'] = $expressOne ? $expressOne['name'] : '此快递公司已被删除';
+                $orderOne['express_code'] = $expressOne ? $expressOne['code'] : '';
             } else {
-                $object['logistics_name'] = $object['logistics_code'] = '';
+                $orderOne['express_name'] = $orderOne['express_code'] = '';
             }
 
-            $Template = new model\Template();
-            $object5 = $Template->one($object['template_id']);
-            $object['template'] = $object5 ? $object5['name'] : '此模板已被删除';
-
-            $OrderState = new model\OrderState();
-            $object6 = $OrderState->one($object['order_state_id']);
-            $object['order_state'] = $object6 ?
-                '<span style="color:' . $object6['color'] . ';">' . $object6['name'] . '</span>' : '此状态已被删除';
-
-            include ROOT_PATH . '/extend/QQWry.php';
-            $QQWry = QQWry::getInstance();
-            $object['ip'] = $object['ip'] . ' ' . $QQWry->getAddr($object['ip']);
-
-            if ($object['pay'] == 3) {
-                $object['pay_scene'] = $this->payScene[0][$object['pay_scene']];
-            } elseif ($object['pay'] == 7) {
-                $object['pay_scene'] = $this->payScene[1][$object['pay_scene']];
-            } else {
-                $object['pay_scene'] = '';
-            }
-            $object['pay'] = Config::get('app.pay1')[$object['pay']];
-            $object['payUrl'] = $this->payUrl($object['order_id']);
-
-            View::assign(['One' => $object]);
+            View::assign(['One' => $orderOne]);
             return $this->view('order/detail');
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 
-    public function recycle()
+    public function delete()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
+            if (Config::get('app.demo')) {
+                return showTip('演示站，订单无法删除！', 0);
+            }
             $Order = new model\Order();
-            if (Request::isPost()) {
-                return $Order->recycle() ?
-                    $this->success(Request::post('prev'), '订单已被移入回收站！') : $this->failed('订单移入回收站失败！');
+            if (Request::post('id')) {
+                if (!$Order->one()) {
+                    return showTip('不存在此订单！', 0);
+                }
+            } elseif (Request::post('ids')) {
+                foreach (explode(',', Request::post('ids')) as $value) {
+                    if (!$Order->one($value)) {
+                        return showTip('不存在您勾选的订单！', 0);
+                    }
+                }
             }
-            if (!$Order->one()) {
-                return $this->failed('不存在此订单，或没有此订单的管理权限！');
-            }
-            return $this->confirm('您真的要将这个订单移入回收站么？');
+            return $Order->recycle() ? showTip('订单已被移入回收站！') : showTip('订单移入回收站失败！', 0);
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 
-    private function output($object)
+    public function output()
     {
-        $this->checkPermit(Request::controller(), 'output');
-        $output = '"订单号","下单管理员","下单模板","姓名","订购产品","成交单价","订购数量","成交总价","联系电话","详细地址","邮政编码","备注","电子邮箱","下单IP",' .
-        '"下单来路","下单时间","支付状态","支付订单号","支付场景","支付时间","订单状态","物流公司","物流编号",';
-        if ($object) {
-            $Template = new model\Template();
+        if (Request::isAjax()) {
+            $Order = new model\Order();
+            if (Request::post('type') == 0) {
+                return $this->outputDo($Order->all2(), Request::post('siwu', 0));
+            } else {
+                return $this->outputDo($Order->all3(), Request::post('siwu', 0));
+            }
+        } else {
+            return showTip('非法操作！', 0);
+        }
+    }
+
+    private function outputDo($orderAll, $type)
+    {
+        if ($type == 0) {
+            $output = '"订单号","管理员","下单模板","姓名","订购商品","成交单价","订购数量","成交总价","联系电话","详细地址","备注","电子邮箱","下单IP",' .
+                '"下单来路","下单时间","支付状态","支付订单号","支付场景","支付时间","订单状态","快递公司","快递单号",';
+        } else {
+            $output = '"客户编号","单位名称","单位简称","联系地址","邮政编码","联系人","联系人手机","用户电话","用户传真","所属省份","所属地市","网址","备注","是否客户",' .
+                '"是否供应商","开户银行","帐号","拼音码","国家","区镇","邮箱",';
+        }
+        if ($orderAll) {
             $Manager = new model\Manager();
+            $Template = new model\Template();
             $Product = new model\Product();
-            $Logistics = new model\Logistics();
+            $Express = new model\Express();
             $OrderState = new model\OrderState();
-            include ROOT_PATH . '/extend/QQWry.php';
-            $QQWry = QQWry::getInstance();
-            foreach ($object as $value) {
-                if ($value['manager_id']) {
-                    $object2 = $Manager->one($value['manager_id']);
-                    $manager = $object2 ? $object2['name'] : '此管理员已被删除';
-                } else {
-                    $manager = '前台下单';
-                }
-                $object3 = $Product->one($value['product_id']);
-                if ($value['logistics_id']) {
-                    $object4 = $Logistics->one($value['logistics_id']);
-                    $logisticsName = $object4 ? $object4['name'] : '此物流已被删除';
-                } else {
-                    $logisticsName = '';
-                }
-                $object5 = $Template->one($value['template_id']);
-                $object6 = $OrderState->one($value['order_state_id']);
-                if ($value['pay'] == 3) {
-                    $payScene = $this->payScene[0][$value['pay_scene']];
-                } elseif ($value['pay'] == 7) {
-                    $payScene = $this->payScene[1][$value['pay_scene']];
-                } else {
+            foreach ($orderAll as $value) {
+                if ($type == 0) {
+                    if ($value['manager_id']) {
+                        $managerOne = $Manager->one($value['manager_id']);
+                        $managerName = $managerOne ? $managerOne['name'] : '此管理员/分销商已被删除';
+                    } else {
+                        $managerName = '终端客户';
+                    }
+                    $templateOne = $Template->one($value['template_id']);
+                    $productOne = $Product->one($value['product_id']);
+                    if ($value['express_id']) {
+                        $expressOne = $Express->one($value['express_id']);
+                        $expressName = $expressOne ? $expressOne['name'] : '此快递已被删除';
+                    } else {
+                        $expressName = '';
+                    }
+                    $orderStateOne = $OrderState->one($value['order_state_id']);
                     $payScene = '';
-                }
-                $output .= "\r\n" . '"' . $value['order_id'] . '","' . $manager . '","' . ($object5 ? $object5['name'] :
-                        '此模板已被删除') . '","' . $value['name'] . '","' . ($object3 ? $object3['name'] . '（' .
-                        $object3['price'] . '元）' : '此产品已被删除') . '","' . $value['price'] . '元","' . $value['count'] .
-                    '","' . number_format($value['price'] * $value['count'], 2, '.', '') . '元","\'' . $value['tel'] .
-                    '","' . $value['province'] . ' ' . $value['city'] . ' ' . $value['county'] . ' ' .
-                    $value['address'] . '","\'' . $value['post'] . '","' . $value['note'] . '","' . $value['email'] .
-                    '","' . ($value['ip'] ? $value['ip'] . ' -- ' . $QQWry->getAddr($value['ip']) : '') . '","' .
-                    htmlspecialchars_decode($value['referrer']) . '","' . dateFormat($value['date']) . '","' .
-                    Config::get('app.pay1')[$value['pay']] . '","\'' . $value['pay_id'] . '","' . $payScene . '","' .
-                    ($value['pay_date'] ? dateFormat($value['pay_date']) : '') . '","' . ($object6 ? $object6['name'] :
-                        '此状态已被删除') . '","' . $logisticsName . '","' . $value['logistics_number'] . '",';
-            }
-        }
-        $output = mb_convert_encoding($output, 'GBK', 'UTF-8');
-        downFile($output, 'order_' . time() . '.csv');
-        exit;
-    }
-
-    public function pay($id = 0)
-    {
-        $html = '';
-        foreach (Config::get('app.pay1') as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . '>' . $value . '</option>';
-        }
-        View::assign(['Pay' => $html]);
-    }
-
-    public function alipayScene($id = 0)
-    {
-        $html = '';
-        unset($this->payScene[0][0]);
-        foreach ($this->payScene[0] as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . '>' . $value . '</option>';
-        }
-        View::assign(['AlipayScene' => $html]);
-    }
-
-    public function wxpayScene($id = 0)
-    {
-        $html = '';
-        unset($this->payScene[1][0]);
-        foreach ($this->payScene[1] as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . '>' . $value . '</option>';
-        }
-        View::assign(['WxpayScene' => $html]);
-    }
-
-    public function field($id = 0)
-    {
-        $html = '';
-        foreach (
-            [
-                '所有字段',
-                '订单号',
-                '姓名',
-                '联系电话',
-                '省份',
-                '城市',
-                '区/县',
-                '乡镇/街道',
-                '详细地址',
-                '邮政编码',
-                '电子邮箱',
-                'IP',
-                '下单来路',
-                '物流编号',
-                '支付订单号'
-            ] as $key => $value
-        ) {
-            $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . '>' . $value . '</option>';
-        }
-        View::assign(['Field' => $html]);
-    }
-
-    public function manager($id = 0)
-    {
-        $session = Session::get(Config::get('system.session_key'));
-        $Manager = new model\Manager();
-        $object = $Manager->all2();
-        $html = '';
-        if ($session['level'] == 1 || ($session['level'] == 2 && $session['order_permit'] != 1)) {
-            $html .= '<option value="0" ' . ($id == 0 ? 'selected' : '') . '>前台下单</option>';
-        }
-        if ($object) {
-            foreach ($object as $value) {
-                $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') . '>' .
-                    $value['name'] . '</option>';
-            }
-        }
-        View::assign(['Manager' => $html]);
-    }
-
-    public function product($id = 0, $flag = 0)
-    {
-        $html = '';
-        $ProductSort = new model\ProductSort();
-        $object = $ProductSort->all2();
-        if ($object) {
-            $Product = new model\Product();
-            foreach ($object as $value) {
-                $html .= '<optgroup label="' . $value['name'] . '" style="color:' . $value['color'] . ';">';
-                $object2 = $Product->all2($value['id']);
-                if ($object2) {
-                    foreach ($object2 as $v) {
-                        if ($id == 0) {
-                            $html .= '<option value="' . $v['id'] . '" ' . ($v['is_default'] && $flag ? 'selected' : '')
-                                . ' style="color:' . ($v['color'] ? $v['color'] : '#333') . ';" price="' . $v['price'] .
-                                '">└—' . $v['name'] . '（' . $v['price'] . '元）</option>';
-                        } else {
-                            $html .= '<option value="' . $v['id'] . '" ' . ($v['id'] == $id ? 'selected' : '') .
-                                ' style="color:' . ($v['color'] ? $v['color'] : '#333') . ';" price="' . $v['price'] .
-                                '">└—' . $v['name'] . '（' . $v['price'] . '元）</option>';
+                    if ($value['order_state_id'] != 1) {
+                        if ($value['payment_id'] == 2) {
+                            $payScene = Config::get('pay_scene.alipay.' . $value['pay_scene']);
+                        } elseif ($value['payment_id'] == 3) {
+                            $payScene = Config::get('pay_scene.wxpay.' . $value['pay_scene']);
                         }
                     }
+                    $output .= "\r\n" . '"\'' . $value['order_id'] . '","' . $managerName . '","' .
+                        ($templateOne ? $templateOne['name'] : '此模板已被删除') . '","' . $value['name'] . '","' .
+                        ($productOne ? $productOne['name'] . '（' . $productOne['price'] . '元）' : '此商品已被删除') . '","' .
+                        $value['price'] . '元","' . $value['count'] . '","' .
+                        number_format($value['price'] * $value['count'], 2, '.', '') . '元","\'' . $value['tel'] .
+                        '","' . $value['province'] . ' ' . $value['city'] . ' ' . $value['county'] . ' ' .
+                        $value['address'] . '","' . $value['note'] . '","' .
+                        $value['email'] . '","' . ($value['ip'] ? $value['ip'] . ' -- ' .
+                            QQWry::getAddress($value['ip']) : '') . '","' . htmlspecialchars_decode($value['referrer'])
+                        . '","' . dateFormat($value['date']) . '","' . Config::get('payment.' . $value['payment_id']) .
+                        '","\'' . $value['pay_id'] . '","' . $payScene . '","' . ($value['pay_date'] ?
+                            dateFormat($value['pay_date']) : '') . '","' . ($orderStateOne ? $orderStateOne['name'] :
+                            '此状态已被删除') . '","' . $expressName . '","' . $value['express_number'] . '",';
+                } else {
+                    $output .= "\r\n" . '"","","","' . $value['town'] . ' ' . $value['address'] . '","","' .
+                        $value['name'] . '","","\'' . $value['tel'] . '","","' . $value['province'] . '","' .
+                        $value['city'] . '","","' . $value['note'] . '","","","","","","","' . $value['county'] .
+                        '","",';
                 }
-                $html .= '</optgroup>';
             }
         }
-        View::assign(['Product' => $html]);
+        return json_encode(['extension' => 'csv', 'filename' => 'order_' . date('YmdHis') . '.csv', 'file' => $output]);
     }
 
-    public function logistics($id = 0, $flag = 0)
+    private function listItem($item)
     {
-        $html = $flag ? '<option value="0">请选择物流公司</option>' : '';
-        $Logistics = new model\Logistics();
-        $object = $Logistics->all2();
-        foreach ($object as $value) {
-            $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') . '>' .
-                $value['name'] . '</option>';
+        $item['order_id'] = keyword($item['order_id']);
+        if ($item['manager_id']) {
+            $managerOne = (new model\Manager())->one($item['manager_id']);
+            $item['manager'] = $managerOne ? $managerOne['name'] : '此管理员已被删除';
+        } else {
+            $item['manager'] = '终端客户';
         }
-        View::assign(['Logistics' => $html]);
-    }
-
-    public function template($id = 0, $flag = 0)
-    {
-        $html = '';
-        $Template = new model\Template();
-        $object = $Template->all2();
-        foreach ($object as $value) {
-            if ($id == 0) {
-                $html .= '<option value="' . $value['id'] . '" ' . ($value['is_default'] && $flag ? 'selected' : '') .
-                    '>' . $value['name'] . '</option>';
-            } else {
-                $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') . '>' .
-                    $value['name'] . '</option>';
+        $templateOne = (new model\Template())->one($item['template_id']);
+        $item['template'] = $templateOne ? $templateOne['name'] : '此模板已被删除';
+        $item['name'] = keyword($item['name']);
+        $productOne = (new model\Product())->one($item['product_id']);
+        $item['product'] = $productOne ? $productOne['name'] . '（' . $productOne['price'] . '元' . '）' : '此商品已被删除';
+        $item['total'] = number_format($item['price'] * $item['count'], 2, '.', '');
+        $item['tel'] = keyword($item['tel']);
+        $item['address'] = $item['province'] . ' ' . $item['city'] . ' ' . $item['county'] . ' ' . $item['town'] . ' ' .
+            $item['address'];
+        $item['address_truncate'] = keyword(truncate($item['address'], 0, 25));
+        $item['email'] = keyword($item['email']);
+        $item['ip'] = '<span title="' . QQWry::getAddress($item['ip']) . '">' . keyword($item['ip']) . '</span>';
+        $item['date'] = dateFormat($item['date']);
+        $item['payment'] = Config::get('payment.' . $item['payment_id']);
+        $item['pay_id'] = keyword($item['pay_id']);
+        $payScene = '';
+        if ($item['order_state_id'] != 1) {
+            if ($item['payment_id'] == 2) {
+                $payScene = Config::get('pay_scene.alipay.' . $item['pay_scene']);
+            } elseif ($item['payment_id'] == 3) {
+                $payScene = Config::get('pay_scene.wxpay.' . $item['pay_scene']);
             }
         }
-        View::assign(['Template' => $html]);
-    }
-
-    public function orderState($id = 0)
-    {
-        $html = '';
-        $OrderState = new model\OrderState();
-        $object = $OrderState->all2();
-        foreach ($object as $value) {
-            $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') .
-                ' style="color:' . $value['color'] . ';">' . $value['name'] . '</option>';
+        $item['pay_scene'] = $payScene;
+        $item['pay_date'] = $item['pay_date'] ? dateFormat($item['pay_date']) : '';
+        $orderStateOne = (new model\OrderState())->one($item['order_state_id']);
+        $item['order_state'] = $orderStateOne ?
+            '<span style="color:' . $orderStateOne['color'] . ';">' . $orderStateOne['name'] . '</span>' :
+            '此状态已被删除';
+        $item['express'] = '';
+        if ($item['express_id']) {
+            $expressOne = (new model\Express())->one($item['express_id']);
+            $item['express'] = ($expressOne ? $expressOne['name'] : '') .
+                '<br><a href="https://www.kuaidi100.com/chaxun?com=' . ($expressOne ? $expressOne['code'] : '') .
+                '&nu=' . $item['express_number'] . '" target="_blank">' . keyword($item['express_number']) . '</a>';
         }
-        View::assign(['OrderState' => $html]);
+        return $item;
     }
 
-    private function orderState2($id = 0)
-    {
-        $html = '';
-        $OrderState = new model\OrderState();
-        $object = $OrderState->all2();
-        foreach ($object as $value) {
-            if ($id == 0) {
-                $html .= '<label style="color:' . $value['color'] .
-                    ';"><input type="radio" name="order_state_id" value="' . $value['id'] . '" ' .
-                    ($value['is_default'] ? 'checked' : '') . '>' . $value['name'] . '</label>&nbsp;';
-            } else {
-                $html .= '<label style="color:' . $value['color'] .
-                    ';"><input type="radio" name="order_state_id" value="' . $value['id'] . '" ' .
-                    ($value['id'] == $id ? 'checked' : '') . '>' . $value['name'] . '</label>&nbsp;';
-            }
-        }
-        View::assign(['OrderState' => $html]);
-    }
-
-    private function payUrl($orderId)
-    {
-        return [
-            'alipay' => Config::get('app.web_url') . Config::get('system.index_php') . 'pay/alipay/oid/' .
-                $orderId . '.html',
-            'wxpay' => Config::get('app.web_url') . Config::get('system.index_php') . 'pay/wxpay/oid/' .
-                $orderId . '.html'
-        ];
-    }
-
-    private function sendmail($subject, $content)
+    private function sendmail($address, $subject, $content)
     {
         $Smtp = new model\Smtp();
-        if ($Smtp->total() > 0) {
-            $object = $Smtp->one2();
-            if ($object) {
+        if ($Smtp->count() > 0) {
+            $smtpOne = $Smtp->one2();
+            if ($smtpOne) {
                 try {
-                    include ROOT_PATH . '/extend/PHPMailer/SMTP.php';
-                    include ROOT_PATH . '/extend/PHPMailer/PHPMailer.php';
+                    include ROOT_DIR . '/extend/PHPMailer/SMTP.php';
+                    include ROOT_DIR . '/extend/PHPMailer/PHPMailer.php';
                     $PHPMailer = new PHPMailer();
                     $PHPMailer->CharSet = 'UTF-8';
-                    $PHPMailer->IsSMTP();
+                    $PHPMailer->isSMTP();
                     $PHPMailer->SMTPAuth = true;
-                    $PHPMailer->Port = $object[0]['port'];
-                    $PHPMailer->Host = $object[0]['smtp'];
-                    $PHPMailer->Username = $object[0]['user'];
-                    $PHPMailer->Password = $object[0]['pass'];
-                    $PHPMailer->From = $object[0]['email'];
-                    $PHPMailer->FromName = $object[0]['email'];
-                    foreach (explode(',', Request::post('email')) as $value) {
-                        $PHPMailer->AddAddress($value, $PHPMailer->FromName);
-                    }
-                    $PHPMailer->IsHTML(true);
+                    $PHPMailer->Port = $smtpOne[0]['port'];
+                    $PHPMailer->Host = $smtpOne[0]['smtp'];
+                    $PHPMailer->Username = $smtpOne[0]['user'];
+                    $PHPMailer->Password = $smtpOne[0]['pass'];
+                    $PHPMailer->From = $smtpOne[0]['email'];
+                    $PHPMailer->FromName = $smtpOne[0]['email'];
+                    $PHPMailer->addAddress($address, $PHPMailer->FromName);
+                    $PHPMailer->isHTML();
                     $PHPMailer->Subject = $this->mail($subject);
                     $PHPMailer->Body = $this->mail($content);
-                    $PHPMailer->Send();
+                    $PHPMailer->send();
                 } catch (Exception $e) {
                     echo $e->getMessage();
                 }
@@ -567,24 +373,21 @@ class Order extends Base
 
     private function mail($content)
     {
-        include ROOT_PATH . '/extend/QQWry.php';
-        $QQWry = QQWry::getInstance();
-
-        $Product = new model\Product();
-        $object = $Product->one(Request::post('product_id'));
-
-        $Logistics = new model\Logistics();
-        $object2 = $Logistics->one(Request::post('logistics_id'));
-
-        $OrderState = new model\OrderState();
-        $object3 = $OrderState->one(Request::post('order_state_id'));
-
-        $payScene = '';
-        if (Request::post('pay') == 3) {
-            $payScene = $this->payScene[0][Request::post('pay_scene')];
-        } elseif (Request::post('pay') == 7) {
-            $payScene = $this->payScene[1][Request::post('pay_scene')];
+        $productOne = (new model\Product())->one(Request::post('product_id'));
+        $expressOne = [];
+        if (Request::post('express_id')) {
+            $expressOne = (new model\Express())->one(Request::post('express_id'));
         }
+        $orderStateOne = (new model\OrderState())->one(Request::post('order_state_id'));
+        $payScene = '';
+        if (Request::post('order_state_id') != 1) {
+            if (Request::post('payment_id') == 2) {
+                $payScene = Config::get('pay_scene.alipay.' . Request::post('pay_scene'));
+            } elseif (Request::post('payment_id') == 3) {
+                $payScene = Config::get('pay_scene.wxpay.' . Request::post('pay_scene'));
+            }
+        }
+        $payUrl = $this->payUrl(Request::post('order_id'));
 
         return str_replace([
             '{order_id}',
@@ -599,28 +402,25 @@ class Order extends Base
             '{county}',
             '{town}',
             '{address}',
-            '{post}',
             '{note}',
-            '{email}',
             '{ip}',
-            '{referrer}',
-            '{alipay}',
-            '{wxpay}',
-            '{pay}',
+            '{alipay_url}',
+            '{wxpay_url}',
+            '{payment}',
             '{pay_id}',
             '{pay_scene}',
             '{pay_date}',
-            '{state}',
-            '{logistics_name}',
-            '{logistics_id}',
-            '{logistics_url}',
+            '{order_state}',
+            '{express_name}',
+            '{express_id}',
+            '{express_url}',
             '{date}'
         ], [
             Request::post('order_id'),
-            $object ? $object['name'] : '',
-            $object ? $object['price'] : '',
+            $productOne ? $productOne['name'] : '',
+            $productOne ? $productOne['price'] : '',
             Request::post('count'),
-            $object ? number_format($object['price'] * Request::post('count'), 2, '.', '') : '0.00',
+            $productOne ? number_format($productOne['price'] * Request::post('count'), 2, '.', '') : '0.00',
             Request::post('name'),
             Request::post('tel'),
             Request::post('province2'),
@@ -628,27 +428,31 @@ class Order extends Base
             Request::post('county2'),
             Request::post('town2'),
             Request::post('address'),
-            Request::post('post'),
             Request::post('note'),
-            Request::post('email'),
-            Request::post('ip') . ' ' . $QQWry->getAddr(Request::post('ip')),
-            Request::post('referrer') ?
-                '<a href="' . Request::post('referrer') . '" target="_blank">' . Request::post('referrer') . '</a>' :
-                '直接进入',
-            Config::get('app.web_url') . Config::get('system.index_php') . 'pay/alipay/oid/' .
-            Request::post('order_id') . '.html',
-            Config::get('app.web_url') . Config::get('system.index_php') . 'pay/wxpay/oid/' .
-            Request::post('order_id') . '.html',
-            Config::get('app.pay1')[Request::post('pay')],
+            Request::post('ip') . ' ' . QQWry::getAddress(Request::post('ip')),
+            $payUrl['alipay'],
+            $payUrl['wxpay'],
+            Config::get('payment.' . Request::post('payment_id')),
             Request::post('pay_id'),
             $payScene,
             Request::post('pay_date') ? dateFormat(Request::post('pay_date')) : '',
-            $object3 ? '<span style="color:' . $object3['color'] . ';">' . $object3['name'] . '</span>' : '',
-            $object2 ? $object2['name'] : '',
-            Request::post('logistics_number'),
-            'http://www.kuaidi100.com/chaxun?com=' . ($object2 ? $object2['code'] : '') . '&nu=' .
-            Request::post('logistics_number'),
+            $orderStateOne ?
+                '<span style="color:' . $orderStateOne['color'] . ';">' . $orderStateOne['name'] . '</span>' : '',
+            $expressOne ? $expressOne['name'] : '',
+            Request::post('express_number'),
+            'https://www.kuaidi100.com/chaxun?com=' . ($expressOne ? $expressOne['code'] : '') . '&nu=' .
+                Request::post('express_number'),
             dateFormat(Request::post('date'))
         ], $content);
+    }
+
+    private function payUrl($orderId)
+    {
+        return [
+            'alipay' => Config::get('url.web1') . Config::get('system.index_php') . 'pay/alipay/order_id/' . $orderId .
+                '.html',
+            'wxpay' => Config::get('url.web1') . Config::get('system.index_php') . 'pay/wxpay/order_id/' . $orderId .
+                '.html'
+        ];
     }
 }

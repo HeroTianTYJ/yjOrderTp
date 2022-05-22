@@ -11,21 +11,22 @@ use think\Model;
 class Visit extends Model
 {
     //查询总记录
-    public function total()
+    public function totalCount()
     {
-        return $this->where($this->map()['where'], $this->map()['value'])->count();
+        return $this->where('date1', '>', strtotime(date('Y-m-d') . ' 00:00:00'))->count();
     }
 
     //查询所有
-    public function all($firstRow)
+    public function all()
     {
         try {
             return $this->field('ip,url,count,date1,date2')
-                ->where($this->map()['where'], $this->map()['value'])
+                ->where(
+                    '`ip` LIKE :ip OR `url` LIKE :url',
+                    ['ip' => '%' . Request::get('keyword') . '%', 'url' => '%' . Request::get('keyword') . '%']
+                )
                 ->order(['date2' => 'DESC'])
-                ->limit($firstRow, Config::get('app.page_size'))
-                ->select()
-                ->toArray();
+                ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -52,16 +53,5 @@ class Visit extends Model
             echo $e->getMessage();
             return [];
         }
-    }
-
-    //搜索
-    private function map()
-    {
-        $map['where'] = '(`ip` LIKE :ip OR `url` LIKE :url)';
-        $map['value'] = [
-            'ip' => '%' . Request::get('keyword') . '%',
-            'url' => '%' . Request::get('keyword') . '%'
-        ];
-        return $map;
     }
 }

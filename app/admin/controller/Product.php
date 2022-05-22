@@ -2,156 +2,154 @@
 
 namespace app\admin\controller;
 
-use think\facade\Route;
-use think\facade\Request;
-use think\facade\Config;
-use think\facade\View;
 use app\admin\model;
+use app\admin\library\Html;
+use think\facade\Config;
+use think\facade\Request;
+use think\facade\View;
 
 class Product extends Base
 {
     public function index()
     {
-        $Product = new model\Product();
-        $object = $Product->all($this->page($Product->total()));
-        if ($object) {
-            $ProductSort = new model\ProductSort();
-            foreach ($object as $key => $value) {
-                $object2 = $ProductSort->one($value['product_sort_id']);
-                $object[$key]['product_sort'] = $object2 ?
-                    '<span style="color:' . $object2['color'] . ';">' . $object2['name'] . '</span>' : '此分类已被删除';
+        $productAll = (new model\Product())->all();
+        if (Request::isAjax()) {
+            foreach ($productAll as $key => $value) {
+                $productAll[$key] = $this->listItem($value);
             }
+            return $productAll->items() ? json_encode($productAll->items(), JSON_NUMERIC_CHECK) : '';
         }
-        View::assign(['All' => $object]);
-        $this->productSort(Request::get('product_sort_id'));
+        View::assign(['Total' => $productAll->total()]);
+        Html::productSort(Request::get('product_sort_id'));
         return $this->view();
     }
 
     public function add()
     {
-        if (Request::isPost()) {
-            $Product = new model\Product();
-            $object = $Product->add();
-            if (is_numeric($object)) {
-                return $object > 0 ?
-                    $this->success(Route::buildUrl('/' . parse_name(Request::controller()) . '/index'), '产品添加成功！') :
-                    $this->failed('产品添加失败！');
-            } else {
-                return $this->failed($object);
+        if (Request::isAjax()) {
+            if (Request::get('action') == 'do') {
+                $productAdd = (new model\Product())->add();
+                if (is_numeric($productAdd)) {
+                    return $productAdd > 0 ? showTip('商品添加成功！') : showTip('商品添加失败！', 0);
+                } else {
+                    return showTip($productAdd, 0);
+                }
             }
+            Html::productSort();
+            return $this->view();
+        } else {
+            return showTip('非法操作！', 0);
         }
-        $this->productSort();
-        return $this->view();
     }
 
     public function update()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && Request::post('id')) {
             $Product = new model\Product();
-            $object = $Product->one();
-            if (!$object) {
-                return $this->failed('不存在此产品！');
+            $productOne = $Product->one();
+            if (!$productOne) {
+                return showTip('不存在此商品！', 0);
             }
-            if (Request::isPost()) {
-                if (Config::get('app.demo') && Request::get('id') <= 5) {
-                    return $this->failed('演示站，id<=5的产品无法修改！');
+            if (Request::get('action') == 'do') {
+                if (Config::get('app.demo') && Request::post('id') <= 5) {
+                    return showTip('演示站，id<=5的商品无法修改！', 0);
                 }
-                $object = $Product->modify();
-                return is_numeric($object) ?
-                    $this->success(Route::buildUrl('/' . parse_name(Request::controller()) . '/index'), '产品修改成功！') :
-                    $this->failed($object);
+                $productModify = $Product->modify();
+                if (is_numeric($productModify)) {
+                    return showTip(['msg' => '商品修改成功！', 'data' => $this->listItem($Product->one())]);
+                } else {
+                    return showTip($productModify, 0);
+                }
             }
-            $this->productSort($object['product_sort_id']);
-            View::assign(['One' => $object]);
+            Html::productSort($productOne['product_sort_id']);
+            View::assign(['One' => $productOne]);
             return $this->view();
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
+        }
+    }
+
+    public function delete()
+    {
+        if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
+            if (Config::get('app.demo')) {
+                return showTip('演示站，商品无法删除！', 0);
+            }
+            $Product = new model\Product();
+            if (Request::post('id')) {
+                if (!$Product->one()) {
+                    return showTip('不存在此商品！', 0);
+                }
+            } elseif (Request::post('ids')) {
+                foreach (explode(',', Request::post('ids')) as $value) {
+                    if (!$Product->one($value)) {
+                        return showTip('不存在您勾选的商品！', 0);
+                    }
+                }
+            }
+            return $Product->remove() ? showTip('商品删除成功！') : showTip('商品删除失败！', 0);
+        } else {
+            return showTip('非法操作！', 0);
+        }
+    }
+
+    public function isView()
+    {
+        if (Request::isAjax() && Request::post('id')) {
+            if (Config::get('app.demo')) {
+                return showTip('演示站，商品无法设置上下架！', 0);
+            }
+            $Product = new model\Product();
+            $productOne = $Product->one();
+            if (!$productOne) {
+                return showTip('不存在此商品！', 0);
+            }
+            if ($productOne['is_view'] == 0) {
+                return $Product->isView(1) ? showTip('商品上架成功！') : showTip('商品上架失败！', 0);
+            } else {
+                return $Product->isView(0) ? showTip('商品下架成功！') : showTip('商品下架失败！', 0);
+            }
+        } else {
+            return showTip('非法操作！', 0);
         }
     }
 
     public function isDefault()
     {
-        if (Request::get('id')) {
+        if (Request::isAjax() && Request::post('id')) {
             $Product = new model\Product();
             if (!$Product->one()) {
-                return $this->failed('不存在此产品！');
+                return showTip('不存在此商品！', 0);
             }
-            if (!$Product->isDefault()) {
-                return $this->failed('设置默认产品失败！');
-            }
-            return $this->success(Config::get('app.prev_url'));
+            return $Product->isDefault() ? showTip('设置默认商品成功！') : showTip('设置默认商品失败！', 0);
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 
     public function sort()
     {
-        if (Request::isPost()) {
+        if (Request::isAjax()) {
             $Product = new model\Product();
             foreach (Request::post('sort') as $key => $value) {
                 if (is_numeric($value)) {
                     $Product->sort($key, $value);
                 }
             }
-            return $this->success(Config::get('app.prev_url'), '产品排序成功！');
-        }
-        return '';
-    }
-
-    public function isView()
-    {
-        if (Request::get('id')) {
-            if (Config::get('app.demo')) {
-                return $this->failed('演示站，无法设置显示状态！');
-            }
-            $Product = new model\Product();
-            $object = $Product->one();
-            if (!$object) {
-                return $this->failed('不存在此产品！');
-            }
-            if ($object['is_view'] == 0) {
-                if (!$Product->isView(1)) {
-                    return $this->failed('设置产品前台显示失败！');
-                }
-            } else {
-                if (!$Product->isView(0)) {
-                    return $this->failed('取消产品前台显示失败！');
-                }
-            }
-            return $this->success(Config::get('app.prev_url'));
+            return showTip('商品排序成功！');
         } else {
-            return $this->failed('非法操作！');
+            return showTip('非法操作！', 0);
         }
     }
 
-    public function delete()
+    private function listItem($item)
     {
-        if (Request::get('id')) {
-            if (Config::get('app.demo')) {
-                return $this->failed('演示站，数据无法删除！');
-            }
-            $Product = new model\Product();
-            if (!$Product->one()) {
-                return $this->failed('不存在此产品！');
-            }
-            if (Request::isPost()) {
-                return $Product->remove() ? $this->success(Request::post('prev'), '产品删除成功！') : $this->failed('产品删除失败！');
-            }
-            return $this->confirm('您真的要删除这条数据么？');
-        } else {
-            return $this->failed('非法操作！');
-        }
-    }
-
-    private function productSort($id = 0)
-    {
-        $html = '';
-        $ProductSort = new model\ProductSort();
-        foreach ($ProductSort->all2() as $value) {
-            $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') .
-                ' style="color:' . $value['color'] . ';">' . $value['name'] . '</option>';
-        }
-        View::assign(['ProductSort' => $html]);
+        $item['name'] = keyword($item['name']);
+        $productSortOne = (new model\ProductSort())->one($item['product_sort_id']);
+        $item['product_sort'] = $productSortOne ?
+            '<span style="color:' . $productSortOne['color'] . ';">' . $productSortOne['name'] . '</span>' :
+            '此分类已被删除';
+        $item['date'] = dateFormat($item['date']);
+        return $item;
     }
 }

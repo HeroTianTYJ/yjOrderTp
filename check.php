@@ -61,12 +61,12 @@ if ($_POST) {
 <body>
 <form method="post" action="" class="form">
   <table>
-    <tr><td>PHP版本：</td><td>最低版本要求为7.1.0，当前版本为<?php echo phpversion();?>，<?php echo
-            version_compare(PHP_VERSION, '7.1.0', '>=') ?
+    <tr><td>PHP版本：</td><td>最低版本要求为7.4.0，当前版本为<?php echo phpversion();?>，<?php echo
+            version_compare(PHP_VERSION, '7.4.0', '>=') ?
                 '<span class="green">支持</span>' : '<span class="red">不支持</span>';?></td></tr>
     <tr><td>MySQL版本：</td><td>
     <?php
-    if (version_compare(PHP_VERSION, '7.1.0', '<')) {
+    if (version_compare(PHP_VERSION, '7.4.0', '<')) {
         ?>
         请先解决PHP版本过低的问题
         <?php

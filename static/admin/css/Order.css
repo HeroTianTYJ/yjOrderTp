@@ -1,0 +1,13 @@
+@charset "utf-8";
+.form table tr td:nth-child(1){
+    width:84px;
+}
+
+.layui-layer .layui-layer-content#express{
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+}
+
+table.detail tr td:first-child{
+    width:104px;
+}

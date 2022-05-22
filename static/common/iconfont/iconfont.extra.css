@@ -1,0 +1,17 @@
+@charset "utf-8";
+.icon-wechat:before {
+    color: #46BB36;
+}
+.icon-tip-succeed:before {
+    color: #52C41A;
+}
+.icon-tip-failed:before {
+    color: #F5222D;
+}
+.icon-tip-warning:before {
+    color: #FAAD14;
+}
+.icon-tip-info:before,
+.icon-expand:before {
+    color: #0059FF;
+}

@@ -4,10 +4,11 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61
+class ComposerStaticInita1c64358045f89dce490daece95017eb
 {
     public static $files = array (
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
+        '35fab96057f1bf5e7aba31a8a6d5fdde' => __DIR__ . '/..' . '/topthink/think-orm/stubs/load_stubs.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -39,6 +40,7 @@ class ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61
         array (
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
+            'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
             'Psr\\Cache\\' => 10,
         ),
@@ -102,6 +104,10 @@ class ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
@@ -131,6 +137,7 @@ class ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
@@ -139,10 +146,10 @@ class ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit281bc52b13b396cf7b97b51ac34cba61::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita1c64358045f89dce490daece95017eb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita1c64358045f89dce490daece95017eb::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInita1c64358045f89dce490daece95017eb::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInita1c64358045f89dce490daece95017eb::$classMap;
 
         }, null, ClassLoader::class);
     }
