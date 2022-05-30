@@ -476,8 +476,8 @@ class Order extends Model
         if (Request::get('keyword')) {
             $map['where'] .= ' AND (';
             foreach (
-                ['order_id', 'attr', 'name', 'tel', 'province', 'city', 'county', 'town', 'address', 'email', 'ip',
-                 'referrer', 'pay_id', 'express_number'] as $value
+                ['order_id', 'name', 'tel', 'province', 'city', 'county', 'town', 'address', 'email', 'ip', 'referrer',
+                 'pay_id', 'express_number'] as $value
             ) {
                 $map['where'] .= '`' . $value . '` LIKE :' . $value . ' OR ';
                 $map['value'][$value] = '%' . Request::get('keyword') . '%';
