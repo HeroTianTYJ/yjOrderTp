@@ -12,7 +12,7 @@ class Manager extends Base
 {
     private array $level = [1 => ['red', '超级管理员'], 2 => ['green', '普通管理员']];
     private array $isActivation = [['green', '否'], ['red', '是']];
-    private array $orderPermit = [['', ''], ['green', '自己订单'], ['blue', '自己订单 + 前台订单'], ['red', '所有订单']];
+    private array $orderPermit = [1 => ['green', '自己订单'], 2 => ['blue', '自己订单 + 前台订单'], 3 => ['red', '所有订单']];
     private array $wechat = [['green', '否'], ['red', '是']];
     private array $qq = [['green', '否'], ['red', '是']];
 
@@ -82,7 +82,7 @@ class Manager extends Base
             Html::permitGroup($managerOne['permit_group_id'], 1);
             Html::managerLevelRadio($this->level, $managerOne['level']);
             Html::managerIsActivationRadio($this->isActivation, $managerOne['is_activation']);
-            Html::managerOrderPermitRadio($this->orderPermit, $managerOne['order_permit']);
+            Html::managerOrderPermitRadio($this->orderPermit, $managerOne['order_permit'] ?: 1);
             View::assign(['One' => $managerOne]);
             return $this->view();
         } else {

@@ -64,7 +64,7 @@ class OrderStatistic extends Base
         }
         View::assign(['Total' => 9]);
         Html::product(Request::get('product_id'), 0, true);
-        Html::manager(Request::get('manager_id', -1));
+        Html::manager2(Request::get('manager_id', -1));
         Html::orderPaymentSelect(Request::get('payment_id'));
         Html::alipayScene(Request::get('alipay_scene', -1));
         Html::wxpayScene(Request::get('wxpay_scene', -1));
@@ -200,7 +200,7 @@ class OrderStatistic extends Base
         }
         View::assign(['Total' => $orderDayMonthYearTotal, 'Param' => $param]);
         Html::product(Request::get('product_id'), 0, true);
-        Html::manager(Request::get('manager_id', -1));
+        Html::manager2(Request::get('manager_id', -1));
         Html::orderPaymentSelect(Request::get('payment_id'));
         Html::alipayScene(Request::get('alipay_scene', -1));
         Html::wxpayScene(Request::get('wxpay_scene', -1));

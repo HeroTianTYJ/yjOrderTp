@@ -33,7 +33,7 @@ class TemplateStyle extends Model
     public function all2()
     {
         try {
-            return $this->field('id')->order(['id' => 'ASC'])->select()->toArray();
+            return $this->field('id,CONCAT(`id`,\'号皮肤样式\') name')->order(['id' => 'ASC'])->select()->toArray();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];

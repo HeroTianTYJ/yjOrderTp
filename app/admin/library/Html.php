@@ -13,12 +13,7 @@ class Html extends \app\common\library\Html
 {
     public static function manager($id = 0)
     {
-        $html = '';
-        foreach ((new model\Manager())->all2() as $value) {
-            $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') . '>' .
-                $value['name'] . '</option>';
-        }
-        View::assign(['Manager' => $html]);
+        self::selectDataset((new model\Manager())->all2(), 'Manager', $id);
     }
 
     public static function manager2($id = 0)
@@ -28,11 +23,7 @@ class Html extends \app\common\library\Html
         if ($session['level'] == 1 || ($session['level'] == 2 && $session['order_permit'] != 1)) {
             $html .= '<option value="0" ' . ($id == 0 ? 'selected' : '') . '>终端客户</option>';
         }
-        foreach ((new model\Manager())->all2() as $value) {
-            $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') . '>' .
-                $value['name'] . '</option>';
-        }
-        return $html;
+        self::selectDataset((new model\Manager())->all2(), 'Manager', $id, $html);
     }
 
     public static function permitManage($ids = [])
@@ -89,143 +80,64 @@ class Html extends \app\common\library\Html
         View::assign(['PermitData' => $html]);
     }
 
-    public static function permitGroup($id = 0, $flag = 0)
+    public static function permitGroup($id = 0, $isDefault = 0)
     {
-        $html = '';
-        foreach ((new model\PermitGroup())->all2() as $value) {
-            if ($id == 0) {
-                $html .= '<option value="' . $value['id'] . '" ' . ($value['is_default'] && $flag ? 'selected' : '') .
-                    '>' . $value['name'] . '</option>';
-            } else {
-                $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') . '>' .
-                    $value['name'] . '</option>';
-            }
-        }
-        View::assign(['PermitGroup' => $html]);
+        self::selectDataset((new model\PermitGroup())->all2(), 'PermitGroup', $id, '', $isDefault);
     }
 
     public static function managerLevelSelect($level = [], $id = 0)
     {
-        $html = '';
-        foreach ($level as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . ' style="color:' . $value[0] .
-                ';">' . $value[1] . '</option>';
-        }
-        View::assign(['Level' => $html]);
+        self::selectArray($level, 'Level', $id);
     }
 
     public static function managerLevelRadio($level = [], $id = 0)
     {
-        $html = '';
-        foreach ($level as $key => $value) {
-            $html .= '<div class="radio-box"><label class="' . $value[0] . '"><input type="radio" name="level" value="'
-                . $key . '" ' . ($key == $id ? 'checked' : '') . '>' . $value[1] . '</label></div>';
-        }
-        View::assign(['Level' => $html]);
+        self::radioArray($level, 'level', 'Level', $id);
     }
 
     public static function managerIsActivationSelect($isActivation = [], $id = 0)
     {
-        $html = '';
-        foreach ($isActivation as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . ' style="color:' .
-                $value[0] . ';">' . $value[1] . '</option>';
-        }
-        View::assign(['IsActivation' => $html]);
+        self::selectArray($isActivation, 'IsActivation', $id);
     }
 
     public static function managerIsActivationRadio($isActivation = [], $id = 0)
     {
-        $html = '';
-        foreach ($isActivation as $key => $value) {
-            $html .= '<div class="radio-box"><label class="' . $value[0] .
-                '"><input type="radio" name="is_activation" value="' . $key . '" ' . ($key == $id ? 'checked' : '') .
-                '>' . $value[1] . '</label></div>';
-        }
-        View::assign(['IsActivation' => $html]);
+        self::radioArray($isActivation, 'is_activation', 'IsActivation', $id);
     }
 
     public static function managerOrderPermitSelect($orderPermit = [], $id = 0)
     {
-        $html = '';
-        foreach ($orderPermit as $key => $value) {
-            if ($key) {
-                $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . ' style="color:' .
-                    $value[0] . ';">' . $value[1] . '</option>';
-            }
-        }
-        View::assign(['OrderPermit' => $html]);
+        self::selectArray($orderPermit, 'OrderPermit', $id);
     }
 
     public static function managerOrderPermitRadio($orderPermit = [], $id = 0)
     {
-        $html = '';
-        foreach ($orderPermit as $key => $value) {
-            if ($key) {
-                $html .= '<div class="radio-box"><label class="' . $value[0] .
-                    '"><input type="radio" name="order_permit" value="' . $key . '" ' . ($key == $id ? 'checked' : '') .
-                    '>' . $value[1] . '</label></div>';
-            }
-        }
-        View::assign(['OrderPermit' => $html]);
+        self::radioArray($orderPermit, 'order_permit', 'OrderPermit', $id);
     }
 
     public static function qq($qq = [], $id = 0)
     {
-        $html = '';
-        foreach ($qq as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . ' style="color:' . $value[0] .
-                ';">' . $value[1] . '</option>';
-        }
-        View::assign(['Qq' => $html]);
+        self::selectArray($qq, 'Qq', $id);
     }
 
     public static function wechat($wechat = [], $id = 0)
     {
-        $html = '';
-        foreach ($wechat as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . ' style="color:' . $value[0] .
-                ';">' . $value[1] . '</option>';
-        }
-        View::assign(['Wechat' => $html]);
-    }
-
-    public static function stateRadio($state = [], $id = 0)
-    {
-        $html = '';
-        foreach ($state as $key => $value) {
-            $html .= '<div class="radio-box"><label class="' . $value[0] . '"><input type="radio" name="state" value="'
-                . $key . '" ' . ($key == $id ? 'checked' : '') . '>' . $value[1] . '</label></div>';
-        }
-        View::assign(['State' => $html]);
+        self::selectArray($wechat, 'Wechat', $id);
     }
 
     public static function validateFileExtension($extension = [], $id = 0)
     {
-        $html = '';
-        foreach ($extension as $key => $value) {
-            $html .= '<div class="radio-box"><label><input type="radio" name="extension" value="' . $key . '" ' .
-                ($key == $id ? 'checked' : '') . '>' . $value . '</label></div>';
-        }
-        View::assign(['Extension' => $html]);
+        self::radioArray($extension, 'extension', 'Extension', $id);
     }
 
     public static function alipayScene($id = 0)
     {
-        $html = '';
-        foreach (Config::get('pay_scene.alipay') as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . '>' . $value . '</option>';
-        }
-        View::assign(['AlipayScene' => $html]);
+        self::selectArray(Config::get('pay_scene.alipay'), 'AlipayScene', $id);
     }
 
     public static function wxpayScene($id = 0)
     {
-        $html = '';
-        foreach (Config::get('pay_scene.wxpay') as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . '>' . $value . '</option>';
-        }
-        View::assign(['WxpayScene' => $html]);
+        self::selectArray(Config::get('pay_scene.wxpay'), 'WxpayScene', $id);
     }
 
     public static function orderStateRadio($id = 0)
@@ -247,27 +159,7 @@ class Html extends \app\common\library\Html
 
     public static function typeSelect($type = [], $id = 0)
     {
-        $html = '';
-        foreach ($type as $key => $value) {
-            $html .= is_array($value) ?
-                '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . ' style="color:' . $value[0] .
-                ';">' . $value[1] . '</option>' :
-                '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . '>' . $value . '</option>';
-        }
-        View::assign(['Type' => $html]);
-    }
-
-    public static function typeRadio($type = [], $id = 0)
-    {
-        $html = '';
-        foreach ($type as $key => $value) {
-            $html .= is_array($value) ?
-                '<div class="radio-box"><label class="' . $value[0] . '"><input type="radio" name="type" value="'
-                . $key . '" ' . ($key == $id ? 'checked' : '') . '>' . $value[1] . '</label></div>' :
-                '<div class="radio-box"><label><input type="radio" name="type" value="' . $key . '" ' .
-                ($key == $id ? 'checked' : '') . '>' . $value . '</label></div>';
-        }
-        View::assign(['Type' => $html]);
+        self::selectArray($type, 'Type', $id);
     }
 
     public static function product($id = 0, $flag = 0, $price = false)
@@ -297,41 +189,22 @@ class Html extends \app\common\library\Html
 
     public static function productSort($id = 0)
     {
-        $html = '';
-        foreach ((new model\ProductSort())->all2() as $value) {
-            $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') .
-                ' style="color:' . $value['color'] . ';">' . $value['name'] . '</option>';
-        }
-        View::assign(['ProductSort' => $html]);
+        self::selectDataset((new model\ProductSort())->all2(), 'ProductSort', $id);
     }
 
     public static function orderPaymentSelect($id = 0)
     {
-        $html = '';
-        foreach (Config::get('payment') as $key => $value) {
-            $html .= '<option value="' . $key . '" ' . ($key == $id ? 'selected' : '') . '>' . $value . '</option>';
-        }
-        View::assign(['Payment' => $html]);
+        self::selectArray(Config::get('payment'), 'Payment', $id);
     }
 
     public static function orderPaymentRadio($id = 0)
     {
-        $html = '';
-        foreach (Config::get('payment') as $key => $value) {
-            $html .= '<div class="radio-box"><label><input type="radio" name="payment_id" value="' . $key . '" ' .
-                ($key == $id ? 'checked' : '') . '>' . $value . '</label></div>';
-        }
-        View::assign(['Payment' => $html]);
+        self::radioArray(Config::get('payment'), 'payment_id', 'Payment', $id);
     }
 
     public static function express($id = 0)
     {
-        $html = '';
-        foreach ((new model\Express())->all2() as $value) {
-            $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') . '>' .
-                $value['name'] . '</option>';
-        }
-        View::assign(['Express' => $html]);
+        self::selectDataset((new model\Express())->all2(), 'Express', $id);
     }
 
     public static function template($template = [], $id = 0)
@@ -345,30 +218,14 @@ class Html extends \app\common\library\Html
         View::assign(['Template' => $html]);
     }
 
-    public static function template2($id = 0, $flag = 0)
+    public static function template2($id = 0, $isDefault = 0)
     {
-        $html = '';
-        foreach ((new model\Template())->all2() as $value) {
-            if ($id == 0) {
-                $html .= '<option value="' . $value['id'] . '" ' . ($value['is_default'] && $flag ? 'selected' : '') .
-                    '>' . $value['name'] . '</option>';
-            } else {
-                $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') . '>' .
-                    $value['name'] . '</option>';
-            }
-        }
-        View::assign(['Template' => $html]);
+        self::selectDataset((new model\Template())->all2(), 'Template', $id, '', $isDefault);
     }
-
 
     public static function templateStyle($id = 0)
     {
-        $html = '';
-        foreach ((new model\TemplateStyle())->all2() as $value) {
-            $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') . '>' .
-                $value['id'] . '号皮肤样式</option>';
-        }
-        View::assign(['TemplateStyle' => $html]);
+        self::selectDataset((new model\TemplateStyle())->all2(), 'TemplateStyle', $id);
     }
 
     public static function field($ids = [])
@@ -400,11 +257,18 @@ class Html extends \app\common\library\Html
 
     public static function orderState($id = 0)
     {
+        self::selectDataset((new model\OrderState())->all2(), 'OrderState', $id);
+    }
+
+    private static function radioArray($array = [], $name = '', $assignName = '', $id = 0)
+    {
         $html = '';
-        foreach ((new model\OrderState())->all2() as $value) {
-            $html .= '<option value="' . $value['id'] . '" ' . ($value['id'] == $id ? 'selected' : '') .
-                ' style="color:' . $value['color'] . ';">' . $value['name'] . '</option>';
+        foreach ($array as $key => $value) {
+            $html .= '<div class="radio-box"><label class="' .
+                (is_array($value) && isset($value[0]) ? $value[0] : '') . '"><input type="radio" name="' . $name .
+                '" value="' . $key . '" ' . ($key == $id ? 'checked' : '') . '>' .
+                (is_array($value) && isset($value[1]) ? $value[1] : $value) . '</label></div>';
         }
-        View::assign(['OrderState' => $html]);
+        View::assign([$assignName => $html]);
     }
 }
