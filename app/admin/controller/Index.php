@@ -123,7 +123,7 @@ class Index extends Base
             if (isDataPermission('manager', 'general')) {
                 $data['管理员'][] = ['普通管理员', $Manager->totalCount(2)];
             }
-            if (isDataPermission('manager', 'distributor')) {
+            if (isDataPermission('manager', 'wait_activation')) {
                 $data['管理员'][] = ['待激活', $Manager->totalCount(3)];
             }
         }
