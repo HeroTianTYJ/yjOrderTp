@@ -3,11 +3,11 @@
 namespace app\index\controller;
 
 use app\index\model;
+use qrCode\QrCode;
 use think\captcha\facade\Captcha;
 use think\facade\Config;
 use think\facade\Request;
 use yjrj\QQWry;
-use yjrj\QrCode;
 
 class Common extends Base
 {
@@ -42,8 +42,7 @@ class Common extends Base
     {
         ob_start();
         ob_clean();
-        include ROOT_DIR . '/extend/phpqrcode.php';
-        QrCode::png((Request::get('data')), '', 'L', 8);
+        QrCode::png(Request::get('data'), 8);
     }
 
     //验证码
