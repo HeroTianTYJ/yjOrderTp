@@ -259,16 +259,4 @@ class Html extends \app\common\library\Html
     {
         self::selectDataset((new model\OrderState())->all2(), 'OrderState', $id);
     }
-
-    private static function radioArray($array = [], $name = '', $assignName = '', $id = 0)
-    {
-        $html = '';
-        foreach ($array as $key => $value) {
-            $html .= '<div class="radio-box"><label class="' .
-                (is_array($value) && isset($value[0]) ? $value[0] : '') . '"><input type="radio" name="' . $name .
-                '" value="' . $key . '" ' . ($key == $id ? 'checked' : '') . '>' .
-                (is_array($value) && isset($value[1]) ? $value[1] : $value) . '</label></div>';
-        }
-        View::assign([$assignName => $html]);
-    }
 }
