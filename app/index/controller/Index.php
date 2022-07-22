@@ -5,7 +5,6 @@ namespace app\index\controller;
 use app\common\controller\Template;
 use app\index\model;
 use think\facade\Request;
-use think\facade\Route;
 
 class Index extends Base
 {
@@ -15,11 +14,5 @@ class Index extends Base
             return $this->failed('不存在此下单模板！');
         }
         return (new Template())->html(Request::param('id'));
-    }
-
-    public function t()
-    {
-        return '<img src="' . Route::buildUrl('/common/qrcode', ['data' => 'weixin://wxpay/bizpayurl?pr=nRBKLMpzz']) .
-            '" alt="">';
     }
 }
