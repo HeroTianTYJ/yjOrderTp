@@ -3,6 +3,7 @@
 namespace app\common\controller;
 
 use think\facade\Config;
+use think\facade\Request;
 use think\facade\View;
 use think\Response;
 
@@ -17,6 +18,7 @@ class Base
     protected function initialize()
     {
         $this->loadConfig();
+        $this->requestFilter();
     }
 
     //成功提示
@@ -111,5 +113,11 @@ $(function () {
                 Config::load('diy/' . $value, $value);
             }
         }
+    }
+
+    //转义请求变量
+    protected function requestFilter()
+    {
+        Request::filter('htmlspecialchars');
     }
 }

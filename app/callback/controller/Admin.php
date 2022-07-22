@@ -15,6 +15,7 @@ class Admin extends Login
     protected function initialize()
     {
         $this->loadConfig();
+        $this->requestFilter();
     }
 
     public function wechatLogin()
