@@ -11,7 +11,7 @@ return [
             'username' => 'root',  //数据库用户名
             'password' => 'tyjtyjtyj',  //数据库密码
             'prefix' => 'yjorder_',  //数据表前缀
-            'charset' => 'UTF8',  //字符集
+            'charset' => 'UTF8MB4',  //字符集
             'fields_cache' => true  //开启字段缓存
         ]
     ]
