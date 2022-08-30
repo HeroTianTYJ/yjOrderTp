@@ -117,7 +117,7 @@ class DatabaseBackup extends Base
         ) {
             return showTip('读数据库结构错误！', 0);
         }
-        $sql = "SET NAMES UTF8;\r\n";
+        $sql = '';
         while ($this->nextRecord($tablesInfo)) {
             $table = $this->f('Name');
             if ($tableStatus) {
@@ -144,7 +144,7 @@ class DatabaseBackup extends Base
             return showTip('读数据库结构错误！', 0);
         }
         $p = 1;
-        $sql = "SET NAMES UTF8;\r\n";
+        $sql = '';
         while ($this->nextRecord($tablesInfo)) {
             $table = $this->f('Name');
             if ($tableStatus) {
@@ -170,7 +170,7 @@ class DatabaseBackup extends Base
     //备份自定义多表（不分卷）
     private function n($path = '', $filename = '', $tables = [], $tableStatus = true)
     {
-        $sql = "SET NAMES UTF8;\r\n";
+        $sql = '';
         foreach ($tables as $value) {
             if ($tableStatus) {
                 $sql .= $this->getInfo($value);
@@ -189,7 +189,7 @@ class DatabaseBackup extends Base
     private function nPart($path = '', $filename = '', $fileSize = 2000, $tables = [], $tableStatus = true)
     {
         $p = 1;
-        $sql = "SET NAMES UTF8;\r\n";
+        $sql = '';
         foreach ($tables as $value) {
             if ($tableStatus) {
                 $sql .= $this->getInfo($value);
