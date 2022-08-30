@@ -17,7 +17,8 @@ class Install extends Model
             'db_name' => Request::post('db_name'),
             'db_user' => Request::post('db_user'),
             'db_pwd' => Request::post('db_pwd'),
-            'db_prefix' => Request::post('db_prefix')
+            'db_prefix' => Request::post('db_prefix'),
+            'db_charset' => 'UTF8MB4'
         ];
         $validate = new validate();
         if ($validate->scene('step2')->check($data)) {
