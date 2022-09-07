@@ -32,22 +32,28 @@ class Base extends \app\common\controller\Base
     //登录验证
     private function checkLogin()
     {
-        if (
-            Session::has(Config::get('system.session_key_admin') . '.manage_info') &&
-            Request::controller() == 'Login' &&
-            Request::action() != 'logout'
-        ) {
-            $this->succeed(Route::buildUrl('/index/index'));
-        } elseif (
-            !Session::has(Config::get('system.session_key_admin') . '.manage_info') &&
-            Request::controller() == 'Index'
-        ) {
-            $this->succeed(Route::buildUrl('/login/index'));
-        } elseif (
-            !Session::has(Config::get('system.session_key_admin') . '.manage_info') &&
-            !in_array(Request::controller(), ['Login', 'Reset'])
-        ) {
-            $this->error('非法登录！', 5, 1, Route::buildUrl('/login/index'));
+        $manageInfo = Config::get('system.session_key_admin') . '.manage_info';
+        if (Session::has($manageInfo)) {
+            $session = Session::get($manageInfo);
+            if (
+                isset($session['id'], $session['name'], $session['level'], $session['permit_group']) &&
+                isset($session['permit_manage'], $session['permit_data'], $session['order_permit']) &&
+                is_numeric($session['id']) && $session['name'] && is_numeric($session['level']) &&
+                $session['permit_group'] && is_array($session['permit_manage']) && is_array($session['permit_data']) &&
+                is_numeric($session['order_permit'])
+            ) {
+                if (Request::controller() == 'Login' && Request::action() != 'logout') {
+                    $this->succeed(Route::buildUrl('/index/index'));
+                }
+            } elseif (Request::controller() != 'Login') {
+                $this->error('登录信息不合法，请重新登录！', 5, 1, Route::buildUrl('/login/index'));
+            }
+        } else {
+            if (Request::controller() == 'Index') {
+                $this->succeed(Route::buildUrl('/login/index'));
+            } elseif (!in_array(Request::controller(), ['Login', 'Reset'])) {
+                $this->error('非法登录！', 5, 1, Route::buildUrl('/login/index'));
+            }
         }
     }
 
