@@ -97,7 +97,7 @@ CREATE TABLE `yjorder_permit_data` (
   `is_default` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `parent_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4;
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('1','系统信息','system','0','0');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('2','版本号','version_code','0','1');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('3','更新时间','version_date','0','1');
@@ -131,7 +131,8 @@ INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) 
 CREATE TABLE `yjorder_permit_group` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(20) NOT NULL DEFAULT '',
-  `permit_ids` text,
+  `text_id_permit_manage_ids` int(10) unsigned NOT NULL DEFAULT '0',
+  `permit_data_ids` char(140) NOT NULL DEFAULT '',
   `is_default` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `date` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -319,6 +320,12 @@ INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_colo
 INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('10','#F2FFFF','#BFFFFF','#3CC','#3CC','1441424358');
 INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('11','#FFF','#FC4400','#F63','#F63','1487560660');
 INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('12','#FFF','#FFF','#BE0F22','#BE0F22','1576467626');
+
+CREATE TABLE `yjorder_text` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `content` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `yjorder_visit` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

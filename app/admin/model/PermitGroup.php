@@ -15,7 +15,7 @@ class PermitGroup extends Model
     public function all()
     {
         try {
-            return $this->field('id,name,permit_manage_ids,permit_data_ids,is_default,date')
+            return $this->field('id,name,text_id_permit_manage_ids,permit_data_ids,is_default,date')
                 ->where('name', 'LIKE', '%' . Request::get('keyword') . '%')
                 ->order(['date' => 'DESC'])
                 ->paginate(Config::get('app.page_size'));
@@ -40,7 +40,7 @@ class PermitGroup extends Model
     public function one($id = 0)
     {
         try {
-            return $this->field('id,name,permit_manage_ids,permit_data_ids,is_default,date')
+            return $this->field('id,name,text_id_permit_manage_ids,permit_data_ids,is_default,date')
                 ->where(['id' => $id ?: Request::post('id')])
                 ->find();
         } catch (Exception $e) {
@@ -56,22 +56,16 @@ class PermitGroup extends Model
             'name' => Request::post('name'),
             'date' => time()
         ];
-        $permitManageIds = Request::post('permit_manage_ids');
-        if ($permitManageIds) {
-            asort($permitManageIds);
-            $data['permit_manage_ids'] = implode(',', $permitManageIds);
-        } else {
-            $data['permit_manage_ids'] = '';
-        }
-        $permitDataIds = Request::post('permit_data_ids');
-        if ($permitDataIds) {
-            asort($permitDataIds);
-            $data['permit_data_ids'] = implode(',', $permitDataIds);
-        } else {
-            $data['permit_data_ids'] = '';
-        }
         $validate = new validate();
         if ($validate->check($data)) {
+            $permitManageIds = Request::post('permit_manage_ids', []);
+            asort($permitManageIds);
+            $data['text_id_permit_manage_ids'] = (new Text())->amr(implode(',', $permitManageIds));
+
+            $permitDataIds = Request::post('permit_data_ids', []);
+            asort($permitDataIds);
+            $data['permit_data_ids'] = implode(',', $permitDataIds);
+
             if ($this->repeat()) {
                 return '此权限组已存在！';
             }
@@ -82,27 +76,22 @@ class PermitGroup extends Model
     }
 
     //修改
-    public function modify()
+    public function modify($textIdPermitManageIds = 0)
     {
         $data = [
             'name' => Request::post('name')
         ];
-        $permitManageIds = Request::post('permit_manage_ids');
-        if ($permitManageIds) {
-            asort($permitManageIds);
-            $data['permit_manage_ids'] = implode(',', $permitManageIds);
-        } else {
-            $data['permit_manage_ids'] = '';
-        }
-        $permitDataIds = Request::post('permit_data_ids');
-        if ($permitDataIds) {
-            asort($permitDataIds);
-            $data['permit_data_ids'] = implode(',', $permitDataIds);
-        } else {
-            $data['permit_data_ids'] = '';
-        }
         $validate = new validate();
         if ($validate->check($data)) {
+            $permitManageIds = Request::post('permit_manage_ids', []);
+            asort($permitManageIds);
+            $data['text_id_permit_manage_ids'] =
+                (new Text())->amr(implode(',', $permitManageIds), $textIdPermitManageIds);
+
+            $permitDataIds = Request::post('permit_data_ids', []);
+            asort($permitDataIds);
+            $data['permit_data_ids'] = implode(',', $permitDataIds);
+
             if ($this->repeat(true)) {
                 return '此权限组已存在！';
             }
