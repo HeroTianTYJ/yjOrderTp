@@ -130,6 +130,7 @@ class Template extends Model
             'product_view_type' => Request::post('product_view_type'),
             'field_ids' => implode(',', Request::post('field_ids', [])),
             'payment_ids' => implode(',', Request::post('payment_ids', [])),
+            'payment_default' => Request::post('payment_default'),
             'is_show_search' => Request::post('is_show_search'),
             'is_show_send' => Request::post('is_show_send'),
             'is_captcha' => Request::post('is_captcha'),
