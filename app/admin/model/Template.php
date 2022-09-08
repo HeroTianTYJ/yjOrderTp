@@ -109,6 +109,9 @@ class Template extends Model
             if (!in_array($data['product_default'], explode(',', $data['product_ids']))) {
                 return '您选择的默认商品不存在！';
             }
+            if ($this->repeat()) {
+                return '此模板名已存在！';
+            }
             return $this->insertGetId($data);
         } else {
             return $validate->getError();
