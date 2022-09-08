@@ -106,6 +106,8 @@ class Order extends Model
                 $scene[] = 'county2';
                 $scene[] = 'town2';
             }
+            $data['district_type'] = Request::post('district_type');
+            $scene[] = 'district_type';
         } elseif (in_array(4, $fieldTemp)) {
             $data['province'] = Request::post('province');
             $data['city'] = Request::post('city');
@@ -153,6 +155,7 @@ class Order extends Model
             }
             $data2 = $data;
             unset(
+                $data2['district_type'],
                 $data2['province2'],
                 $data2['city2'],
                 $data2['county2'],
