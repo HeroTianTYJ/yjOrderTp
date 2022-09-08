@@ -8,7 +8,7 @@ class Order extends Base
 {
     protected $rule = [
         'product_id' => 'require',
-        'price' => 'require|regex:/^\d+(\.\d+)?$/',
+        'price' => 'priceRequire',
         'count' => 'require|number',
         'name' => 'require|min:2|max:20',
         'tel' => 'require|regex:/^[\d\-]{7,20}$/',
