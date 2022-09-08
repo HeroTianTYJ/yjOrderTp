@@ -2,9 +2,9 @@
 
 namespace app\admin\validate;
 
-use think\Validate;
+use app\common\validate\Base;
 
-class District extends Validate
+class District extends Base
 {
     protected $rule = [
         'name' => 'require|max:25',

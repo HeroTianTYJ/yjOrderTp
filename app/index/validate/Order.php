@@ -2,9 +2,9 @@
 
 namespace app\index\validate;
 
-use think\Validate;
+use app\common\validate\Base;
 
-class Order extends Validate
+class Order extends Base
 {
     protected $rule = [
         'count' => 'require|number',

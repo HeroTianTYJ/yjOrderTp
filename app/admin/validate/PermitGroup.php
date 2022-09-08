@@ -2,9 +2,9 @@
 
 namespace app\admin\validate;
 
-use think\Validate;
+use app\common\validate\Base;
 
-class PermitGroup extends Validate
+class PermitGroup extends Base
 {
     protected $rule = [
         'name' => 'require|max:20',

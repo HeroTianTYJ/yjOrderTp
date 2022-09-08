@@ -59,23 +59,23 @@ class Order extends Model
         if (!$templateOne) {
             return '此下单模板已被删除！';
         }
+        $productOne = (new Product())->one(Request::post('product_id'));
+        if (!$productOne) {
+            return '此商品已被删除，无法下单！';
+        }
         $scene = ['count', 'payment_id'];
         $data = [
             'order_id' => time() . rand(100, 999),
             'manager_id' => $templateOne['manager_id'],
             'template_id' => Request::post('template_id'),
             'product_id' => Request::post('product_id'),
-            'referrer' => Request::post('referrer'),
+            'product' => $productOne['name'],
+            'price' => $productOne['price'],
+            'referrer' => strip_tags(Request::post('referrer', '', 'stripslashes')),
             'payment_id' => Request::post('payment_id', 1),
             'ip' => getUserIp(),
             'date' => time()
         ];
-        if ($data['payment_id'] == 1) {
-            $data['order_state_id'] = 2;
-        } elseif (in_array($data['payment_id'], [2, 3])) {
-            $data['order_state_id'] = 1;
-        }
-        $data['success'] = str_replace('{order_id}', $data['order_id'], $templateOne['success']);
         $fieldTemp = explode(',', $templateOne['field_ids']);
         $data['count'] = in_array(1, $fieldTemp) ? Request::post('count') : 1;
         if (in_array(2, $fieldTemp) || Request::post('name')) {
@@ -137,15 +137,12 @@ class Order extends Model
             $data['email'] = Request::post('email');
             $scene[] = 'email';
         }
-
-        $productOne = (new Product())->one(Request::post('product_id'));
-        if ($productOne) {
-            $data['product'] = $productOne['name'];
-            $data['price'] = $productOne['price'];
-        } else {
-            return '此商品已被删除，无法下单！';
+        if ($data['payment_id'] == 1) {
+            $data['order_state_id'] = 2;
+        } elseif (in_array($data['payment_id'], [2, 3])) {
+            $data['order_state_id'] = 1;
         }
-
+        $data['success'] = str_replace('{order_id}', $data['order_id'], $templateOne['success']);
         $validate = new validate();
         if ($validate->only($scene)->check($data)) {
             if ($templateOne['is_captcha'] && !Captcha::check(Request::post('captcha'))) {
@@ -173,13 +170,12 @@ class Order extends Model
     //修改支付状态
     public function modify($orderId, $pay, $payId = 0, $payScene = '', $payDate = '')
     {
-        $data = [
+        return $this->where(['order_id' => $orderId])->update([
             'payment_id' => $pay,
             'pay_id' => $payId,
             'pay_scene' => $payScene,
             'pay_date' => $payDate
-        ];
-        return $this->where(['order_id' => $orderId])->update($data);
+        ]);
     }
 
     //验证重复

@@ -2,14 +2,14 @@
 
 namespace app\admin\validate;
 
-use think\Validate;
+use app\common\validate\Base;
 
-class Product extends Validate
+class Product extends Base
 {
     protected $rule = [
         'name' => 'require|max:30',
         'product_sort_id' => 'require',
-        'price' => 'require|regex:/^\d+(\.\d+)?$/',
+        'price' => 'priceRequire',
         'color' => 'max:20',
     ];
     protected $message = [

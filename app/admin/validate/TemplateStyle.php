@@ -2,9 +2,9 @@
 
 namespace app\admin\validate;
 
-use think\Validate;
+use app\common\validate\Base;
 
-class TemplateStyle extends Validate
+class TemplateStyle extends Base
 {
     protected $rule = [
         'bg_color' => 'require|max:20',

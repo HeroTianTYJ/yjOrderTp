@@ -33,7 +33,7 @@ return [
     'www' => '" . str_replace("'", "\'", Request::post('www', 0)) . "',  //是否强制www
     'https' => '" . str_replace("'", "\'", Request::post('https', 0)) . "',  //是否强制https
     'manager_enter' => '" . str_replace("'", "\'", Request::post('manager_enter')) . "',  //后台入口
-    'index_php' => '" . str_replace("'", "\'", Request::post('index_php')) . "',  //隐藏index.php
+    'index_php' => '" . (Request::post('index_php') == 0 ? 'index.php/' : '') . "',  //隐藏index.php
     'copyright_backend' => '" . str_replace("'", "\'", Request::post('copyright_backend', '', 'stripslashes')) .
                     "',  //登录页版权
     'order_time' => '" . str_replace("'", "\'", Request::post('order_time')) . "',  //防刷单间隔

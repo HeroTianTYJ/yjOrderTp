@@ -2,9 +2,9 @@
 
 namespace app\admin\validate;
 
-use think\Validate;
+use app\common\validate\Base;
 
-class Order extends Validate
+class Order extends Base
 {
     protected $rule = [
         'product_id' => 'require',
@@ -12,6 +12,7 @@ class Order extends Validate
         'count' => 'require|number',
         'name' => 'require|min:2|max:20',
         'tel' => 'require|regex:/^[\d\-]{7,20}$/',
+        'district_type' => 'require|between:0,1',
         'province' => 'require',
         'city' => 'require',
         'county' => 'require',
@@ -22,6 +23,8 @@ class Order extends Validate
         'town2' => 'max:25',
         'address' => 'require|min:5|max:200',
         'note' => 'max:255',
+        'payment_id' => 'require|between:1,3',
+        'order_state_id' => 'require',
         'email' => 'email',
         'express_number' => 'max:30',
     ];
@@ -31,6 +34,7 @@ class Order extends Validate
         'count' => '订购数量必须是数字！',
         'name' => '姓名不得小于2位或大于20位！',
         'tel' => '联系电话必须是数字和-号，且不得小于7位或大于20位！',
+        'district_type' => '所在地区类型不合法！',
         'province' => '请选择省份！',
         'city' => '请选择城市！',
         'county' => '请选择区/县！',
@@ -41,6 +45,8 @@ class Order extends Validate
         'town2' => '乡镇/街道不得大于25位！',
         'address' => '详细地址不得小于5位或大于200位！',
         'note' => '备注不得大于255位！',
+        'payment_id' => '支付方式不合法！',
+        'order_state_id' => '请先在订单状态模块中添加一个订单状态！',
         'email' => '电子邮箱格式不合法！',
         'express_number' => '快递单号不得大于30位！',
     ];

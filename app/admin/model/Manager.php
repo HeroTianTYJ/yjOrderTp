@@ -114,8 +114,8 @@ class Manager extends Model
     public function one($id = 0)
     {
         try {
-            return $this->field('id,name,pass,level,is_activation,permit_group_id,wechat_open_id,wechat_union_id,' .
-                'qq_open_id,date')
+            return $this->field('id,name,pass,level,is_activation,permit_group_id,order_permit,wechat_open_id,' .
+                'wechat_union_id,qq_open_id,date')
                 ->where(['id' => $id ?: Request::post('id')])
                 ->find();
         } catch (Exception $e) {
@@ -136,17 +136,19 @@ class Manager extends Model
             'date' => time()
         ];
         if (Request::post('level') == 1) {
-            $data['permit_group_id'] = 0;
-            $data['order_permit'] = 0;
+            $data['permit_group_id'] = $data['order_permit'] = 0;
         } elseif (Request::post('level') == 2) {
             if (!Request::post('permit_group_id')) {
                 return '请先在权限组模块中添加一个权限组！';
+            }
+            if (!(new PermitGroup())->one(Request::post('permit_group_id'))) {
+                return '您选择的权限组不存在！';
             }
             $data['permit_group_id'] = Request::post('permit_group_id');
             $data['order_permit'] = Request::post('order_permit');
         }
         $validate = new validate();
-        if ($validate->only(['name', 'pass', 'repass'])->check($data)) {
+        if ($validate->remove('admin_mail', true)->check($data)) {
             if ($this->repeat()) {
                 return '此帐号已存在！';
             }
@@ -171,7 +173,7 @@ class Manager extends Model
             'date' => time()
         ];
         $validate = new validate();
-        if ($validate->check($data)) {
+        if ($validate->only(['name', 'pass', 'repass', 'admin_mail', 'level', 'is_activation'])->check($data)) {
             $data['pass'] = passEncode(Request::post('admin_pass'), $passKey);
             unset($data['repass'], $data['admin_mail']);
             return $this->insertGetId($data);
@@ -190,15 +192,20 @@ class Manager extends Model
         if (Request::post('id') != 1) {
             $data['level'] = Request::post('level');
             $data['is_activation'] = Request::post('is_activation');
+            $scene[] = 'level';
+            $scene[] = 'is_activation';
             if (Request::post('level') == 1) {
-                $data['permit_group_id'] = 0;
-                $data['order_permit'] = 0;
+                $data['permit_group_id'] = $data['order_permit'] = 0;
             } elseif (Request::post('level') == 2) {
                 if (!Request::post('permit_group_id')) {
                     return '请先在权限组模块中添加一个权限组！';
                 }
+                if (!(new PermitGroup())->one(Request::post('permit_group_id'))) {
+                    return '您选择的权限组不存在！';
+                }
                 $data['permit_group_id'] = Request::post('permit_group_id');
                 $data['order_permit'] = Request::post('order_permit');
+                $scene[] = 'order_permit';
             }
         }
         if (Request::post('pass')) {

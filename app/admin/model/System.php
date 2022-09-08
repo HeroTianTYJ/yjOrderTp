@@ -15,8 +15,13 @@ class System extends Model
         $data = [
             'web_name' => Request::post('web_name'),
             'admin_mail' => Request::post('admin_mail'),
+            'www' => Request::post('www', 0),
+            'https' => Request::post('https', 0),
             'manager_enter' => Request::post('manager_enter'),
+            'index_php' => Request::post('index_php'),
             'order_time' => Request::post('order_time'),
+            'order_search' => Request::post('order_search'),
+            'order_search_step' => Request::post('order_search_step'),
             'mail_order_subject' => Request::post('mail_order_subject'),
             'mail_order_content' => Request::post('mail_order_content'),
             'mail_pay_subject' => Request::post('mail_pay_subject'),

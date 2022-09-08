@@ -88,6 +88,9 @@ class Product extends Model
         ];
         $validate = new validate();
         if ($validate->check($data)) {
+            if (!(new ProductSort())->one($data['product_sort_id'])) {
+                return '您选择的商品分类不存在！';
+            }
             if ($this->repeat()) {
                 return '此商品已存在！';
             }
@@ -108,6 +111,9 @@ class Product extends Model
         ];
         $validate = new validate();
         if ($validate->check($data)) {
+            if (!(new ProductSort())->one($data['product_sort_id'])) {
+                return '您选择的商品分类不存在！';
+            }
             if ($this->repeat(true)) {
                 return '此商品已存在！';
             }

@@ -2,9 +2,9 @@
 
 namespace app\admin\validate;
 
-use think\Validate;
+use app\common\validate\Base;
 
-class Smtp extends Validate
+class Smtp extends Base
 {
     protected $rule = [
         'smtp' => 'require|max:20',

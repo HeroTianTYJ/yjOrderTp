@@ -60,10 +60,22 @@ class PermitGroup extends Model
         if ($validate->check($data)) {
             $permitManageIds = Request::post('permit_manage_ids', []);
             asort($permitManageIds);
+            $PermitManage = new PermitManage();
+            foreach ($permitManageIds as $value) {
+                if (!$PermitManage->one($value)) {
+                    return '您勾选的管理权限不存在！';
+                }
+            }
             $data['text_id_permit_manage_ids'] = (new Text())->amr(implode(',', $permitManageIds));
 
             $permitDataIds = Request::post('permit_data_ids', []);
             asort($permitDataIds);
+            $PermitData = new PermitData();
+            foreach ($permitDataIds as $value) {
+                if (!$PermitData->one($value)) {
+                    return '您勾选的数据权限不存在！';
+                }
+            }
             $data['permit_data_ids'] = implode(',', $permitDataIds);
 
             if ($this->repeat()) {
@@ -85,11 +97,23 @@ class PermitGroup extends Model
         if ($validate->check($data)) {
             $permitManageIds = Request::post('permit_manage_ids', []);
             asort($permitManageIds);
+            $PermitManage = new PermitManage();
+            foreach ($permitManageIds as $value) {
+                if (!$PermitManage->one($value)) {
+                    return '您勾选的管理权限不存在！';
+                }
+            }
             $data['text_id_permit_manage_ids'] =
                 (new Text())->amr(implode(',', $permitManageIds), $textIdPermitManageIds);
 
             $permitDataIds = Request::post('permit_data_ids', []);
             asort($permitDataIds);
+            $PermitData = new PermitData();
+            foreach ($permitDataIds as $value) {
+                if (!$PermitData->one($value)) {
+                    return '您勾选的数据权限不存在！';
+                }
+            }
             $data['permit_data_ids'] = implode(',', $permitDataIds);
 
             if ($this->repeat(true)) {

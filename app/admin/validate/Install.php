@@ -2,9 +2,9 @@
 
 namespace app\admin\validate;
 
-use think\Validate;
+use app\common\validate\Base;
 
-class Install extends Validate
+class Install extends Base
 {
     protected $rule = [
         'db_host' => 'require',

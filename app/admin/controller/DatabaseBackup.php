@@ -15,9 +15,19 @@ class DatabaseBackup extends Base
 
     public function index()
     {
+        $commonInfo = (new model\Common())->info();
         if (Request::isPost()) {
             if (Config::get('app.demo')) {
                 return showTip('演示站，数据库无法备份！', 0);
+            }
+            if (Request::post('table_name')) {
+                $table = [];
+                foreach ($commonInfo as $value) {
+                    $table[] = $value['Name'];
+                }
+                if (array_diff(Request::post('table_name'), $table)) {
+                    return showTip('您勾选的数据表不存在！', 0);
+                }
             }
             if (
                 $this->backup(
@@ -30,7 +40,6 @@ class DatabaseBackup extends Base
                 return showTip('数据库已成功备份到服务器，可联系客服人员下载！');
             }
         }
-        $commonInfo = (new model\Common())->info();
         $remainder = count($commonInfo) % 4;
         if ($remainder != 0) {
             for ($i = 0; $i < 4 - $remainder; $i++) {

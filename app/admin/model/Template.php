@@ -61,7 +61,6 @@ class Template extends Model
             'template' => Request::post('template'),
             'template_style_id' => Request::post('template_style_id'),
             'product_type' => Request::post('product_type'),
-            'product_default' => Request::post('product_default'),
             'product_view_type' => Request::post('product_view_type'),
             'field_ids' => implode(',', Request::post('field_ids', [])),
             'payment_ids' => implode(',', Request::post('payment_ids', [])),
@@ -91,8 +90,24 @@ class Template extends Model
         }
         $validate = new validate();
         if ($validate->check($data)) {
-            if ($this->repeat()) {
-                return '此模板名已存在！';
+            if ($data['manager_id'] && !(new Manager())->one($data['manager_id'])) {
+                return '您选择的代理不存在！';
+            }
+            if (!(new TemplateStyle())->one($data['template_style_id'])) {
+                return '您选择的模板样式不存在！';
+            }
+            foreach (explode(',', $data['product_sort_ids']) as $value) {
+                if (!(new ProductSort())->one($value)) {
+                    return '您勾选的商品分类不存在！';
+                }
+            }
+            foreach (explode(',', $data['product_ids']) as $value) {
+                if (!(new Product())->one($value)) {
+                    return '您勾选的商品不存在！';
+                }
+            }
+            if (!in_array($data['product_default'], explode(',', $data['product_ids']))) {
+                return '您选择的默认商品不存在！';
             }
             return $this->insertGetId($data);
         } else {
@@ -112,7 +127,6 @@ class Template extends Model
             'product_view_type' => Request::post('product_view_type'),
             'field_ids' => implode(',', Request::post('field_ids', [])),
             'payment_ids' => implode(',', Request::post('payment_ids', [])),
-            'payment_default' => Request::post('payment_default'),
             'is_show_search' => Request::post('is_show_search'),
             'is_show_send' => Request::post('is_show_send'),
             'is_captcha' => Request::post('is_captcha'),
@@ -137,6 +151,25 @@ class Template extends Model
         }
         $validate = new validate();
         if ($validate->check($data)) {
+            if ($data['manager_id'] && !(new Manager())->one($data['manager_id'])) {
+                return '您选择的代理不存在！';
+            }
+            if (!(new TemplateStyle())->one($data['template_style_id'])) {
+                return '您选择的模板样式不存在！';
+            }
+            foreach (explode(',', $data['product_sort_ids']) as $value) {
+                if (!(new ProductSort())->one($value)) {
+                    return '您勾选的商品分类不存在！';
+                }
+            }
+            foreach (explode(',', $data['product_ids']) as $value) {
+                if (!(new Product())->one($value)) {
+                    return '您勾选的商品不存在！';
+                }
+            }
+            if (!in_array($data['product_default'], explode(',', $data['product_ids']))) {
+                return '您选择的默认商品不存在！';
+            }
             if ($this->repeat(true)) {
                 return '此模板名已存在！';
             }

@@ -241,9 +241,9 @@ class Order extends Model
     {
         $templateOne = (new Template())->one(Request::post('template_id'));
         if (!$templateOne) {
-            return '请先在模板管理模块中添加一个模板！';
+            return '您选择的模板不存在！';
         }
-        $scene = ['template_id', 'product_id', 'price', 'count', 'express_number'];
+        $scene = ['product_id', 'price', 'count', 'district_type', 'payment_id', 'order_state_id', 'express_number'];
         $data = [
             'order_id' => time() . rand(100, 999),
             'manager_id' => Session::get(Config::get('system.session_key_admin') . '.manage_info.id'),
@@ -251,6 +251,7 @@ class Order extends Model
             'product_id' => Request::post('product_id'),
             'price' => Request::post('price'),
             'count' => Request::post('count'),
+            'district_type' => Request::post('district_type'),
             'payment_id' => Request::post('payment_id'),
             'order_state_id' => Request::post('order_state_id'),
             'express_id' => Request::post('express_id'),
@@ -335,7 +336,16 @@ class Order extends Model
         }
         $validate = new validate();
         if ($validate->only($scene)->check($data)) {
-            unset($data['province2'], $data['city2'], $data['county2'], $data['town2']);
+            if (!(new Product())->one($data['product_id'])) {
+                return '您选择的商品不存在！';
+            }
+            if (!(new OrderState())->one($data['order_state_id'])) {
+                return '您选择的订单状态不存在！';
+            }
+            if ($data['express_id'] && !(new Express())->one($data['express_id'])) {
+                return '您选择的快递公司不存在！';
+            }
+            unset($data['district_type'], $data['province2'], $data['city2'], $data['county2'], $data['town2']);
             return $this->insertGetId($data);
         } else {
             return $validate->getError();
@@ -347,9 +357,9 @@ class Order extends Model
     {
         $templateOne = (new Template())->one(Request::post('template_id'));
         if (!$templateOne) {
-            return '请先在模板管理模块中添加一个模板！';
+            return '您选择的模板不存在！';
         }
-        $scene = ['template_id', 'product_id', 'price', 'count', 'express_number'];
+        $scene = ['product_id', 'price', 'count', 'payment_id', 'order_state_id', 'express_number'];
         $data = [
             'template_id' => Request::post('template_id'),
             'product_id' => Request::post('product_id'),
@@ -399,6 +409,15 @@ class Order extends Model
         }
         $validate = new validate();
         if ($validate->only($scene)->check($data)) {
+            if (!(new Product())->one($data['product_id'])) {
+                return '您选择的商品不存在！';
+            }
+            if (!(new OrderState())->one($data['order_state_id'])) {
+                return '您选择的订单状态不存在！';
+            }
+            if ($data['express_id'] && !(new Express())->one($data['express_id'])) {
+                return '您选择的快递公司不存在！';
+            }
             unset($data['province2'], $data['city2'], $data['county2'], $data['town2']);
             return $this->where([
                 'id' => Request::post('id'),
