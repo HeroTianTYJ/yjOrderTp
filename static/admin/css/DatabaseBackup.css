@@ -8,7 +8,5 @@
 }
 .form table:nth-child(2) tr td:nth-child(3){
     color:#333;
-}
-.form table:nth-child(3){
-    margin: 10px 0 0 0;
+    font-size: 14px;
 }
