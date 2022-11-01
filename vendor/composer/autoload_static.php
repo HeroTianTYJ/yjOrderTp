@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5b4f038b635209a54ebc0e1616dfe78d
+class ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae
 {
     public static $files = array (
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
@@ -42,12 +42,10 @@ class ComposerStaticInit5b4f038b635209a54ebc0e1616dfe78d
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
-            'Psr\\Cache\\' => 10,
         ),
         'L' => 
         array (
             'League\\MimeTypeDetection\\' => 25,
-            'League\\Flysystem\\Cached\\' => 24,
             'League\\Flysystem\\' => 17,
         ),
     );
@@ -75,6 +73,7 @@ class ComposerStaticInit5b4f038b635209a54ebc0e1616dfe78d
             1 => __DIR__ . '/..' . '/topthink/think-helper/src',
             2 => __DIR__ . '/..' . '/topthink/think-orm/src',
             3 => __DIR__ . '/..' . '/topthink/think-template/src',
+            4 => __DIR__ . '/..' . '/topthink/think-filesystem/src',
         ),
         'app\\' => 
         array (
@@ -112,17 +111,9 @@ class ComposerStaticInit5b4f038b635209a54ebc0e1616dfe78d
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'Psr\\Cache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/cache/src',
-        ),
         'League\\MimeTypeDetection\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/mime-type-detection/src',
-        ),
-        'League\\Flysystem\\Cached\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/league/flysystem-cached-adapter/src',
         ),
         'League\\Flysystem\\' => 
         array (
@@ -146,10 +137,10 @@ class ComposerStaticInit5b4f038b635209a54ebc0e1616dfe78d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5b4f038b635209a54ebc0e1616dfe78d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5b4f038b635209a54ebc0e1616dfe78d::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit5b4f038b635209a54ebc0e1616dfe78d::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit5b4f038b635209a54ebc0e1616dfe78d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae::$classMap;
 
         }, null, ClassLoader::class);
     }
