@@ -22,7 +22,7 @@
     <tr><td>电子邮箱：</td><td><input type="text" name="email" value="{$One['email']}" class="text"></td></tr>
     <tr><td>备　　注：</td><td><textarea name="note" class="textarea">{$One['note']}</textarea></td></tr>
     <tr><td>支付方式：</td><td>{$Payment}</td></tr>
-    <tr><td>支付链接：</td><td>支付宝 <a href="{$One['pay_url']['alipay']}" target="_blank">{$One['pay_url']['alipay']}</a><br>微信支付 <a href="{$One['pay_url']['wxpay']}" target="_blank">{$One['pay_url']['wxpay']}</a></td></tr>
+    <tr><td>支付链接：</td><td>支付宝 <a href="{$One['pay_url']['alipay']}" target="_blank">{$One['pay_url']['alipay']}</a><br>微信支付 <a href="{$One['pay_url']['wechat_pay']}" target="_blank">{$One['pay_url']['wechat_pay']}</a></td></tr>
     <tr><td>订单状态：</td><td>{$OrderState}</td></tr>
     <tr><td>快递公司：</td><td><select name="express_id" lay-search><option value="">请选择</option>{$Express}</select></td></tr>
     <tr><td>快递单号：</td><td><input type="text" name="express_number" value="{$One['express_number']}" class="text"></td></tr>

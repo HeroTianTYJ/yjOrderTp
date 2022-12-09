@@ -67,7 +67,7 @@ class OrderStatistic extends Base
         Html::manager2(Request::get('manager_id', -1));
         Html::orderPaymentSelect(Request::get('payment_id'));
         Html::alipayScene(Request::get('alipay_scene', -1));
-        Html::wxpayScene(Request::get('wxpay_scene', -1));
+        Html::wechatPayScene(Request::get('wechat_pay_scene', -1));
         Html::orderState(Request::get('order_state_id'));
         Html::express(Request::get('express_id'));
         Html::template2(Request::get('template_id'));
@@ -203,7 +203,7 @@ class OrderStatistic extends Base
         Html::manager2(Request::get('manager_id', -1));
         Html::orderPaymentSelect(Request::get('payment_id'));
         Html::alipayScene(Request::get('alipay_scene', -1));
-        Html::wxpayScene(Request::get('wxpay_scene', -1));
+        Html::wechatPayScene(Request::get('wechat_pay_scene', -1));
         Html::orderState(Request::get('order_state_id'));
         Html::express(Request::get('express_id'));
         Html::template2(Request::get('template_id'));

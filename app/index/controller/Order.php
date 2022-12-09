@@ -89,7 +89,8 @@ class Order extends Base
         return [
             'alipay' => Config::get('url.web1') . Config::get('system.index_php') . 'pay/alipay/order_id/' . $orderId .
                 '.html',
-            'wxpay' => Config::get('url.web1') . Config::get('system.index_php') . 'pay/wxpay/order_id/' . $orderId . '.html'
+            'wechat_pay' => Config::get('url.web1') . Config::get('system.index_php') . 'pay/wechatPay/order_id/' .
+                $orderId . '.html'
         ];
     }
 }

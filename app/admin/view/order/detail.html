@@ -16,7 +16,7 @@
   <tr><td>支付订单号：</td><td>{$One['pay_id']}</td></tr>
   <tr><td>支付场景：</td><td>{$One['pay_scene']}</td></tr>
   <tr><td>支付时间：</td><td>{if condition="$One['pay_date']"}{$One['pay_date']|dateFormat}{/if}</td></tr>
-  <tr><td>支付链接：</td><td>支付宝 <a href="{$One['pay_url']['alipay']}" target="_blank">{$One['pay_url']['alipay']}</a><br>微信支付 <a href="{$One['pay_url']['wxpay']}" target="_blank">{$One['pay_url']['wxpay']}</a></td></tr>
+  <tr><td>支付链接：</td><td>支付宝 <a href="{$One['pay_url']['alipay']}" target="_blank">{$One['pay_url']['alipay']}</a><br>微信支付 <a href="{$One['pay_url']['wechat_pay']}" target="_blank">{$One['pay_url']['wechat_pay']}</a></td></tr>
   <tr><td>下单IP：</td><td>{$One['ip']}</td></tr>
   <tr><td>下单来路：</td><td>{if condition="$One['referrer']"}<a href="{$One['referrer']}" target="_blank">{$One['referrer']}</a>{else/}直接进入{/if}</td></tr>
   <tr><td>下单时间：</td><td>{$One['date']|dateFormat}</td></tr>

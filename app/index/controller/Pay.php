@@ -3,14 +3,11 @@
 namespace app\index\controller;
 
 use app\index\model;
-use Exception;
 use think\facade\Request;
 use think\facade\Config;
 use think\facade\View;
-use wxpay\Api;
-use wxpay\JsApiPay;
-use wxpay\UnifiedOrder;
 use yjrj\Alipay;
+use yjrj\WechatPay;
 
 class Pay extends Base
 {
@@ -66,7 +63,7 @@ class Pay extends Base
         ];
     }
 
-    public function wxpay()
+    public function wechatPay()
     {
         if (Request::param('order_id')) {
             $orderOne = (new model\Order())->one();
@@ -77,57 +74,37 @@ class Pay extends Base
                 return $this->failed('此订单无法支付！');
             }
             $productOne = (new model\Product())->one($orderOne['product_id']);
-            include ROOT_DIR . '/extend/wxpay/config.php';
-            $UnifiedOrder = new UnifiedOrder();
-            $UnifiedOrder->setBody($productOne ? $productOne['name'] : '');
-            $UnifiedOrder->setAttach($productOne ? $productOne['name'] : '');
-            $UnifiedOrder->setOutTradeNo(time() . '-' . Request::param('order_id'));
-            $UnifiedOrder->setTotalFee($orderOne['price'] * $orderOne['count'] * 100);
-            $UnifiedOrder->setGoodsTag($productOne ? $productOne['name'] : '');
-            $UnifiedOrder->setNotifyUrl(Config::get('url.web1') . 'callback.php/index/wxpayNotify.html');
-            $UnifiedOrder->setProfitSharing('N');
+            $WechatPay = new WechatPay([
+                'app_id' => Config::get('system.wechat_pay_app_id'),
+                'app_secret' => Config::get('system.wechat_pay_app_secret'),
+                'mch_id' => Config::get('system.wechat_pay_mch_id'),
+                'cert_serial_number' => Config::get('system.wechat_pay_cert_serial_number'),
+                'cert_private_key' => Config::get('system.wechat_pay_cert_private_key')
+            ]);
+            $wechatPayParam = [
+                'out_trade_no' => time() . '-' . Request::param('order_id'),
+                'description' => $productOne ? $productOne['name'] : '',
+                'notify_url' => Config::get('url.web1') . 'callback.php/index/wechatPayNotify.html',
+                'total' => $orderOne['price'] * $orderOne['count'] * 100
+            ];
             if (in_array(device(), ['windows', 'mac', 'windowsWechat', 'macWechat'])) {
-                $UnifiedOrder->setTradeType('NATIVE');
-                $UnifiedOrder->setProductId($orderOne['product_id']);
-                try {
-                    View::assign([
-                        'Url' => Api::unifiedOrder($UnifiedOrder)['code_url'],
-                        'jsApiParameters' => ''
-                    ]);
-                } catch (Exception $e) {
-                    echo $e->getMessage();
-                }
+                View::assign(['Url' => $WechatPay->native($wechatPayParam), 'jsApiParameters' => '']);
                 return $this->view();
             } elseif (in_array(device(), ['androidWechat', 'iphoneWechat'])) {
-                $UnifiedOrder->setTradeType('JSAPI');
-                $JsApiPay = new JsApiPay();
-                $UnifiedOrder->setOpenid($JsApiPay->getOpenid());
-                try {
-                    View::assign([
-                        'Url' => '',
-                        'jsApiParameters' => $JsApiPay->getJsApiParameters(Api::unifiedOrder($UnifiedOrder))
-                    ]);
-                } catch (Exception $e) {
-                    echo $e->getMessage();
-                }
+                View::assign(['Url' => '', 'jsApiParameters' => $WechatPay->jsapi($wechatPayParam)]);
                 return $this->view();
             } else {
-                $UnifiedOrder->setTradeType('MWEB');
-                try {
-                    return '<script type="text/javascript">window.location.href="' .
-                        Api::unifiedOrder($UnifiedOrder)['mweb_url'] . '&redirect_url=' .
-                        urldecode(Config::get('url.web1') . Config::get('system.index_php') . 'pay/wxpayH5/order_id/' .
-                            Request::param('order_id') . '.html') . '";</script>';
-                } catch (Exception $e) {
-                    return $e->getMessage();
-                }
+                return '<script type="text/javascript">window.location.href="' .
+                    $WechatPay->h5($wechatPayParam) . '&redirect_url=' .
+                    urldecode(Config::get('url.web1') . Config::get('system.index_php') . 'pay/wechatPayH5/order_id/' .
+                        Request::param('order_id') . '.html') . '";</script>';
             }
         } else {
             return $this->failed('非法操作！');
         }
     }
 
-    public function wxpayH5()
+    public function wechatPayH5()
     {
         if (Request::param('order_id')) {
             $orderOne = (new model\Order())->one();
@@ -143,7 +120,7 @@ class Pay extends Base
         }
     }
 
-    public function wxpayAjax()
+    public function wechatPayAjax()
     {
         if (Request::isAjax()) {
             return (new model\Order())->one(Request::post('order_id'))['order_state_id'];
@@ -152,7 +129,7 @@ class Pay extends Base
         }
     }
 
-    public function wxpayTip()
+    public function wechatPayTip()
     {
         if (Request::get('order_id')) {
             $orderOne = (new model\Order())->one(Request::get('order_id'));

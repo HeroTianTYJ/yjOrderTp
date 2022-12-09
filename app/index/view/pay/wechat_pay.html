@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="static/index/css/{:request()->controller()}.css?{:staticCache()}">
 <script type="text/javascript">
 $(function(){
-  let TIP = '{:url("/".parse_name(request()->controller())."/wxpayTip",["order_id"=>input("order_id")])}';
+  let TIP = '{:url("/".parse_name(request()->controller())."/wechatPayTip",["order_id"=>input("order_id")])}';
   {if condition="$jsApiParameters"}
   function jsApiCall(){
     WeixinJSBridge.invoke(
@@ -34,7 +34,7 @@ $(function(){
   setInterval(function(){
     $.ajax({
         type: 'POST',
-        url: '{:url("/".parse_name(request()->controller())."/wxpayAjax")}',
+        url: '{:url("/".parse_name(request()->controller())."/wechatPayAjax")}',
         data: {
             order_id: '{:input("order_id")}'
         },

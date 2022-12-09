@@ -65,19 +65,19 @@ $(function () {
   payment($tool.find('select[name=payment_id] option:selected').val());
   function payment (val) {
     let $alipayScene = $tool.find('.alipay_scene');
-    let $wxpayScene = $tool.find('.wxpay_scene');
+    let $wechatPayScene = $tool.find('.wechat_pay_scene');
     switch (val) {
       case '2':
         $alipayScene.show();
-        $wxpayScene.hide();
+        $wechatPayScene.hide();
         break;
       case '3':
         $alipayScene.hide();
-        $wxpayScene.show();
+        $wechatPayScene.show();
         break;
       default:
         $alipayScene.hide();
-        $wxpayScene.hide();
+        $wechatPayScene.hide();
     }
   }
 

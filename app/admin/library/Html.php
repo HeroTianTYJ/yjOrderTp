@@ -135,9 +135,9 @@ class Html extends \app\common\library\Html
         self::selectArray(Config::get('pay_scene.alipay'), 'AlipayScene', $id);
     }
 
-    public static function wxpayScene($id = 0)
+    public static function wechatPayScene($id = 0)
     {
-        self::selectArray(Config::get('pay_scene.wxpay'), 'WxpayScene', $id);
+        self::selectArray(Config::get('pay_scene.wechat_pay'), 'WxpayScene', $id);
     }
 
     public static function orderStateRadio($id = 0)

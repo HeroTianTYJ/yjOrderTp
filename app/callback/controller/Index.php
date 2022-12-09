@@ -5,8 +5,8 @@ namespace app\callback\controller;
 use app\callback\model;
 use think\facade\Config;
 use think\facade\Request;
-use wxpay\PayNotifyCallBack;
 use yjrj\Alipay;
+use yjrj\WechatPay;
 
 class Index extends Base
 {
@@ -39,19 +39,21 @@ class Index extends Base
         }
     }
 
-    public function wxpayNotify()
+    public function wechatPayNotify()
     {
-        include ROOT_DIR . '/extend/wxpay/config.php';
-        $result = (array)simplexml_load_string(file_get_contents('php://input'), 'SimpleXMLElement', LIBXML_NOCDATA);
-        if ((new PayNotifyCallBack())->queryOrder($result['transaction_id'])) {
+        $notify = (new WechatPay([
+            'app_id' => Config::get('system.wechat_pay_app_id'),
+            'mch_id' => Config::get('system.wechat_pay_mch_id'),
+            'key' => Config::get('system.wechat_pay_key')
+        ]))->notify();
+        if ($notify) {
             (new model\Order())->modify(
-                explode('-', $result['out_trade_no'])[1],
+                explode('-', $notify['out_trade_no'])[1],
                 3,
-                $result['transaction_id'],
-                $this->payScene[1][$result['trade_type']],
-                strtotime($result['time_end'])
+                $notify['transaction_id'],
+                $this->payScene[1][$notify['trade_type']],
+                $notify['success_time']
             );
-            return '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
         }
         return '';
     }

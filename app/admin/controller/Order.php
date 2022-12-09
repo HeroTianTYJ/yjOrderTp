@@ -27,7 +27,7 @@ class Order extends Base
         Html::manager2(Request::get('manager_id', -1));
         Html::orderPaymentSelect(Request::get('payment_id'));
         Html::alipayScene(Request::get('alipay_scene', -1));
-        Html::wxpayScene(Request::get('wxpay_scene', -1));
+        Html::wechatPayScene(Request::get('wechat_pay_scene', -1));
         Html::orderState(Request::get('order_state_id'));
         Html::express(Request::get('express_id'));
         Html::template2(Request::get('template_id'));
@@ -166,7 +166,7 @@ class Order extends Base
                 if ($orderOne['payment_id'] == 2) {
                     $payScene = Config::get('pay_scene.alipay.' . $orderOne['pay_scene']);
                 } elseif ($orderOne['payment_id'] == 3) {
-                    $payScene = Config::get('pay_scene.wxpay.' . $orderOne['pay_scene']);
+                    $payScene = Config::get('pay_scene.wechat_pay.' . $orderOne['pay_scene']);
                 }
             }
             $orderOne['pay_scene'] = $payScene;
@@ -265,7 +265,7 @@ class Order extends Base
                         if ($value['payment_id'] == 2) {
                             $payScene = Config::get('pay_scene.alipay.' . $value['pay_scene']);
                         } elseif ($value['payment_id'] == 3) {
-                            $payScene = Config::get('pay_scene.wxpay.' . $value['pay_scene']);
+                            $payScene = Config::get('pay_scene.wechat_pay.' . $value['pay_scene']);
                         }
                     }
                     $output .= "\r\n" . '"\'' . $value['order_id'] . '","' . $managerName . '","' .
@@ -321,7 +321,7 @@ class Order extends Base
             if ($item['payment_id'] == 2) {
                 $payScene = Config::get('pay_scene.alipay.' . $item['pay_scene']);
             } elseif ($item['payment_id'] == 3) {
-                $payScene = Config::get('pay_scene.wxpay.' . $item['pay_scene']);
+                $payScene = Config::get('pay_scene.wechat_pay.' . $item['pay_scene']);
             }
         }
         $item['pay_scene'] = $payScene;
@@ -384,7 +384,7 @@ class Order extends Base
             if (Request::post('payment_id') == 2) {
                 $payScene = Config::get('pay_scene.alipay.' . Request::post('pay_scene'));
             } elseif (Request::post('payment_id') == 3) {
-                $payScene = Config::get('pay_scene.wxpay.' . Request::post('pay_scene'));
+                $payScene = Config::get('pay_scene.wechat_pay.' . Request::post('pay_scene'));
             }
         }
         $payUrl = $this->payUrl(Request::post('order_id'));
@@ -405,7 +405,7 @@ class Order extends Base
             '{note}',
             '{ip}',
             '{alipay_url}',
-            '{wxpay_url}',
+            '{wechat_pay_url}',
             '{payment}',
             '{pay_id}',
             '{pay_scene}',
@@ -431,7 +431,7 @@ class Order extends Base
             Request::post('note'),
             Request::post('ip') . ' ' . QQWry::getAddress(Request::post('ip')),
             $payUrl['alipay'],
-            $payUrl['wxpay'],
+            $payUrl['wechat_pay'],
             Config::get('payment.' . Request::post('payment_id')),
             Request::post('pay_id'),
             $payScene,
@@ -451,8 +451,8 @@ class Order extends Base
         return [
             'alipay' => Config::get('url.web1') . Config::get('system.index_php') . 'pay/alipay/order_id/' . $orderId .
                 '.html',
-            'wxpay' => Config::get('url.web1') . Config::get('system.index_php') . 'pay/wxpay/order_id/' . $orderId .
-                '.html'
+            'wechat_pay' => Config::get('url.web1') . Config::get('system.index_php') . 'pay/wechatPay/order_id/' .
+                $orderId . '.html'
         ];
     }
 }

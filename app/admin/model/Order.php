@@ -524,9 +524,9 @@ class Order extends Model
                     $map['value']['alipay_scene'] = Request::get('alipay_scene');
                 }
             } elseif (Request::get('payment_id') == 3) {
-                if (Request::get('wxpay_scene')) {
-                    $map['where'] .= ' AND `pay_scene`=:wxpay_scene';
-                    $map['value']['wxpay_scene'] = Request::get('wxpay_scene');
+                if (Request::get('wechat_pay_scene')) {
+                    $map['where'] .= ' AND `pay_scene`=:wechat_pay_scene';
+                    $map['value']['wechat_pay_scene'] = Request::get('wechat_pay_scene');
                 }
             }
         }

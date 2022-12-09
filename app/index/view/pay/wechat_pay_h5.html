@@ -12,12 +12,12 @@ $(function(){
   setInterval(function(){
     $.ajax({
       type: 'POST',
-      url: '{:url("/".parse_name(request()->controller())."/wxpayAjax")}',
+      url: '{:url("/".parse_name(request()->controller())."/wechatPayAjax")}',
       data: {
         order_id: '{:input("order_id")}'
       },
       success: function(data){
-        if (data === '2') window.location.href = '{:url("/".parse_name(request()->controller())."/wxpayTip",["order_id"=>input("order_id")])}';
+        if (data === '2') window.location.href = '{:url("/".parse_name(request()->controller())."/wechatPayTip",["order_id"=>input("order_id")])}';
       }
     });
   },1000);

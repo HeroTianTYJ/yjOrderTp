@@ -43,10 +43,15 @@ return [
     'alipay_merchant_private_key' => '" . str_replace("'", "\'", Request::post('alipay_merchant_private_key')) .
                     "',  //支付宝应用私钥
     'alipay_public_key' => '" . str_replace("'", "\'", Request::post('alipay_public_key')) . "',  //支付宝公钥
-    'wxpay_app_id' => '" . str_replace("'", "\'", Request::post('wxpay_app_id')) . "',  //微信支付AppID
-    'wxpay_app_secret' => '" . str_replace("'", "\'", Request::post('wxpay_app_secret')) . "',  //微信支付AppSecret
-    'wxpay_mchid' => '" . str_replace("'", "\'", Request::post('wxpay_mchid')) . "',  //微信支付MCHID
-    'wxpay_key' => '" . str_replace("'", "\'", Request::post('wxpay_key')) . "',  //微信支付KEY
+    'wechat_pay_app_id' => '" . str_replace("'", "\'", Request::post('wechat_pay_app_id')) . "',  //微信支付AppID
+    'wechat_pay_app_secret' => '" . str_replace("'", "\'", Request::post('wechat_pay_app_secret')) .
+                    "',  //微信支付AppSecret
+    'wechat_pay_mch_id' => '" . str_replace("'", "\'", Request::post('wechat_pay_mch_id')) . "',  //微信支付商户号
+    'wechat_pay_key' => '" . str_replace("'", "\'", Request::post('wechat_pay_key')) . "',  //微信支付商户密钥
+    'wechat_pay_cert_serial_number' => '" . str_replace("'", "\'", Request::post('wechat_pay_cert_serial_number')) .
+                    "',  //微信支付证书序列号
+    'wechat_pay_cert_private_key' => '" . str_replace("'", "\'", Request::post('wechat_pay_cert_private_key')) .
+                    "',  //微信支付证书私钥
     'qq_app_id' => '" . str_replace("'", "\'", Request::post('qq_app_id')) . "',  //QQ互联AppID
     'qq_app_key' => '" . str_replace("'", "\'", Request::post('qq_app_key')) . "',  //QQ互联AppKey
     'wechat_app_id' => '" . str_replace("'", "\'", Request::post('wechat_app_id')) . "',  //微信公众平台AppID

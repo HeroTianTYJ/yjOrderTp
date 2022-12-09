@@ -22,7 +22,7 @@ class SubOrder extends Base
                         'pay/alipay/order_id/' . $orderAdd['order_id'] . '.html');
                 } elseif (Request::post('payment_id') == 3) {
                     return $this->succeed(Config::get('url.web1') . Config::get('system.index_php') .
-                        'pay/wxpay/order_id/' . $orderAdd['order_id'] . '.html');
+                        'pay/wechatPay/order_id/' . $orderAdd['order_id'] . '.html');
                 }
                 return $this->succeed('', $orderAdd['success'], 0, 2);
             } else {
