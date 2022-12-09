@@ -60,7 +60,7 @@
           });
           // 输入框
           element.on('keyup', 'input', function (e) {
-            $(this).val($(this).val().replace(/[^\d]/g, ''));
+            $(this).val($(this).val().replace(/\D/g, ''));
             if (e.key === 'Enter') {
               args.active = parseInt($(this).val());
               if (args.active < 1) {

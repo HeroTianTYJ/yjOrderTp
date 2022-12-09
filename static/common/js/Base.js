@@ -97,9 +97,9 @@ $(function () {
     let obj = {};
     let sort = {};
     $.each($list.find('tbody tr'), function (index, element) {
-      let $sort = $(element).find('input[name=sort]');
-      obj[$sort.val()] = $(element).html().replace(/<input type="text" name="sort" value="[\d]+" class="text">/, '<input type="text" name="sort" value="' + $sort.val() + '" class="text">');
-      sort[$(element).find('input[name=id]').val()] = $sort.val();
+      let sortVal = $(element).find('input[name=sort]').val();
+      obj[sortVal] = $(element).html().replace(/<input type="text" name="sort" value="\d+" class="text">/, '<input type="text" name="sort" value="' + sortVal + '" class="text">');
+      sort[$(element).find('input[name=id]').val()] = sortVal;
     });
     $.ajax({
       type: 'POST',
@@ -141,7 +141,7 @@ $(function () {
 });
 
 // 添加
-function add (title, width = 800) {
+function add (title, width = 800, succeed = function () {}) {
   $('.tool .add').on('click', function () {
     ajaxMessageLayer(ThinkPHP['ADD'], title, {}, function (index) {
       $.ajax({
@@ -164,6 +164,7 @@ function add (title, width = 800) {
       });
       iCheck();
       $('.layui-layer-content').animate({scrollTop: 0});
+      succeed();
     }, width);
   });
 }
@@ -198,7 +199,7 @@ function multi (element, title, url) {
 }
 
 // 修改
-function update (title, width = 800) {
+function update (title, width = 800, succeed = function () {}) {
   let $list = $('.list');
   $list.on('click', 'a.update', function () {
     let id = $(this).parent().parent().find('input[name=id]').val();
@@ -230,6 +231,7 @@ function update (title, width = 800) {
       });
       iCheck();
       $('.layui-layer-content').animate({scrollTop: 0});
+      succeed();
     }, width);
   });
 }
