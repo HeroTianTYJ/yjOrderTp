@@ -6,6 +6,7 @@ return [
         'local' => [
             'type' => 'local',
             'root' => ROOT_DIR . '/uploads',
+            'url' => ''
         ]
     ]
 ];
