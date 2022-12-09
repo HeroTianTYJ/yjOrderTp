@@ -112,7 +112,6 @@ div.left{
 .left ul.navigator > li{
 	height: 46px;
 	line-height: 46px;
-	text-indent: 15px;
 }
 .left ul.navigator > li a{
 	color: #fff;
@@ -120,6 +119,11 @@ div.left{
 	filter:alpha(opacity=65);
 	text-decoration: none;
 	display: block;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	word-break: break-all;
+	padding: 0 15px;
 }
 .left ul.navigator > li:hover a,
 .left ul.navigator > li.active a{
