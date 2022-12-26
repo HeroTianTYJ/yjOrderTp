@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'version' => '35.0|2022-09-08',  //版本
+    'version' => '35.2|2022-12-26',  //版本
     'page_size' => 20,  //默认每页条数
 
     'demo' => $_SERVER['HTTP_HOST'] == 'www.yjrj.top' && getUserIp() != '111.225.42.206',
