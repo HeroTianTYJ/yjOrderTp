@@ -313,8 +313,9 @@ div.top{
 .main .list table tr:hover,
 .main .list table tr:hover td:first-child,
 .main .list table tr.checked,
-.main .list table tr.checked td:first-child{
-	background: #F4FBFF;
+.main .list table tr.checked td:first-child,
+.main .list table tr:hover td:last-child{
+	background: #F4FBFF !important;
 }
 .main .list table tr th{
 	height: 54px;
