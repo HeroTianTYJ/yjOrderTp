@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae
+class ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4
 {
     public static $files = array (
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
@@ -42,10 +42,12 @@ class ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
+            'Psr\\Cache\\' => 10,
         ),
         'L' => 
         array (
             'League\\MimeTypeDetection\\' => 25,
+            'League\\Flysystem\\Cached\\' => 24,
             'League\\Flysystem\\' => 17,
         ),
     );
@@ -70,10 +72,10 @@ class ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae
         'think\\' => 
         array (
             0 => __DIR__ . '/..' . '/topthink/framework/src/think',
-            1 => __DIR__ . '/..' . '/topthink/think-helper/src',
-            2 => __DIR__ . '/..' . '/topthink/think-orm/src',
-            3 => __DIR__ . '/..' . '/topthink/think-template/src',
-            4 => __DIR__ . '/..' . '/topthink/think-filesystem/src',
+            1 => __DIR__ . '/..' . '/topthink/think-filesystem/src',
+            2 => __DIR__ . '/..' . '/topthink/think-helper/src',
+            3 => __DIR__ . '/..' . '/topthink/think-orm/src',
+            4 => __DIR__ . '/..' . '/topthink/think-template/src',
         ),
         'app\\' => 
         array (
@@ -111,9 +113,17 @@ class ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
+        'Psr\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/cache/src',
+        ),
         'League\\MimeTypeDetection\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/mime-type-detection/src',
+        ),
+        'League\\Flysystem\\Cached\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/flysystem-cached-adapter/src',
         ),
         'League\\Flysystem\\' => 
         array (
@@ -137,10 +147,10 @@ class ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr0 = ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInitad1a702148fc9a5f7ca6b2b3926d55ae::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4::$classMap;
 
         }, null, ClassLoader::class);
     }
