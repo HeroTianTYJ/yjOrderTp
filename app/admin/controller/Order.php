@@ -164,9 +164,9 @@ class Order extends Base
             $payScene = '';
             if ($orderOne['order_state_id'] != 1) {
                 if ($orderOne['payment_id'] == 2) {
-                    $payScene = Config::get('pay_scene.alipay.' . $orderOne['pay_scene']);
+                    $payScene = Config::get('pay_scene.alipay.' . $orderOne['pay_scene'], '');
                 } elseif ($orderOne['payment_id'] == 3) {
-                    $payScene = Config::get('pay_scene.wechat_pay.' . $orderOne['pay_scene']);
+                    $payScene = Config::get('pay_scene.wechat_pay.' . $orderOne['pay_scene'], '');
                 }
             }
             $orderOne['pay_scene'] = $payScene;
@@ -263,9 +263,9 @@ class Order extends Base
                     $payScene = '';
                     if ($value['order_state_id'] != 1) {
                         if ($value['payment_id'] == 2) {
-                            $payScene = Config::get('pay_scene.alipay.' . $value['pay_scene']);
+                            $payScene = Config::get('pay_scene.alipay.' . $value['pay_scene'], '');
                         } elseif ($value['payment_id'] == 3) {
-                            $payScene = Config::get('pay_scene.wechat_pay.' . $value['pay_scene']);
+                            $payScene = Config::get('pay_scene.wechat_pay.' . $value['pay_scene'], '');
                         }
                     }
                     $output .= "\r\n" . '"\'' . $value['order_id'] . '","' . $managerName . '","' .
@@ -319,9 +319,9 @@ class Order extends Base
         $payScene = '';
         if ($item['order_state_id'] != 1) {
             if ($item['payment_id'] == 2) {
-                $payScene = Config::get('pay_scene.alipay.' . $item['pay_scene']);
+                $payScene = Config::get('pay_scene.alipay.' . $item['pay_scene'], '');
             } elseif ($item['payment_id'] == 3) {
-                $payScene = Config::get('pay_scene.wechat_pay.' . $item['pay_scene']);
+                $payScene = Config::get('pay_scene.wechat_pay.' . $item['pay_scene'], '');
             }
         }
         $item['pay_scene'] = $payScene;
@@ -382,9 +382,9 @@ class Order extends Base
         $payScene = '';
         if (Request::post('order_state_id') != 1) {
             if (Request::post('payment_id') == 2) {
-                $payScene = Config::get('pay_scene.alipay.' . Request::post('pay_scene'));
+                $payScene = Config::get('pay_scene.alipay.' . Request::post('pay_scene'), '');
             } elseif (Request::post('payment_id') == 3) {
-                $payScene = Config::get('pay_scene.wechat_pay.' . Request::post('pay_scene'));
+                $payScene = Config::get('pay_scene.wechat_pay.' . Request::post('pay_scene'), '');
             }
         }
         $payUrl = $this->payUrl(Request::post('order_id'));
