@@ -12,13 +12,13 @@ class Install extends Model
     public function step2()
     {
         $data = [
-            'db_host' => Request::post('db_host'),
-            'db_port' => Request::post('db_port'),
-            'db_name' => Request::post('db_name'),
-            'db_user' => Request::post('db_user'),
-            'db_pwd' => Request::post('db_pwd'),
-            'db_prefix' => Request::post('db_prefix'),
-            'db_charset' => 'UTF8MB4'
+            'hostname' => Request::post('hostname'),
+            'hostport' => Request::post('hostport'),
+            'database' => Request::post('database'),
+            'username' => Request::post('username'),
+            'password' => Request::post('password'),
+            'prefix' => Request::post('prefix'),
+            'charset' => 'UTF8MB4'
         ];
         $validate = new validate();
         if ($validate->scene('step2')->check($data)) {
