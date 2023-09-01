@@ -64,7 +64,7 @@ class Alipay
         $string2Sign = '';
         $i = 0;
         foreach ($param as $key => $value) {
-            if (trim($value) && substr($value, 0, 1) != '@') {
+            if ($value && trim($value) && substr($value, 0, 1) != '@') {
                 $string2Sign .= ($i == 0 ? '' : '&') . $key . '=' . $value;
                 $i++;
             }

@@ -30,7 +30,7 @@ class Index extends Base
                 explode('_', Request::post('out_trade_no'))[1],
                 2,
                 Request::post('trade_no'),
-                $this->payScene[0][json_decode(Request::post('fund_bill_list'))[0]->fundChannel],
+                $this->payScene[0][json_decode(Request::post('fund_bill_list', '', 'stripslashes'))[0]->fundChannel],
                 strtotime(Request::post('gmt_payment'))
             );
             return 'success';
