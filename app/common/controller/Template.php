@@ -148,7 +148,7 @@ class Template
 
 <body>
 <script type="text/javascript" src="static/vendor/jquery.cookie.js?' . staticCache() . '"></script>
-<script type="text/javascript" src="static/vendor/ValidForm.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/vendor/validForm.js?' . staticCache() . '"></script>
 <script type="text/javascript" src="static/common/js/address.js?' . staticCache() . '"></script>
 <script type="text/javascript" src="static/vendor/LayUI/js/LayUI.js?' . staticCache() . '"></script>
 <script type="text/javascript" src="static/index/js/Order.js?' . staticCache() . '"></script>
@@ -258,7 +258,7 @@ class Template
 
 <body>
 <script type="text/javascript" src="static/vendor/jquery.cookie.js?' . staticCache() . '"></script>
-<script type="text/javascript" src="static/vendor/ValidForm.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/vendor/validForm.js?' . staticCache() . '"></script>
 <script type="text/javascript" src="static/common/js/address.js?' . staticCache() . '"></script>
 <script type="text/javascript" src="static/vendor/LayUI/js/LayUI.js?' . staticCache() . '"></script>
 <script type="text/javascript" src="static/index/js/Order.js?' . staticCache() . '"></script>
