@@ -58,6 +58,9 @@ class Template extends Base
                 return showTip('不存在此模板！', 0);
             }
             if (Request::get('action') == 'do') {
+                if (Config::get('app.demo') && Request::post('id') <= 5) {
+                    return showTip('演示站，id<=5的模板无法修改！', 0);
+                }
                 $templateModify = $Template->modify();
                 return is_numeric($templateModify) ?
                     showTip(['msg' => '模板修改成功！', 'data' => $this->listItem($Template->one())]) :
