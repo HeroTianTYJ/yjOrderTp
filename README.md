@@ -42,9 +42,7 @@ https://www.yjrj.top/product/demo.html
 
 1、GitHub：https://github.com/HeroTianTYJ/yjOrderTp （进入GitHub页面，点击右侧的“Clone or download”的绿色按钮，然后点击“Download ZIP”即可进行下载，国内用户下载速度可能会稍慢）；
 
-2、Gitee：https://gitee.com/tyj568/yjOrderTp （进入Gitee页面，点击右侧的“克隆/下载”的橙色按钮，然后点击“下载ZIP”，完成机器验证后即可进行下载，国内用户下载速度正常）；
-
-3、百度网盘：https://pan.baidu.com/s/1ueBeIikr3eHFG2Jn8NCTeg ，提取码：mmdm（下载方法不用赘述，百度网盘相信大家都会使用）。
+2、Gitee：https://gitee.com/tyj568/yjOrderTp （进入Gitee页面，点击右侧的“克隆/下载”的橙色按钮，然后点击“下载ZIP”，完成机器验证后即可进行下载，国内用户下载速度正常）。
 
 另外站长之家、A5下载等源码平台也收录了本系统的源码，但可能会收录不及时，因此我们不能保证源码平台中的源码为最新版。
 
