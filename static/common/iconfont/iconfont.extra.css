@@ -1,4 +1,7 @@
 @charset "utf-8";
+.icon-qq:before {
+    color: #68A5E1;
+}
 .icon-wechat:before {
     color: #46BB36;
 }
