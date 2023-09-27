@@ -24,8 +24,8 @@ function listItem (item) {
     let control = [];
     if (isPermission('update')) control.push('<a href="javascript:" class="update">修改</a>');
     if (isPermission('delete')) control.push('<a href="javascript:" class="delete">删除</a>');
-    return '<tr class="item' + item['id'] + '"><td' + (isPermission('delete') ? '' : ' class="none"') + '><div class="check-box"><label><input type="checkbox" name="id" value="' + item['id'] + '"></label></div></td><td>' + item['smtp'] + '</td><td>' + item['port'] + '</td><td>' + item['email'] + '</td><td>' + item['user'] + '</td>' + (control.length ? '<td>' + control.join('/') + '</td>' : '') + '</tr>';
+    return '<tr class="item' + item['id'] + '"><td' + (isPermission('delete') ? '' : ' class="none"') + '><div class="check-box"><label><input type="checkbox" name="id" value="' + item['id'] + '"></label></div></td><td>' + item['smtp'] + '</td><td>' + item['port'] + '</td><td>' + item['email'] + '</td><td>' + item['from_name'] + '</td>' + (control.length ? '<td>' + control.join('/') + '</td>' : '') + '</tr>';
   } else {
-    return '<tr class="item' + item['id'] + (item['current'] ? ' red' : '') + '">' + '<td>' + item['hour'] + '</td><td>' + item['smtp'] + '</td><td>' + item['port'] + '</td><td>' + item['email'] + '</td><td>' + item['user'] + '</td></tr>';
+    return '<tr class="item' + item['id'] + (item['current'] ? ' red' : '') + '">' + '<td>' + item['hour'] + '</td><td>' + item['smtp'] + '</td><td>' + item['port'] + '</td><td>' + item['email'] + '</td><td>' + item['from_name'] + '</td></tr>';
   }
 }

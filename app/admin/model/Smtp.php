@@ -15,8 +15,8 @@ class Smtp extends Model
     public function all()
     {
         try {
-            return $this->field('id,smtp,port,email,user')
-                ->where('smtp|port|email|user', 'LIKE', '%' . Request::get('keyword') . '%')
+            return $this->field('id,smtp,port,email,from_name')
+                ->where('smtp|port|email|from_name', 'LIKE', '%' . Request::get('keyword') . '%')
                 ->order(['id' => 'DESC'])
                 ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
@@ -29,7 +29,7 @@ class Smtp extends Model
     public function one($id = 0)
     {
         try {
-            return $this->field('id,smtp,port,email,user')->where(['id' => $id ?: Request::post('id')])->find();
+            return $this->field('id,smtp,port,email,from_name')->where(['id' => $id ?: Request::post('id')])->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -41,7 +41,7 @@ class Smtp extends Model
     {
         try {
             $firstRow = date('H') % $this->count();
-            return $this->field('smtp,port,email,user,pass')
+            return $this->field('smtp,port,email,pass,from_name')
                 ->order(['id' => 'DESC'])
                 ->limit($firstRow, 1)
                 ->select()
@@ -55,7 +55,7 @@ class Smtp extends Model
     {
         try {
             $firstRow = $hour % $this->count();
-            return $this->field('id,smtp,port,email,user')
+            return $this->field('id,smtp,port,email,from_name')
                 ->order(['id' => 'DESC'])
                 ->limit($firstRow, 1)
                 ->select()[0];
@@ -72,8 +72,8 @@ class Smtp extends Model
             'smtp' => Request::post('smtp'),
             'port' => Request::post('port'),
             'email' => Request::post('email'),
-            'user' => Request::post('user'),
-            'pass' => Request::post('pass')
+            'pass' => Request::post('pass'),
+            'from_name' => Request::post('from_name')
         ];
         $validate = new validate();
         if ($validate->check($data)) {
@@ -90,7 +90,7 @@ class Smtp extends Model
             'smtp' => Request::post('smtp'),
             'port' => Request::post('port'),
             'email' => Request::post('email'),
-            'user' => Request::post('user')
+            'from_name' => Request::post('from_name')
         ];
         if (Request::post('pass')) {
             $data['pass'] = Request::post('pass');

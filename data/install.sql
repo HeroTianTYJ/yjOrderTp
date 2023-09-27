@@ -269,8 +269,8 @@ CREATE TABLE `yjorder_smtp` (
   `smtp` char(20) NOT NULL DEFAULT '',
   `port` smallint(5) unsigned NOT NULL DEFAULT '0',
   `email` char(50) NOT NULL DEFAULT '',
-  `user` char(50) NOT NULL DEFAULT '',
   `pass` char(50) NOT NULL DEFAULT '',
+  `from_name` char(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 

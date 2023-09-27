@@ -1,4 +1,3 @@
-
 <?php
 /**
  * PHPMailer - PHP email creation and transport class.

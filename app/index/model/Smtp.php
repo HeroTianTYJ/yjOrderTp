@@ -12,7 +12,7 @@ class Smtp extends Model
     {
         try {
             $firstRow = date('H') % $this->count();
-            return $this->field('smtp,port,email,user,pass')
+            return $this->field('smtp,port,email,pass,from_name')
                 ->order(['id' => 'DESC'])
                 ->limit($firstRow, 1)
                 ->select()

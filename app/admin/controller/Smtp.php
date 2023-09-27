@@ -114,7 +114,7 @@ class Smtp extends Base
         $item['smtp'] = keyword($item['smtp']);
         $item['port'] = keyword($item['port']);
         $item['email'] = keyword($item['email']);
-        $item['user'] = keyword($item['user']);
+        $item['from_name'] = keyword($item['from_name']);
         return $item;
     }
 }

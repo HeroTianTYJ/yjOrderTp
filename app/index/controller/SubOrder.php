@@ -42,19 +42,14 @@ class SubOrder extends Base
                     include ROOT_DIR . '/extend/PHPMailer/SMTP.php';
                     include ROOT_DIR . '/extend/PHPMailer/PHPMailer.php';
                     $PHPMailer = new PHPMailer();
-                    $PHPMailer->CharSet = 'UTF-8';
-                    $PHPMailer->IsSMTP();
-                    $PHPMailer->SMTPAuth = true;
-                    $PHPMailer->Port = $smtpOne[0]['port'];
                     $PHPMailer->Host = $smtpOne[0]['smtp'];
-                    $PHPMailer->Username = $smtpOne[0]['user'];
+                    $PHPMailer->Port = $smtpOne[0]['port'];
+                    $PHPMailer->Username = $PHPMailer->From = $smtpOne[0]['email'];
                     $PHPMailer->Password = $smtpOne[0]['pass'];
-                    $PHPMailer->From = $smtpOne[0]['email'];
-                    $PHPMailer->FromName = $smtpOne[0]['email'];
+                    $PHPMailer->FromName = $smtpOne[0]['from_name'];
                     foreach (array_unique(array_filter(explode(',', Config::get('system.admin_mail')))) as $value) {
                         $PHPMailer->AddAddress($value, $PHPMailer->FromName);
                     }
-                    $PHPMailer->IsHTML();
                     $PHPMailer->Subject = $this->mail(Config::get('system.mail_order_subject'), $orderAdd);
                     $PHPMailer->Body = $this->mail(Config::get('system.mail_order_content'), $orderAdd);
                     $PHPMailer->Send();
