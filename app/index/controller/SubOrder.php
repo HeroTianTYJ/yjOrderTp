@@ -4,7 +4,7 @@ namespace app\index\controller;
 
 use app\index\model;
 use Exception;
-use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer;
 use think\facade\Config;
 use think\facade\Request;
 use yjrj\QQWry;
@@ -34,13 +34,11 @@ class SubOrder extends Base
 
     private function sendmail($orderAdd)
     {
-        $Smtp = new model\Smtp();
-        if ($Smtp->count() > 0) {
-            $smtpOne = $Smtp->one();
-            if ($smtpOne) {
-                try {
-                    include ROOT_DIR . '/extend/PHPMailer/SMTP.php';
-                    include ROOT_DIR . '/extend/PHPMailer/PHPMailer.php';
+        try {
+            $Smtp = new model\Smtp();
+            if ($Smtp->count() > 0) {
+                $smtpOne = $Smtp->one();
+                if ($smtpOne) {
                     $PHPMailer = new PHPMailer();
                     $PHPMailer->Host = $smtpOne[0]['smtp'];
                     $PHPMailer->Port = $smtpOne[0]['port'];
@@ -53,10 +51,10 @@ class SubOrder extends Base
                     $PHPMailer->Subject = $this->mail(Config::get('system.mail_order_subject'), $orderAdd);
                     $PHPMailer->Body = $this->mail(Config::get('system.mail_order_content'), $orderAdd);
                     $PHPMailer->Send();
-                } catch (Exception $e) {
-                    echo $e->getMessage();
                 }
             }
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
     }
 

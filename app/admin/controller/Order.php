@@ -5,7 +5,7 @@ namespace app\admin\controller;
 use app\admin\model;
 use app\admin\library\Html;
 use Exception;
-use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer;
 use think\facade\Config;
 use think\facade\Request;
 use think\facade\View;
@@ -342,13 +342,11 @@ class Order extends Base
 
     private function sendmail($address, $subject, $content)
     {
-        $Smtp = new model\Smtp();
-        if ($Smtp->count() > 0) {
-            $smtpOne = $Smtp->one2();
-            if ($smtpOne) {
-                try {
-                    include ROOT_DIR . '/extend/PHPMailer/SMTP.php';
-                    include ROOT_DIR . '/extend/PHPMailer/PHPMailer.php';
+        try {
+            $Smtp = new model\Smtp();
+            if ($Smtp->count() > 0) {
+                $smtpOne = $Smtp->one2();
+                if ($smtpOne) {
                     $PHPMailer = new PHPMailer();
                     $PHPMailer->Host = $smtpOne[0]['smtp'];
                     $PHPMailer->Port = $smtpOne[0]['port'];
@@ -359,10 +357,10 @@ class Order extends Base
                     $PHPMailer->Subject = $this->mail($subject);
                     $PHPMailer->Body = $this->mail($content);
                     $PHPMailer->send();
-                } catch (Exception $e) {
-                    echo $e->getMessage();
                 }
             }
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
     }
 
