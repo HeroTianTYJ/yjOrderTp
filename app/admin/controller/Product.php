@@ -17,7 +17,7 @@ class Product extends Base
             foreach ($productAll as $key => $value) {
                 $productAll[$key] = $this->listItem($value);
             }
-            return $productAll->items() ? json_encode($productAll->items(), JSON_NUMERIC_CHECK) : '';
+            return $productAll->items() ? json_encode($productAll->items()) : '';
         }
         View::assign(['Total' => $productAll->total()]);
         Html::productSort(Request::get('product_sort_id'));

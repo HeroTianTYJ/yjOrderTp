@@ -16,7 +16,7 @@ class OrderState extends Base
             foreach ($orderStateAll as $key => $value) {
                 $orderStateAll[$key] = $this->listItem($value);
             }
-            return $orderStateAll->items() ? json_encode($orderStateAll->items(), JSON_NUMERIC_CHECK) : '';
+            return $orderStateAll->items() ? json_encode($orderStateAll->items()) : '';
         }
         View::assign(['Total' => $orderStateAll->total()]);
         return $this->view();

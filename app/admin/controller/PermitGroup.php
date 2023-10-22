@@ -16,7 +16,7 @@ class PermitGroup extends Base
             foreach ($permitGroupAll as $key => $value) {
                 $permitGroupAll[$key] = $this->listItem($value);
             }
-            return $permitGroupAll->items() ? json_encode($permitGroupAll->items(), JSON_NUMERIC_CHECK) : '';
+            return $permitGroupAll->items() ? json_encode($permitGroupAll->items()) : '';
         }
         View::assign(['Total' => $permitGroupAll->total()]);
         return $this->view();

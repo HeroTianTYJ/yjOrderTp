@@ -16,7 +16,7 @@ class Smtp extends Base
             foreach ($smtpAll as $key => $value) {
                 $smtpAll[$key] = $this->listItem($value);
             }
-            return $smtpAll->items() ? json_encode($smtpAll->items(), JSON_NUMERIC_CHECK) : '';
+            return $smtpAll->items() ? json_encode($smtpAll->items()) : '';
         }
         View::assign(['Total' => $smtpAll->total()]);
         return $this->view();

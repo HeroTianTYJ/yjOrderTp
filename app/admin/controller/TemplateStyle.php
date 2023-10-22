@@ -16,7 +16,7 @@ class TemplateStyle extends Base
             foreach ($templateStyleAll as $key => $value) {
                 $templateStyleAll[$key] = $this->listItem($value);
             }
-            return $templateStyleAll->items() ? json_encode($templateStyleAll->items(), JSON_NUMERIC_CHECK) : '';
+            return $templateStyleAll->items() ? json_encode($templateStyleAll->items()) : '';
         }
         View::assign(['Total' => $templateStyleAll->total()]);
         return $this->view();

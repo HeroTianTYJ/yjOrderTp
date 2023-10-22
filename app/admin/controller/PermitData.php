@@ -22,7 +22,7 @@ class PermitData extends Base
                 }
                 $permitDataAll[$key]['child'] = $child;
             }
-            return $permitDataAll->items() ? json_encode($permitDataAll->items(), JSON_NUMERIC_CHECK) : '';
+            return $permitDataAll->items() ? json_encode($permitDataAll->items()) : '';
         }
         View::assign(['Total' => $permitDataAll->total()]);
         return $this->view();

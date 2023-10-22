@@ -19,7 +19,7 @@ class LoginRecordManager extends Base
                 $loginRecordManagerAll[$key] = $this->listItem($value);
             }
             return $loginRecordManagerAll->items() ?
-                json_encode($loginRecordManagerAll->items(), JSON_NUMERIC_CHECK) : '';
+                json_encode($loginRecordManagerAll->items()) : '';
         }
         View::assign(['Total' => $loginRecordManagerAll->total()]);
         Html::manager(Request::get('manager_id'));

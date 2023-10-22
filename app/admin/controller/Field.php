@@ -15,7 +15,7 @@ class Field extends Base
             foreach ($fieldAll as $key => $value) {
                 $fieldAll[$key] = $this->listItem($value);
             }
-            return $fieldAll->items() ? json_encode($fieldAll->items(), JSON_NUMERIC_CHECK) : '';
+            return $fieldAll->items() ? json_encode($fieldAll->items()) : '';
         }
         View::assign(['Total' => $fieldAll->total()]);
         return $this->view();
