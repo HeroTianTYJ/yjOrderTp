@@ -79,19 +79,3 @@
 .icon-data:before {
   content: "\e622";
 }
-
-.icon-date-prev-y:before {
-  content: "\e632";
-}
-
-.icon-date-next-m:before {
-  content: "\e633";
-}
-
-.icon-date-prev-m:before {
-  content: "\e634";
-}
-
-.icon-date-next-y:before {
-  content: "\e635";
-}

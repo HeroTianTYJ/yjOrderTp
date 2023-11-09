@@ -1,9 +1,9 @@
-/**
- @Name : layDate 5.0.9 日期时间控件
- @Author: 贤心
- @Site：http://www.layui.com/laydate/
- @License：MIT
- */
+/*
+  @Name: layDate 日期时间控件
+  @Author: 贤心
+  @Homepage: www.layui.com
+  @License：MIT
+*/
 
 (function () {
   'use strict';
@@ -33,15 +33,15 @@
     };
   };
 
-  let THIS = 'layui-this';
-  let DISABLED = 'date-disabled';
+  let THIS = 'this';
+  let DISABLED = 'disabled';
   let LIMIT_YEAR = [100, 200000];
-  let ELEM_STATIC = 'layui-date-static';
-  let ELEM_LIST = 'layui-date-list';
-  let ELEM_HINT = 'layui-date-hint';
-  let ELEM_CONFIRM = '.date-buttons-confirm';
-  let ELEM_TIME_TEXT = 'date-time-text';
-  let ELEM_TIME_BTN = '.date-buttons-time';
+  let ELEM_STATIC = 'static';
+  let ELEM_LIST = 'list';
+  let ELEM_HINT = 'hint';
+  let ELEM_CONFIRM = '.buttons-confirm';
+  let ELEM_TIME_TEXT = 'time-text';
+  let ELEM_TIME_BTN = '.buttons-time';
 
   let Class = function (options) {
     let that = this;
@@ -217,33 +217,33 @@
       id: that.elemID,
       'class': [
         'layui-date',
-        options.range ? ' layui-date-range' : '',
+        options.range ? ' range' : '',
         isStatic ? (' ' + ELEM_STATIC) : '',
-        options.theme && options.theme !== 'default' && !/^#/.test(options.theme) ? (' date-theme-' + options.theme) : ''
+        options.theme && options.theme !== 'default' && !/^#/.test(options.theme) ? (' theme-' + options.theme) : ''
       ].join('')
     });
     let elemMain = that.elemMain = [];
     that.elemHeader = [];
     that.elemCont = [];
     that.table = [];
-    let divFooter = that.footer = lay.elem('div', {'class': 'layui-date-footer'});
+    let divFooter = that.footer = lay.elem('div', {'class': 'footer'});
     if (options.zIndex) elem.style.zIndex = options.zIndex;
     $.each(new Array(2), function (i) {
       if (!options.range && i > 0) return true;
-      let divHeader = lay.elem('div', {'class': 'layui-date-header'});
+      let divHeader = lay.elem('div', {'class': 'header'});
       let headerChild = [
-        lay.elem('i', {'class': 'iconfont icon-date-prev-y'}),
-        lay.elem('i', {'class': 'iconfont icon-date-prev-m'}),
+        lay.elem('i', {'class': 'layui-font previous-year'}),
+        lay.elem('i', {'class': 'layui-font previous-month'}),
         (function () {
-          let elem = lay.elem('div', {'class': 'date-set-ym'});
+          let elem = lay.elem('div', {'class': 'set-ym'});
           elem.appendChild(lay.elem('span'));
           elem.appendChild(lay.elem('span'));
           return elem;
         }()),
-        lay.elem('i', {'class': 'iconfont icon-date-next-m'}),
-        lay.elem('i', {'class': 'iconfont icon-date-next-y'})
+        lay.elem('i', {'class': 'layui-font next-month'}),
+        lay.elem('i', {'class': 'layui-font next-year'})
       ];
-      let divContent = lay.elem('div', {'class': 'layui-date-content'});
+      let divContent = lay.elem('div', {'class': 'content'});
       let table = lay.elem('table');
       let thead = lay.elem('thead');
       let theadTr = lay.elem('tr');
@@ -264,7 +264,7 @@
       });
       table.insertBefore(thead, table.children[0]);
       divContent.appendChild(table);
-      elemMain[i] = lay.elem('div', {'class': 'layui-date-main date-main-list-' + i});
+      elemMain[i] = lay.elem('div', {'class': 'main main-list-' + i});
       elemMain[i].appendChild(divHeader);
       elemMain[i].appendChild(divContent);
       that.elemHeader.push(headerChild);
@@ -274,14 +274,14 @@
     $(divFooter).html(function () {
       let html = [];
       let button = [];
-      if (options.type === 'datetime') html.push('<span lay-type="datetime" class="date-buttons-time">' + lang.timeTips + '</span>');
+      if (options.type === 'datetime') html.push('<span lay-type="datetime" class="buttons-time">' + lang.timeTips + '</span>');
       $.each(options.buttons, function (i, item) {
         let title = lang.tools[item] || 'btn';
         if (options.range && item === 'now') return;
         if (isStatic && item === 'clear') title = options.lang === 'cn' ? '重置' : 'Reset';
-        button.push('<span lay-type="' + item + '" class="date-buttons-' + item + '">' + title + '</span>');
+        button.push('<span lay-type="' + item + '" class="buttons-' + item + '">' + title + '</span>');
       });
-      html.push('<div class="date-footer-buttons">' + button.join('') + '</div>');
+      html.push('<div class="buttons">' + button.join('') + '</div>');
       return html.join('');
     }());
     $.each(elemMain, function (i, main) {
@@ -559,7 +559,7 @@
       item.removeAttr('class');
       if (index < startWeek) {
         st = prevMaxDate - startWeek + index;
-        item.addClass('date-day-prev');
+        item.addClass('day-prev');
         YMD = that.getAsYM(dateTime.year, dateTime.month, 'sub');
       } else if (index >= startWeek && index < thisMaxDate + startWeek) {
         st = index - startWeek;
@@ -568,7 +568,7 @@
         }
       } else {
         st = index - thisMaxDate - startWeek;
-        item.addClass('date-day-next');
+        item.addClass('day-next');
         YMD = that.getAsYM(dateTime.year, dateTime.month);
       }
       YMD[1]++;
@@ -608,7 +608,7 @@
     let dateTime = options.dateTime;
     let lang = that.lang();
     let isAlone = options.range && options.type !== 'date' && options.type !== 'datetime';
-    let ul = lay.elem('ul', {'class': ELEM_LIST + ' ' + ({year: 'date-year-list', month: 'date-month-list', time: 'date-time-list'})[type]});
+    let ul = lay.elem('ul', {'class': ELEM_LIST + ' ' + ({year: 'year-list', month: 'month-list', time: 'time-list'})[type]});
     let elemHeader = that.elemHeader[index];
     let elemYM = $(elemHeader[2]).find('span');
     let elemCont = that.elemCont[index || 0];
@@ -702,7 +702,7 @@
     // 年月
     if (type === 'year' || type === 'month') {
       // 显示切换箭头
-      $(that.elemMain[index]).addClass('date-ym-show');
+      $(that.elemMain[index]).addClass('ym-show');
 
       // 选中
       $(ul).find('li').on('click', function () {
@@ -763,7 +763,7 @@
       let haveSpan = $(elemHeader[2]).find('.' + ELEM_TIME_TEXT);
       scroll();
       span.innerHTML = options.range ? [lang.startTime, lang.endTime][index] : lang.timeTips;
-      $(that.elemMain[index]).addClass('date-time-show');
+      $(that.elemMain[index]).addClass('time-show');
       if (haveSpan[0]) haveSpan.remove();
       elemHeader[2].appendChild(span);
       $(ul).find('ol').each(function (i) {
@@ -792,7 +792,7 @@
     let that = this;
     $.each(that.elemCont, function (index) {
       $(this).find('.' + ELEM_LIST).remove();
-      $(that.elemMain[index]).removeClass('date-ym-show date-time-show');
+      $(that.elemMain[index]).removeClass('ym-show time-show');
     });
     $(that.elem).find('.' + ELEM_TIME_TEXT).remove();
   };
@@ -866,7 +866,7 @@
         delete that.endState;
         delete that.endDate;
         that.startState = true;
-        tds.removeClass(THIS + ' date-selected');
+        tds.removeClass(THIS + ' selected');
         td.addClass(THIS);
       } else if (that.startState) { // 选中截止
         td.addClass(THIS);
@@ -978,8 +978,8 @@
     let listYM = that.listYM[index];
     let addSubYear = function (type) {
       let startEnd = ['startDate', 'endDate'][index];
-      let isYear = $(elemCont).find('.date-year-list')[0];
-      let isMonth = $(elemCont).find('.date-month-list')[0];
+      let isYear = $(elemCont).find('.year-list')[0];
+      let isMonth = $(elemCont).find('.month-list')[0];
       if (isYear) {
         listYM[0] = type ? listYM[0] - 15 : listYM[0] + 15;
         that.list('year', index);

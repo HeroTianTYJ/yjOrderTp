@@ -1,7 +1,8 @@
 /*
- @Name：layui.form 表单组件
- @Author：贤心
- @License：MIT
+  @Name：layui.form 表单组件
+  @Homepage: www.layui.com
+  @Author: 贤心
+  @License：MIT
 */
 
 layui.define(function (exports) {
@@ -231,7 +232,7 @@ layui.define(function (exports) {
             '<div class="' + (isSearch ? '' : 'unselect ') + CLASS,
             (disabled ? ' select-disabled' : '') + '">',
             '<div class="' + TITLE + '">',
-            '<input type="text" placeholder="' + placeholder + '" ' + ('value="' + (value ? selected.html().replace('√', '') : '') + '"') + (!disabled && isSearch ? '' : ' readonly') + ' class="input' + (isSearch ? '' : ' unselect') + (disabled ? (' ' + DISABLED) : '') + '">',
+            '<input type="text" placeholder="' + placeholder + '" ' + ('value="' + (value ? selected.html() : '') + '"') + (!disabled && isSearch ? '' : ' readonly') + ' class="input' + (isSearch ? '' : ' unselect') + (disabled ? (' ' + DISABLED) : '') + '">',
             '<i class="edge"></i></div>',
             '<dl class="anim anim-up-bit' + ($this.find('optgroup')[0] ? ' select-group' : '') + '">',
             (function (options) {
@@ -248,7 +249,7 @@ layui.define(function (exports) {
                   arr.push('<dt ' + attr + '>' + item.label + '</dt>');
                 }
                 if (item.tagName.toLowerCase() === 'option') {
-                  arr.push('<dd lay-value="' + item.value + '" class="' + (value === item.value ? THIS : '') + (item.disabled ? (' ' + DISABLED) : '') + '" ' + attr + '>' + item.innerHTML + '</dd>'); // <span>√</span>
+                  arr.push('<dd lay-value="' + item.value + '" class="' + (value === item.value ? THIS : '') + (item.disabled ? (' ' + DISABLED) : '') + '" ' + attr + '>' + item.innerHTML + '</dd>');
                 }
               });
               arr.length === 0 && arr.push('<dd lay-value="" class="' + DISABLED + '">没有选项</dd>');

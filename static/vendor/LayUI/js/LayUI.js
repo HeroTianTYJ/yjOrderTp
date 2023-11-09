@@ -1,9 +1,8 @@
 /*
-@Name: layui
-@Description：经典模块化前端 UI 框架
-@Homepage: www.layui.com
-@Author: 贤心
-@License：MIT
+  @Name: layui 经典模块化前端 UI 框架
+  @Homepage: www.layui.com
+  @Author: 贤心
+  @License：MIT
 */
 
 (function (win) {
