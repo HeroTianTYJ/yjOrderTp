@@ -4,14 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4
+class ComposerStaticInit401641799412cddb708794d1cc2980b5
 {
     public static $files = array (
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
         '35fab96057f1bf5e7aba31a8a6d5fdde' => __DIR__ . '/..' . '/topthink/think-orm/stubs/load_stubs.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
-        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
     );
@@ -31,8 +30,6 @@ class ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4
         ),
         'S' => 
         array (
-            'Symfony\\Polyfill\\Php80\\' => 23,
-            'Symfony\\Polyfill\\Php72\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\VarDumper\\' => 28,
         ),
@@ -42,12 +39,10 @@ class ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
-            'Psr\\Cache\\' => 10,
         ),
         'L' => 
         array (
             'League\\MimeTypeDetection\\' => 25,
-            'League\\Flysystem\\Cached\\' => 24,
             'League\\Flysystem\\' => 17,
         ),
     );
@@ -81,14 +76,6 @@ class ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
-        'Symfony\\Polyfill\\Php80\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
-        ),
-        'Symfony\\Polyfill\\Php72\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-php72',
-        ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
@@ -103,7 +90,7 @@ class ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4
         ),
         'Psr\\Log\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+            0 => __DIR__ . '/..' . '/psr/log/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (
@@ -113,17 +100,9 @@ class ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'Psr\\Cache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/cache/src',
-        ),
         'League\\MimeTypeDetection\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/mime-type-detection/src',
-        ),
-        'League\\Flysystem\\Cached\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/league/flysystem-cached-adapter/src',
         ),
         'League\\Flysystem\\' => 
         array (
@@ -136,21 +115,16 @@ class ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4
     );
 
     public static $classMap = array (
-        'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
-        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
-        'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
-        'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit4902d55d617c754c39e9d3eedcf53ee4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit401641799412cddb708794d1cc2980b5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit401641799412cddb708794d1cc2980b5::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit401641799412cddb708794d1cc2980b5::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit401641799412cddb708794d1cc2980b5::$classMap;
 
         }, null, ClassLoader::class);
     }
