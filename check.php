@@ -68,7 +68,7 @@ body {
       <td>PHP版本：</td>
       <td><?php echo version_compare(PHP_VERSION, '8.0.0', '>=') ?
               '<span class="green">支持</span>' : '最低版本要求为8.0.0，当前版本为' . phpversion() . '，<span class="red">不支持' .
-              '</span>，请升级您的PHP版本，使运行环境更安全。如确实不能升级，请' .
+              '</span>，建议您升级PHP版本，使运行环境更安全。如确实不能升级，请' .
               '<a href="https://pan.baidu.com/s/14NtpvNxD-S-_a7LZAjCU7g?pwd=5q9w" target="_blank">点击此处</a>下载本系统的PHP' .
               '7.4版支持包，下载后，删除本系统根目录中的vendor目录及run.inc.php文件，并将支持包解压到本系统根目录即可安装本系统（如已上传，此页面不会更新，请直接访问安装页面进行安装）。';?></td>
     </tr>
