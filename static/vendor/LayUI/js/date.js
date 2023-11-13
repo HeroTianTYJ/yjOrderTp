@@ -230,7 +230,7 @@
     if (options.zIndex) elem.style.zIndex = options.zIndex;
     $.each(new Array(2), function (i) {
       if (!options.range && i > 0) return true;
-      let divHeader = lay.elem('div', {'class': 'header'});
+      let divHeader = lay.elem('div', {'class': 'layui-date-header'});
       let headerChild = [
         lay.elem('i', {'class': 'layui-font previous-year'}),
         lay.elem('i', {'class': 'layui-font previous-month'}),
@@ -264,7 +264,7 @@
       });
       table.insertBefore(thead, table.children[0]);
       divContent.appendChild(table);
-      elemMain[i] = lay.elem('div', {'class': 'main main-list-' + i});
+      elemMain[i] = lay.elem('div', {'class': 'layui-date-main main-list-' + i});
       elemMain[i].appendChild(divHeader);
       elemMain[i].appendChild(divContent);
       that.elemHeader.push(headerChild);
@@ -282,6 +282,7 @@
         button.push('<span lay-type="' + item + '" class="buttons-' + item + '">' + title + '</span>');
       });
       html.push('<div class="buttons">' + button.join('') + '</div>');
+      html.push('<p style="clear:both;"></p>');
       return html.join('');
     }());
     $.each(elemMain, function (i, main) {
