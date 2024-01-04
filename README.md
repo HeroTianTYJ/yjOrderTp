@@ -38,6 +38,8 @@ https://www.yjrj.top/version/index.html?product_id=2
 
 系统安装和使用的其它常见问题请见：https://mp.weixin.qq.com/s/k76lM_MxTFk-GZg8F71waQ
 
+《昱杰订单管理系统》问题答疑群：https://mp.weixin.qq.com/s/EzjCjCqn8HxMcvIYp4i9dw
+
 ## 四、增值业务
 
 1、单页制作：您可通过《昱杰单页制作系统》制作出像《昱杰多功能订单管理系统》那样的图文并茂的产品单页，并可嵌入通过《昱杰订单管理系统（ThinkPHP版）》生成的下单界面，《昱杰单页制作系统》入口：https://www.yvjie.cn/web.php （注：通过《昱杰单页制作系统》生成的单页为纯静态页面，无法通过后台可视化修改，如需可通过后台可视化修改的产品单页，推荐您使用《昱杰多功能订单管理系统》）；
