@@ -8,9 +8,10 @@ class Wechat
 {
     public string $errMsg = 'no access';
 
-    private bool $isMp;
     private string $appId;
     private string $appSecret;
+    private string $bridge;
+    private bool $isMp;
 
     private const API_URL_PREFIX = 'https://api.weixin.qq.com/cgi-bin';
     private const SNS_URL_PREFIX = 'https://api.weixin.qq.com/sns';
@@ -20,6 +21,7 @@ class Wechat
     {
         $this->appId = $config['app_id'] ?? '';
         $this->appSecret = $config['app_secret'] ?? '';
+        $this->bridge = $config['bridge'] ?? '';
         $this->isMp = $config['is_mp'] ?? true;
     }
 
@@ -38,12 +40,13 @@ class Wechat
         return $config;
     }
 
-    public function oauthRedirect($redirectUrl, $state = '', $scope = 'snsapi_userinfo')
+    public function oauthRedirect($redirectUrl, $state = '', $scope = 'userinfo')
     {
-        header('Location:' . self::OPEN_URL_PREFIX . ($this->isMp ? '/oauth2/authorize?appid=' . $this->appId .
-                '&redirect_uri=' . urlencode($redirectUrl) . '&response_type=code&scope=' . $scope :
-                '/qrconnect?appid=' . $this->appId . '&redirect_uri=' . urlencode($redirectUrl) .
-                '&response_type=code&scope=snsapi_login') . '&state=' . $state . '#wechat_redirect');
+        header('Location:' . ($this->bridge ? $this->bridge . (strstr($this->bridge, '?') ? '&' : '?') . 'callback=' .
+                urlencode($redirectUrl) : self::OPEN_URL_PREFIX . ($this->isMp ? '/oauth2/authorize?appid=' .
+                    $this->appId . '&redirect_uri=' . urlencode($redirectUrl) . '&response_type=code&scope=snsapi_' .
+                    $scope : '/qrconnect?appid=' . $this->appId . '&redirect_uri=' . urlencode($redirectUrl) .
+                    '&response_type=code&scope=snsapi_login') . '&state=' . $state . '#wechat_redirect'));
         exit;
     }
 
@@ -70,10 +73,7 @@ class Wechat
         if ($_SERVER['HTTP_HOST'] == 'www.yjrj.top' || $_SERVER['HTTP_HOST'] == 'www.yvjie.cn') {
             $file = ROOT_DIR . '/../../../common/' . $this->appId . '.php';
             $config = include($file);
-            if (
-                isset($config['cache']) && isset($config['token']) && time() - $config['cache'] < 5400 &&
-                $config['token']
-            ) {
+            if (isset($config['cache'], $config['token']) && time() - $config['cache'] < 5400 && $config['token']) {
                 $accessToken = $config['token'];
             } else {
                 $accessToken = $this->getAccessToken();
@@ -88,10 +88,7 @@ return [
         } else {
             Config::load('cache/' . $this->appId, $this->appId);
             $config = Config::get($this->appId);
-            if (
-                isset($config['cache']) && isset($config['token']) && time() - $config['cache'] < 5400 &&
-                $config['token']
-            ) {
+            if (isset($config['cache'], $config['token']) && time() - $config['cache'] < 5400 && $config['token']) {
                 $accessToken = $config['token'];
             } else {
                 $accessToken = $this->getAccessToken();
@@ -138,18 +135,19 @@ return [
 
     private function httpGet($url)
     {
-        $curl = curl_init();
+        $option = [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true
+        ];
         if (stripos($url, 'https://') !== false) {
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-            curl_setopt($curl, CURLOPT_SSLVERSION, 1);
+            $option[CURLOPT_SSL_VERIFYPEER] = $option[CURLOPT_SSL_VERIFYHOST] = false;
+            $option[CURLOPT_SSLVERSION] = true;
         }
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $curl = curl_init();
+        curl_setopt_array($curl, $option);
         $content = curl_exec($curl);
-        $status = curl_getinfo($curl);
         curl_close($curl);
-        return intval($status['http_code']) == 200 ? $content : false;
+        return $content;
     }
 
     private function getData($result, $returnField = false)

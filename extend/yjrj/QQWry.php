@@ -29,7 +29,7 @@ class QQWry
     public static function getVersion()
     {
         preg_match_all(
-            '/[\d]{4}年[\d]{1,2}月[\d]{1,2}日/',
+            '/\d{4}年\d{1,2}月\d{1,2}日/',
             mb_convert_encoding(file_get_contents(Config::get('file.qqwry')), 'UTF-8', 'GBK'),
             $version
         );
@@ -38,7 +38,7 @@ class QQWry
 
     private function getStartEndIp($handle, $recNo, $firstStartIp)
     {
-        fseek($handle, $firstStartIp + $recNo * 7, SEEK_SET);
+        fseek($handle, $firstStartIp + $recNo * 7);
         $fread = fread($handle, 7);
         return [
             ord($fread[0]) + ord($fread[1]) * 256 + ord($fread[2]) * 256 * 256 + ord($fread[3]) * 256 * 256 * 256,
@@ -49,7 +49,7 @@ class QQWry
     private function getFlagStr($handle, $offset)
     {
         while (1) {
-            fseek($handle, $offset, SEEK_SET);
+            fseek($handle, $offset);
             $flag = ord(fgetc($handle));
             if ($flag == 1 || $flag == 2) {
                 $fread = fread($handle, 3);
@@ -66,7 +66,7 @@ class QQWry
             return '';
         }
 
-        fseek($handle, $offset, SEEK_SET);
+        fseek($handle, $offset);
         $str = '';
         while (1) {
             $c = fgetc($handle);
@@ -92,7 +92,7 @@ class QQWry
                 return 'FileDataError';
             }
 
-            fseek($handle, 0, SEEK_SET);
+            fseek($handle, 0);
             $fread = fread($handle, 8);
             $firstStartIp = ord($fread[0]) + ord($fread[1]) * 256 + ord($fread[2]) * 256 * 256 +
                 ord($fread[3]) * 256 * 256 * 256;
@@ -122,7 +122,7 @@ class QQWry
             }
             $startEndIp = $this->getStartEndIp($handle, $rangB, $firstStartIp);
 
-            fseek($handle, $startEndIp[1], SEEK_SET);
+            fseek($handle, $startEndIp[1]);
             $fread2 = fread($handle, 5);
             if (
                 $startEndIp[0] <= $ip && ord($fread2[0]) + ord($fread2[1]) * 256 + ord($fread2[2]) * 256 * 256 +

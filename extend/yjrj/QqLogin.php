@@ -6,20 +6,28 @@ use think\facade\Session;
 
 class QqLogin
 {
-    private array $config;
+    private string $appId;
+    private string $appKey;
+    private string $redirectUri;
+    private string $bridge;
 
     public function __construct($config = [])
     {
-        $this->config = $config;
+        $this->appId = $config['app_id'] ?? '';
+        $this->appKey = $config['app_key'] ?? '';
+        $this->redirectUri = $config['redirect_uri'];
+        $this->bridge = $config['bridge'] ?? '';
     }
 
-    public function login()
+    public function login($state = '')
     {
-        $state = md5(uniqid(rand(), true));
+        $state = $state ?: md5(uniqid(rand(), true));
         Session::set('qq_login_state', $state);
-        header('Location:https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=' .
-            $this->config['app_id'] . '&redirect_uri=' . $this->config['redirect_uri'] . '&state=' .
-            $state . '&scope=get_user_info');
+        header('Location:' . ($this->bridge ? $this->bridge . (strstr($this->bridge, '?') ? '&' : '?') . 'callback=' .
+                urlencode($this->redirectUri) . '&state=' . $state :
+                'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=' . $this->appId .
+                '&redirect_uri=' . urlencode($this->redirectUri) . '&state=' . $state .
+                '&scope=get_user_info'));
     }
 
     public function getOpenid($accessToken = '')
@@ -34,7 +42,7 @@ class QqLogin
         $accessToken = $this->getAccessToken();
         $openid = $this->getOpenid($accessToken);
         $userInfo = json_decode($this->curlGet('https://graph.qq.com/user/get_user_info?access_token=' . $accessToken .
-            '&openid=' . $openid . '&oauth_consumer_key=' . $this->config['app_id']), true);
+            '&openid=' . $openid . '&oauth_consumer_key=' . $this->appId), true);
         $userInfo['openid'] = $openid;
         return $userInfo;
     }
@@ -47,28 +55,25 @@ class QqLogin
         Session::delete('qq_login_state');
         $params = [];
         parse_str($this->curlGet('https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=' .
-            $this->config['app_id'] . '&redirect_uri=' . urlencode($this->config['redirect_uri']) . '&client_secret=' .
-            $this->config['app_key'] . '&code=' . $_GET['code']), $params);
+            $this->appId . '&redirect_uri=' . urlencode($this->bridge ?: $this->redirectUri) . '&client_secret=' .
+            $this->appKey . '&code=' . $_GET['code']), $params);
         return $params['access_token'];
     }
 
     private function curlGet($url)
     {
-        $curl = curl_init();
+        $option = [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true
+        ];
         if (stripos($url, 'https://') !== false) {
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-            curl_setopt($curl, CURLOPT_SSLVERSION, 1);
+            $option[CURLOPT_SSL_VERIFYPEER] = $option[CURLOPT_SSL_VERIFYHOST] = false;
+            $option[CURLOPT_SSLVERSION] = true;
         }
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $curl = curl_init();
+        curl_setopt_array($curl, $option);
         $content = curl_exec($curl);
-        $info = curl_getinfo($curl);
         curl_close($curl);
-        if (intval($info['http_code']) == 200) {
-            return $content;
-        } else {
-            return false;
-        }
+        return $content;
     }
 }

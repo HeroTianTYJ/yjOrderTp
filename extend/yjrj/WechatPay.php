@@ -134,18 +134,20 @@ class WechatPay
 
     private function httpPost($url, $data = [], $header = [], $field = '')
     {
-        $curl = curl_init();
+        $option = [
+            CURLOPT_URL => $url,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => $header,
+            CURLINFO_HEADER_OUT => true
+        ];
         if (stripos($url, 'https://') !== false) {
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-            curl_setopt($curl, CURLOPT_SSLVERSION, 1);
+            $option[CURLOPT_SSL_VERIFYPEER] = $option[CURLOPT_SSL_VERIFYHOST] = false;
+            $option[CURLOPT_SSLVERSION] = true;
         }
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($curl, CURLINFO_HEADER_OUT, true);
+        $curl = curl_init();
+        curl_setopt_array($curl, $option);
         $content = json_decode(curl_exec($curl), true);
         curl_close($curl);
         return $content[$field] ?? $content;
