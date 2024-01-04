@@ -50,7 +50,7 @@ class Visit extends Base
     public function js()
     {
         if (Request::isAjax()) {
-            $js = ROOT_DIR . '/static/index/js/Visit.js';
+            $js = ROOT_DIR . '/static/index/js/visit.js';
             return file_put_contents(
                 $js,
                 preg_replace(

@@ -1,8 +1,8 @@
-<script type="text/javascript" src="static/vendor/xmSelect.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/admin/js/{:request()->controller()}Form.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/library/xm_select.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}_form.js?{:staticCache()}"></script>
 <script type="text/javascript">
-ThinkPHP['AJAX'] = '{:url("/".parse_name(request()->controller())."/ajaxProduct")}';
-ThinkPHP['AJAX2'] = '{:url("/".parse_name(request()->controller())."/ajaxProduct2")}';
+CONFIG['AJAX'] = '{:url("/".parse_name(request()->controller())."/ajaxProduct")}';
+CONFIG['AJAX2'] = '{:url("/".parse_name(request()->controller())."/ajaxProduct2")}';
 </script>
 
 <form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
@@ -21,7 +21,7 @@ ThinkPHP['AJAX2'] = '{:url("/".parse_name(request()->controller())."/ajaxProduct
     <tr class="product_default1"><td>默认商品：</td><td><select name="product_default1" lay-search></select></td></tr>
     <tr class="product_default2"><td>默认商品：</td><td><select name="product_default2" lay-search></select></td></tr>
     <tr><td>商品显示：</td><td><div class="radio-box"><label><input type="radio" name="product_view_type" value="0" checked>单选按钮</label></div><div class="radio-box"><label><input type="radio" name="product_view_type" value="1">下拉框</label></div></td></tr>
-    <tr><td>下单字段：</td><td class="field">{$Field}<p style="margin:10px 0 0 0;"><input type="button" value="全选" class="button all"> <input type="button" value="全部不选" class="button no"> <input type="button" value="默认字段" class="button selected"></p></td></tr>
+    <tr><td>下单字段：</td><td class="field">{$Field}<p style="margin:10px 0 0 0;"><input type="button" value="全选" class="button all"> <input type="button" value="全部不选" class="button no"> <input type="button" value="默认字段" class="button default"></p></td></tr>
     <tr class="tip"><td></td><td>红色部分为默认字段</td></tr>
     <tr><td>支付方式：</td><td>{$Payment}</td></tr>
     <tr><td>默认方式：</td><td><select name="payment_default" lay-search>{$PaymentDefault}</select></td></tr>

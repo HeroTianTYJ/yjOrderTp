@@ -2,13 +2,17 @@
 
 {block name="title"}系统{/block}
 
-{block name="head"}<script type="text/javascript">
-ThinkPHP['TYPE'] = 'index';
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
-ThinkPHP['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
-ThinkPHP['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+CONFIG['TYPE'] = 'index';
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
+CONFIG['ADD_DO'] = '{:url("/".parse_name(request()->controller())."/add",["action"=>"do"])}';
+CONFIG['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
+CONFIG['UPDATE_DO'] = '{:url("/".parse_name(request()->controller())."/update",["action"=>"do"])}';
+CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
 </script>{/block}
 
 {block name="main"}
@@ -58,6 +62,6 @@ ThinkPHP['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}'
     <li>3、设置参数，以QQ邮箱为例。SMTP服务器和SMTP端口分别为：smtp.qq.com、25或ssl://smtp.qq.com、465（后者较稳定） | 发件人邮箱为邮箱地址（注意加@qq.com） | 发件人密码为邮箱密码（如果是新开通的SMTP服务，开通时会生成一个授权码，发件人密码为这个授权码） | 发件人名称为您自定义的名称。</li>
   </ul>
 
-  <span class="iconfont icon-expand"></span>
+  <span class="iconfont icon-expand color"></span>
 </div>
 {/block}

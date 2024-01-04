@@ -3,9 +3,10 @@
 {block name="title"}模板{/block}
 
 {block name="head"}<script type="text/javascript">
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['IS_DEFAULT'] = '{:url("/".parse_name(request()->controller())."/isDefault")}';
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['IS_DEFAULT'] = '{:url("/".parse_name(request()->controller())."/isDefault")}';
 </script>{/block}
 
 {block name="main"}
@@ -45,6 +46,6 @@ ThinkPHP['IS_DEFAULT'] = '{:url("/".parse_name(request()->controller())."/isDefa
     <li>您可将字段设置为默认字段，在添加模板时，将自动勾选上默认字段。</li>
   </ul>
 
-  <span class="iconfont icon-expand"></span>
+  <span class="iconfont icon-expand color"></span>
 </div>
 {/block}

@@ -20,12 +20,12 @@ $(function () {
     ajaxPost: true,
     callback: function (data) {
       let json = JSON.parse(data);
-      if (json.state === 0) {
-        tip(json.content);
-      } else if (json.state === 1) {
+      if (json['state'] === 0) {
+        tip(json['content']);
+      } else if (json['state'] === 1) {
         window.location.reload();
-      } else if (json.state === 2) {
-        window.location.href = json.content;
+      } else if (json['state'] === 2) {
+        window.location.href = json['content'];
       }
     }
   }).addRule([{

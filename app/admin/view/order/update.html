@@ -1,4 +1,4 @@
-<script type="text/javascript" src="static/admin/js/{:request()->controller()}Form.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}_form.js?{:staticCache()}"></script>
 
 <form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
   <input type="hidden" name="order_id" value="{$One['order_id']}">

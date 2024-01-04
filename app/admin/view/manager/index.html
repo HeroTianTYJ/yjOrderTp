@@ -2,16 +2,20 @@
 
 {block name="title"}管理{/block}
 
-{block name="head"}<link rel="stylesheet" type="text/css" href="static/vendor/LayUI/css/date.css?{:staticCache()}">
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/library/lay_ui/css/date.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
 <script type="text/javascript">
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
-ThinkPHP['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
-ThinkPHP['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
-ThinkPHP['WECHAT_OPEN_ID'] = '{:url("/".parse_name(request()->controller())."/wechatOpenId")}';
-ThinkPHP['QQ_OPEN_ID'] = '{:url("/".parse_name(request()->controller())."/qqOpenId")}';
-ThinkPHP['IS_ACTIVATION'] = '{:url("/".parse_name(request()->controller())."/isActivation")}';
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
+CONFIG['ADD_DO'] = '{:url("/".parse_name(request()->controller())."/add",["action"=>"do"])}';
+CONFIG['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
+CONFIG['UPDATE_DO'] = '{:url("/".parse_name(request()->controller())."/update",["action"=>"do"])}';
+CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
+CONFIG['WECHAT_OPEN_ID'] = '{:url("/".parse_name(request()->controller())."/wechatOpenId")}';
+CONFIG['QQ_OPEN_ID'] = '{:url("/".parse_name(request()->controller())."/qqOpenId")}';
+CONFIG['IS_ACTIVATION'] = '{:url("/".parse_name(request()->controller())."/isActivation")}';
 </script>{/block}
 
 {block name="main"}

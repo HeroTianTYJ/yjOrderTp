@@ -2,6 +2,8 @@
 
 {block name="title"}系统{/block}
 
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">{/block}
+
 {block name="main"}
 <div class="tool">
   <div class="row1">
@@ -27,6 +29,6 @@
     <li>此功能可按照您输入的内容在您的系统根目录生成对应的文件，用于第三方平台中的网站所属权验证；每次生成验证文件，将会自动删除上一次生成的验证文件。</li>
   </ul>
 
-  <span class="iconfont icon-expand"></span>
+  <span class="iconfont icon-expand color"></span>
 </div>
 {/block}

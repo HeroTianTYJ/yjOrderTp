@@ -18,19 +18,19 @@ $(function () {
   multiRemove(moduleName, true);
 
   // 修改订单状态
-  multi('.state', '修改订单状态', ThinkPHP['STATE']);
+  multi('.state', '修改订单状态', CONFIG['STATE']);
 
   // 修改快递单号
-  multi('.express', '修改快递单号', ThinkPHP['EXPRESS']);
+  multi('.express', '修改快递单号', CONFIG['EXPRESS']);
 
   // 导出当前订单
   $tool.find('.output1').on('click', function () {
-    download(ThinkPHP['OUTPUT'] + '?' + window.location.toString().split('?')[1], {type: 0, siwu: $tool.find('input[name=siwu]:checked').val()});
+    download(CONFIG['OUTPUT'] + '?' + window.location.toString().split('?')[1], {type: 0, siwu: $tool.find('input[name=siwu]:checked').val()});
   });
 
   // 导出选定订单
   $tool.find('.output2').on('click', function () {
-    download(ThinkPHP['OUTPUT'], {type: 1, ids: $tool.find('input[name=ids]').val(), siwu: $tool.find('input[name=siwu]:checked').val()});
+    download(CONFIG['OUTPUT'], {type: 1, ids: $tool.find('input[name=ids]').val(), siwu: $tool.find('input[name=siwu]:checked').val()});
   });
 
   // 搜索
@@ -62,10 +62,10 @@ $(function () {
     min: 0
   });
   // 支付方式
+  let $alipayScene = $tool.find('.alipay_scene');
+  let $wechatPayScene = $tool.find('.wechat_pay_scene');
   payment($tool.find('select[name=payment_id] option:selected').val());
   function payment (val) {
-    let $alipayScene = $tool.find('.alipay_scene');
-    let $wechatPayScene = $tool.find('.wechat_pay_scene');
     switch (val) {
       case '2':
         $alipayScene.show();
@@ -83,7 +83,7 @@ $(function () {
 
   // 详情
   $('.list').on('click', 'a.detail', function () {
-    ajaxMessageLayer(ThinkPHP['DETAIL'], '订单详情', {id: $(this).parent().parent().find('input[name=id]').val()}, function (index) {
+    ajaxMessageLayer(CONFIG['DETAIL'], '订单详情', {id: $(this).parent().parent().find('input[name=id]').val()}, function (index) {
       layer.close(index);
     });
   });

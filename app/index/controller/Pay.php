@@ -47,9 +47,9 @@ class Pay extends Base
             $orderId = explode('_', Request::get('out_trade_no'))[1];
             $orderOne = (new model\Order())->one($orderId);
             $templateOne = (new model\Template())->one($orderOne['template_id']);
-            return $this->succeed('', str_replace('{order_id}', $orderId, $templateOne['success2']), 0, 2);
+            return $this->succeed('', str_replace('{order_id}', $orderId, $templateOne['success2']));
         } else {
-            return $this->failed('很遗憾，订单支付失败，如果您确定已经支付，请联系客服解决！', 0, 2);
+            return $this->failed('很遗憾，订单支付失败，如果您确定已经支付，请联系客服解决！', 0);
         }
     }
 
@@ -134,8 +134,7 @@ class Pay extends Base
         if (Request::get('order_id')) {
             $orderOne = (new model\Order())->one(Request::get('order_id'));
             $templateOne = (new model\Template())->one($orderOne['template_id']);
-            return
-                $this->succeed('', str_replace('{order_id}', Request::get('order_id'), $templateOne['success2']), 0, 2);
+            return $this->succeed('', str_replace('{order_id}', Request::get('order_id'), $templateOne['success2']));
         }
         return '';
     }

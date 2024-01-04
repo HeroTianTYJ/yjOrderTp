@@ -2,12 +2,16 @@
 
 {block name="title"}模板{/block}
 
-{block name="head"}<script type="text/javascript">
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
-ThinkPHP['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
-ThinkPHP['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
+CONFIG['ADD_DO'] = '{:url("/".parse_name(request()->controller())."/add",["action"=>"do"])}';
+CONFIG['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
+CONFIG['UPDATE_DO'] = '{:url("/".parse_name(request()->controller())."/update",["action"=>"do"])}';
+CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
 </script>{/block}
 
 {block name="main"}

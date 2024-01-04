@@ -1,10 +1,11 @@
 {extend name="../../common/view/public/base" /}
 
 {block name="title"}系统{/block}
-{block name="head"}<script type="text/javascript" src="static/vendor/webuploader/webuploader.html5.min.js?{:staticCache()}"></script>
-<link rel="stylesheet" type="text/css" href="static/vendor/webuploader/webuploader.min.css?{:staticCache()}">
+{block name="head"}<script type="text/javascript" src="static/library/web_uploader/web_uploader_html5.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/library/web_uploader/web_uploader.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
 <script type="text/javascript">
-ThinkPHP['UPLOAD'] = '{:url("/common/qqwry")}';
+CONFIG['UPLOAD'] = '{:url("/common/qqwry")}';
 </script>{/block}
 
 {block name="main"}

@@ -3,13 +3,16 @@
 {block name="title"}订单{/block}
 
 {block name="head"}<script type="text/javascript">
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
-ThinkPHP['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
-ThinkPHP['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
-ThinkPHP['IS_DEFAULT'] = '{:url("/".parse_name(request()->controller())."/isDefault")}';
-ThinkPHP['SORT'] = '{:url("/".parse_name(request()->controller())."/sort")}';
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
+CONFIG['ADD_DO'] = '{:url("/".parse_name(request()->controller())."/add",["action"=>"do"])}';
+CONFIG['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
+CONFIG['UPDATE_DO'] = '{:url("/".parse_name(request()->controller())."/update",["action"=>"do"])}';
+CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
+CONFIG['IS_DEFAULT'] = '{:url("/".parse_name(request()->controller())."/isDefault")}';
+CONFIG['SORT'] = '{:url("/".parse_name(request()->controller())."/sort")}';
 </script>{/block}
 
 {block name="main"}
@@ -53,6 +56,6 @@ ThinkPHP['SORT'] = '{:url("/".parse_name(request()->controller())."/sort")}';
     <li>此模块中的“是否默认”设置仅在后台添加订单时有效。</li>
   </ul>
 
-  <span class="iconfont icon-expand"></span>
+  <span class="iconfont icon-expand color"></span>
 </div>
 {/block}

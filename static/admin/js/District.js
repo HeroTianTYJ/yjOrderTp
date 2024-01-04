@@ -8,7 +8,7 @@ $(function () {
   add('添加' + moduleName);
 
   // 批量添加
-  multi('.multi', '批量添加' + moduleName, ThinkPHP['MULTI']);
+  multi('.multi', '批量添加' + moduleName, CONFIG['MULTI']);
 
   // 修改
   update('修改' + moduleName);
@@ -22,7 +22,7 @@ $(function () {
 
 function listItem (item) {
   let control = [];
-  if (ThinkPHP['LEVEL'] < 4) control.push('<a href="' + ThinkPHP['INDEX'] + '?parent_id=' + item['id'] + '">查看子区划</a>');
+  if (CONFIG['LEVEL'] < 4) control.push('<a href="' + CONFIG['INDEX'] + '?parent_id=' + item['id'] + '">查看子区划</a>');
   if (isPermission('update')) control.push('<a href="javascript:" class="update">修改</a>');
   if (isPermission('delete')) control.push('<a href="javascript:" class="delete">删除</a>');
   return '<tr class="item' + item['id'] + '"><td' + (isPermission('delete') ? '' : ' class="none"') + '><div class="check-box"><label><input type="checkbox" name="id" value="' + item['id'] + '"></label></div></td><td>' + item['name'] + '</td>' + (control.length ? '<td>' + control.join('/') + '</td>' : '') + '</tr>';

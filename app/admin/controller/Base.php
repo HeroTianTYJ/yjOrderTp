@@ -46,13 +46,13 @@ class Base extends \app\common\controller\Base
                     $this->succeed(Route::buildUrl('/index/index'));
                 }
             } elseif (Request::controller() != 'Login') {
-                $this->error('登录信息不合法，请重新登录！', 5, 1, Route::buildUrl('/login/index'));
+                $this->error('登录信息不合法，请重新登录！', 5, Route::buildUrl('/login/index'));
             }
         } else {
             if (Request::controller() == 'Index') {
                 $this->succeed(Route::buildUrl('/login/index'));
             } elseif (!in_array(Request::controller(), ['Login', 'Reset'])) {
-                $this->error('非法登录！', 5, 1, Route::buildUrl('/login/index'));
+                $this->error('非法登录！', 5, Route::buildUrl('/login/index'));
             }
         }
     }
@@ -67,7 +67,7 @@ class Base extends \app\common\controller\Base
                 if (Request::isAjax()) {
                     exit(showTip('权限不足！', 0));
                 } else {
-                    strtolower($action) == 'index' ? $this->error('权限不足！', 0, 2) : $this->error('权限不足！');
+                    strtolower($action) == 'index' ? $this->error('权限不足！', 0) : $this->error('权限不足！');
                 }
             }
         }
@@ -78,15 +78,16 @@ class Base extends \app\common\controller\Base
     {
         $run = '';
         if (Config::get('app.demo')) {
-            $run .= '<script type="text/javascript">
+            $run .= '<script>
+var _hmt = _hmt || [];
 (function() {
-  let hm = document.createElement(\'script\');
-  hm.src = \'https://hm.baidu.com/hm.js?6a53567a73cbf2e97dd826c2cdf8bd33\';
-  let s = document.getElementsByTagName(\'script\')[0]; 
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?c6bb5df23fe4ee546e63006da2093d81";
+  var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
 </script>
-<script type="text/javascript" src="static/index/js/Visit.js?' . staticCache() . '"></script>';
+<script type="text/javascript" src="static/index/js/visit.js?' . staticCache() . '"></script>';
         }
         View::assign(['Run' => $run]);
         return parent::view($template, $code);

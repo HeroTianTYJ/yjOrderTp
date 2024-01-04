@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0">
 <title>{:config('system.web_name')}-{block name="title"}{/block}</title>
 <base href="{:config('url.web1')}">
-<link rel="stylesheet" type="text/css" href="static/common/iconfont/iconfont.css?{:staticCache()}">
-<link rel="stylesheet" type="text/css" href="static/common/iconfont/iconfont.extra.css?{:staticCache()}">
-<link rel="stylesheet" type="text/css" href="static/common/css/Basic.css?{:staticCache()}">
-{block name="base_css"}<link rel="stylesheet" type="text/css" href="static/{:app('http')->getName()}/css/{:request()->controller()}.css?{:staticCache()}">{/block}
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont_extra.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/css/basic.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/css/single_page.css?{:staticCache()}">
+{block name="base_css"}<link rel="stylesheet" type="text/css" href="static/{:app('http')->getName()}/css/{:parse_name(request()->controller())}.css?{:staticCache()}">{/block}
 {block name="head"}{/block}
 </head>
 
@@ -21,7 +22,7 @@
 
 <footer class="copyright">{:config('system.copyright_backend')}</footer>
 
-<div class="tip"><div><span class="iconfont"></span> <span class="content"></span></div></div>
+<div class="tip"><div><span class="iconfont color"></span> <span class="content"></span></div></div>
 
 {$Run}
 </body>

@@ -24,7 +24,7 @@ class SubOrder extends Base
                     return $this->succeed(Config::get('url.web1') . Config::get('system.index_php') .
                         'pay/wechatPay/order_id/' . $orderAdd['order_id'] . '.html');
                 }
-                return $this->succeed('', $orderAdd['success'], 0, 2);
+                return $this->succeed('', $orderAdd['success']);
             } else {
                 return $this->failed($orderAdd);
             }

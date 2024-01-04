@@ -3,11 +3,12 @@
 {block name="title"}数据{/block}
 
 {block name="head"}<script type="text/javascript">
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['ZIP'] = '{:url("/".parse_name(request()->controller())."/zip")}';
-ThinkPHP['DOWNLOAD'] = '{:url("/".parse_name(request()->controller())."/download")}';
-ThinkPHP['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['ZIP'] = '{:url("/".parse_name(request()->controller())."/zip")}';
+CONFIG['DOWNLOAD'] = '{:url("/".parse_name(request()->controller())."/download")}';
+CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
 </script>{/block}
 
 {block name="main"}

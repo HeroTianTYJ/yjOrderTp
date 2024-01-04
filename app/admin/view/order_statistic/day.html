@@ -2,13 +2,15 @@
 
 {block name="title"}订单{/block}
 
-{block name="head"}<script type="text/javascript" src="static/common/js/jquery.number.js?{:staticCache()}"></script>
-<link rel="stylesheet" type="text/css" href="static/vendor/LayUI/css/date.css?{:staticCache()}">
+{block name="head"}<script type="text/javascript" src="static/yj.admin.ui/js/jquery/number.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/library/lay_ui/css/date.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
 <script type="text/javascript">
-ThinkPHP['TYPE'] = 'day';
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['OUTPUT'] = '{:url("/".parse_name(request()->controller())."/output")}{$Param}';
+CONFIG['TYPE'] = 'day';
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['OUTPUT'] = '{:url("/".parse_name(request()->controller())."/output")}{$Param}';
 </script>{/block}
 
 {block name="main"}
@@ -58,6 +60,6 @@ ThinkPHP['OUTPUT'] = '{:url("/".parse_name(request()->controller())."/output")}{
     <li>2、点击表头中的链接可进行排序操作。</li>
   </ul>
 
-  <span class="iconfont icon-expand"></span>
+  <span class="iconfont icon-expand color"></span>
 </div>
 {/block}

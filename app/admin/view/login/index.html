@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0">
 <title>{:config('system.web_name')}</title>
 <base href="{:config('url.web1')}">
-<script type="text/javascript" src="static/vendor/jquery.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/vendor/validForm.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/admin/js/{:request()->controller()}.js?{:staticCache()}"></script>
-<link rel="stylesheet" type="text/css" href="static/common/iconfont/iconfont.css?{:staticCache()}">
-<link rel="stylesheet" type="text/css" href="static/common/iconfont/iconfont.extra.css?{:staticCache()}">
-<link rel="stylesheet" type="text/css" href="static/common/css/Basic.css?{:staticCache()}">
-<link rel="stylesheet" type="text/css" href="static/admin/css/{:request()->controller()}.css?{:staticCache()}">
+<script type="text/javascript" src="static/library/jquery/jquery.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/library/valid_form.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont_extra.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/css/basic.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
 </head>
 
 <body>

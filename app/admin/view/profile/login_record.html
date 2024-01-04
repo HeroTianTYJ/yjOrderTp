@@ -3,8 +3,9 @@
 {block name="title"}个人中心{/block}
 
 {block name="head"}<script type="text/javascript">
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
 </script>{/block}
 
 {block name="main"}

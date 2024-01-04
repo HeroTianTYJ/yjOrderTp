@@ -7,17 +7,17 @@ $(function () {
 
   // 优化表
   $tool.find('.optimize').on('click', function () {
-    commonAjax(ThinkPHP['OPTIMIZE']);
+    commonAjax(CONFIG['OPTIMIZE']);
   });
 
   // 修复AutoIncrement
   $tool.find('.repair_auto_increment').on('click', function () {
-    commonAjax(ThinkPHP['REPAIR_AUTO_INCREMENT']);
+    commonAjax(CONFIG['REPAIR_AUTO_INCREMENT']);
   });
 
   // 更新表缓存
   $tool.find('.schema').on('click', function () {
-    commonAjax(ThinkPHP['SCHEMA'], {}, false);
+    commonAjax(CONFIG['SCHEMA'], {}, false);
   });
 });
 

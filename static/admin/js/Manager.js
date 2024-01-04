@@ -21,11 +21,11 @@ $(function () {
   $list.on('click', 'a.wechat_open_id', function () {
     let that = this;
     confirmLayer(
-      ThinkPHP['WECHAT_OPEN_ID'],
+      CONFIG['WECHAT_OPEN_ID'],
       {id: $(that).parent().parent().find('input[name=id]').val()},
       '<h3><span>？</span>确定要为此用户解绑微信吗？</h3><p>解绑后，此用户需要重新绑定微信。</p>',
       function (json, layerIndex) {
-        if (json.state === 1) {
+        if (json['state'] === 1) {
           layer.close(layerIndex);
           $(that).parent().html('<span class="green">否</span>');
         }
@@ -37,11 +37,11 @@ $(function () {
   $list.on('click', 'a.qq_open_id', function () {
     let that = this;
     confirmLayer(
-      ThinkPHP['QQ_OPEN_ID'],
+      CONFIG['QQ_OPEN_ID'],
       {id: $(that).parent().parent().find('input[name=id]').val()},
       '<h3><span>？</span>确定要为此用户解绑QQ吗？</h3><p>解绑后，此用户需要重新绑定QQ。</p>',
       function (json, layerIndex) {
-        if (json.state === 1) {
+        if (json['state'] === 1) {
           layer.close(layerIndex);
           $(that).parent().html('<span class="green">否</span>');
         }
@@ -54,14 +54,14 @@ $(function () {
     let that = this;
     $.ajax({
       type: 'POST',
-      url: ThinkPHP['IS_ACTIVATION'],
+      url: CONFIG['IS_ACTIVATION'],
       data: {
         id: $(that).parent().parent().find('input[name=id]').val()
       }
     }).then(function (data) {
       let json = JSON.parse(data);
-      showTip(json.content, json.state);
-      if (json.state === 1) {
+      showTip(json['content'], json['state']);
+      if (json['state'] === 1) {
         let isActivation1 = '<span class="red">是</span> | <a href="javascript:" class="is_activation">取消激活</a>';
         let isActivation2 = '<span class="green">否</span> | <a href="javascript:" class="is_activation">帮他激活</a>';
         $(that).parent().html($(that).parent().html() === isActivation1 ? isActivation2 : isActivation1);

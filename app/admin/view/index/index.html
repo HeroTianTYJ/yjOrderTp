@@ -1,11 +1,12 @@
 {extend name="../../common/view/public/base" /}
 
-{block name="base_head"}<script type="text/javascript" src="static/common/js/Common.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/common/js/Base.js?{:staticCache()}"></script>{/block}
+{block name="base_head"}<script type="text/javascript" src="static/yj.admin.ui/js/common.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/yj.admin.ui/js/base.js?{:staticCache()}"></script>{/block}
 {block name="base_js"}{/block}
-{block name="head"}<script type="text/javascript">
-ThinkPHP['FOLD_MAIN_WIDTH'] = 'calc(100% - 122px)';
-ThinkPHP['EXPAND_MAIN_WIDTH'] = 'calc(100% - 322px)';
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+CONFIG['FOLD_MAIN_WIDTH'] = 'calc(100% - 122px)';
+CONFIG['EXPAND_MAIN_WIDTH'] = 'calc(100% - 322px)';
 </script>{/block}
 
 {block name="main"}

@@ -16,14 +16,14 @@ $(function () {
     let that = this;
     $.ajax({
       type: 'POST',
-      url: ThinkPHP['IS_DEFAULT'],
+      url: CONFIG['IS_DEFAULT'],
       data: {
         id: $(that).parent().parent().find('input[name=id]').val()
       }
     }).then(function (data) {
       let json = JSON.parse(data);
-      showTip(json.content, json.state);
-      if (json.state === 1) {
+      showTip(json['content'], json['state']);
+      if (json['state'] === 1) {
         let $parent = $(that).parent();
         $list.find('td.is_default').html('<a href="javascript:" class="is_default">设为默认</a>');
         $parent.html('<span class="red">是</span>');
@@ -33,7 +33,7 @@ $(function () {
 
   // 获取代码
   $list.on('click', 'a.code', function () {
-    ajaxMessageLayer(ThinkPHP['CODE'], '获取代码', {id: $(this).parent().parent().find('input[name=id]').val()}, function (index) {
+    ajaxMessageLayer(CONFIG['CODE'], '获取代码', {id: $(this).parent().parent().find('input[name=id]').val()}, function (index) {
       layer.close(index);
     });
   });

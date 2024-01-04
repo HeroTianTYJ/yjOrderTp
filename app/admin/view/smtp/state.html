@@ -3,8 +3,9 @@
 {block name="title"}系统{/block}
 
 {block name="head"}<script type="text/javascript">
-ThinkPHP['TYPE'] = 'state';
-ThinkPHP['PAGE_SIZE'] = ThinkPHP['TOTAL'] = {$Total};
+CONFIG['TYPE'] = 'state';
+CONFIG['PAGE_SIZE'] = CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
 </script>{/block}
 
 {block name="main"}
@@ -42,6 +43,6 @@ ThinkPHP['PAGE_SIZE'] = ThinkPHP['TOTAL'] = {$Total};
     <li>以红色显示的表示当前运行中的服务器。</li>
   </ul>
 
-  <span class="iconfont icon-expand"></span>
+  <span class="iconfont icon-expand color"></span>
 </div>
 {/block}

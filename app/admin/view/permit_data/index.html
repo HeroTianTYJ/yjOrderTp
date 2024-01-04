@@ -3,9 +3,10 @@
 {block name="title"}管理{/block}
 
 {block name="head"}<script type="text/javascript">
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['IS_DEFAULT'] = '{:url("/".parse_name(request()->controller())."/isDefault")}';
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['IS_DEFAULT'] = '{:url("/".parse_name(request()->controller())."/isDefault")}';
 </script>{/block}
 
 {block name="main"}
@@ -45,6 +46,6 @@ ThinkPHP['IS_DEFAULT'] = '{:url("/".parse_name(request()->controller())."/isDefa
     <li>4、您可将数据权限设置为默认权限，在添加权限组时，将自动勾选上默认权限。</li>
   </ul>
 
-  <span class="iconfont icon-expand"></span>
+  <span class="iconfont icon-expand color"></span>
 </div>
 {/block}

@@ -1,5 +1,5 @@
-<script type="text/javascript" src="static/vendor/jquery.colorpicker.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/admin/js/{:request()->controller()}Form.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/library/jquery/color_picker.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}_form.js?{:staticCache()}"></script>
 
 <form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
   <table>

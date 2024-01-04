@@ -13,10 +13,10 @@ $(function () {
 
   // 打包
   $tool.on('click', '.zip1', function () {
-    commonAjax(ThinkPHP['ZIP'], {ids: $tool.find('input[name=ids]').val()});
+    commonAjax(CONFIG['ZIP'], {ids: $tool.find('input[name=ids]').val()});
   });
   $tool.on('click', '.zip2', function () {
-    commonAjax(ThinkPHP['ZIP'], {ids: $tool.find('input[name=ids]').val(), is_delete: 1});
+    commonAjax(CONFIG['ZIP'], {ids: $tool.find('input[name=ids]').val(), is_delete: 1});
   });
 
   // 搜索
@@ -30,7 +30,7 @@ $(function () {
 
 function listItem (item) {
   let control = [];
-  if (isPermission('download')) control.push('<a href="' + ThinkPHP['DOWNLOAD'] + '?id=' + item['id'] + '">下载</a>');
+  if (isPermission('download')) control.push('<a href="' + CONFIG['DOWNLOAD'] + '?id=' + item['id'] + '">下载</a>');
   if (isPermission('delete')) control.push('<a href="javascript:" class="delete">删除</a>');
   return '<tr class="item' + item['id'] + '"><td' + (isPermission('delete') || isPermission('output') ? '' : ' class="none"') + '><div class="check-box"><label><input type="checkbox" name="id" value="' + item['id'] + '"></label></div></td><td>' + item['name'] + '</td><td>' + item['type'] + '</td><td>' + item['size'] + '</td>' + (control.length ? '<td>' + control.join('/') + '</td>' : '') + '</tr>';
 }

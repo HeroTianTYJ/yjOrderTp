@@ -1,7 +1,7 @@
-<script type="text/javascript" src="static/common/js/address.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/admin/js/{:request()->controller()}Form.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/yj.admin.ui/js/address.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}_form.js?{:staticCache()}"></script>
 <script type="text/javascript">
-ThinkPHP['DISTRICT'] = '{:config("url.web1")}{:config("system.index_php")}common/district.html';
+CONFIG['DISTRICT'] = '{:config("url.web1")}{:config("system.index_php")}common/district.html';
 </script>
 
 <form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">

@@ -1,6 +1,11 @@
 @charset "utf-8";
+/*
+@Name：《昱杰后台UI框架》
+@Author：风形火影
+@Site：https://www.yjrj.top
+*/
 body {
-	background: url("../../common/images/login_bg.jpg") no-repeat fixed top center;
+	background: url("../images/login_bg.jpg") no-repeat fixed top center;
 	background-size: 100% 100%;
 }
 form.login {
@@ -80,7 +85,7 @@ form.login footer.copyright{
 
 @media (max-width:720px){
 	body {
-		background: #F2F3FF url("../../common/images/login_bg2.png") no-repeat fixed top center;
+		background: #F2F3FF url("../images/login_bg2.png") no-repeat fixed top center;
 		background-size: 100% 100%;
 	}
 	form.login {

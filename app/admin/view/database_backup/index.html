@@ -2,6 +2,8 @@
 
 {block name="title"}数据库{/block}
 
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">{/block}
+
 {block name="main"}
 <div class="tool">
   <div class="row1">

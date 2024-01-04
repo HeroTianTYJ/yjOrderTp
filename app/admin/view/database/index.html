@@ -2,11 +2,13 @@
 
 {block name="title"}数据库{/block}
 
-{block name="head"}<script type="text/javascript">
-ThinkPHP['PAGE_SIZE'] = ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['OPTIMIZE'] = '{:url("/".parse_name(request()->controller())."/optimize")}';
-ThinkPHP['REPAIR_AUTO_INCREMENT'] = '{:url("/".parse_name(request()->controller())."/repairAutoIncrement")}';
-ThinkPHP['SCHEMA'] = '{:url("/".parse_name(request()->controller())."/schema")}';
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+CONFIG['PAGE_SIZE'] = CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['OPTIMIZE'] = '{:url("/".parse_name(request()->controller())."/optimize")}';
+CONFIG['REPAIR_AUTO_INCREMENT'] = '{:url("/".parse_name(request()->controller())."/repairAutoIncrement")}';
+CONFIG['SCHEMA'] = '{:url("/".parse_name(request()->controller())."/schema")}';
 </script>{/block}
 
 {block name="main"}

@@ -143,20 +143,20 @@ class Template
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0">
 <title>' . $templateOne['name'] . '</title>
 <base href="' . Config::get('url.web1') . '">
-<script type="text/javascript" src="static/vendor/jquery.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/library/jquery/jquery.js?' . staticCache() . '"></script>
 </head>
 
 <body>
-<script type="text/javascript" src="static/vendor/jquery.cookie.js?' . staticCache() . '"></script>
-<script type="text/javascript" src="static/vendor/validForm.js?' . staticCache() . '"></script>
-<script type="text/javascript" src="static/common/js/address.js?' . staticCache() . '"></script>
-<script type="text/javascript" src="static/vendor/LayUI/js/LayUI.js?' . staticCache() . '"></script>
-<script type="text/javascript" src="static/index/js/Order.js?' . staticCache() . '"></script>
-<link rel="stylesheet" type="text/css" href="static/vendor/LayUI/css/LayUI.css?' . staticCache() . '">
-<link rel="stylesheet" type="text/css" href="static/index/css/Template' .
+<script type="text/javascript" src="static/library/jquery/cookie.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/library/valid_form.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/yj.admin.ui/js/address.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/library/lay_ui/js/lay_ui.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/index/js/order.js?' . staticCache() . '"></script>
+<link rel="stylesheet" type="text/css" href="static/library/lay_ui/css/lay_ui.css?' . staticCache() . '">
+<link rel="stylesheet" type="text/css" href="static/index/css/template' .
                 (in_array($templateOne['template'], [0, 1]) ? 1 : $templateOne['template']) . '.css?' . staticCache() .
                 '">
-<script type="text/javascript">let ThinkPHP={"DISTRICT":"' . Config::get('url.web1') . Config::get('system.index_php') .
+<script type="text/javascript">let CONFIG={"DISTRICT":"' . Config::get('url.web1') . Config::get('system.index_php') .
                 'common/district"};</script>
 <style>.order{background:' . $templateStyleOne['bg_color'] . ';border:1px solid ' .
                 $templateStyleOne['border_color'] . ';}.order .buy{border-bottom:1px solid ' .
@@ -216,7 +216,7 @@ class Template
   ' . ($templateOne['is_show_send'] ? '<div class="new"></div>' : '') . '
 </div>
 
-<script type="text/javascript" src="static/index/js/Visit.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/index/js/visit.js?' . staticCache() . '"></script>
 <div class="tip"></div>
 </body>
 </html>';
@@ -253,18 +253,18 @@ class Template
 <meta charset="utf-8">
 <title>' . $templateOne['name'] . '</title>
 <base href="' . Config::get('url.web1') . '">
-<script type="text/javascript" src="static/vendor/jquery.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/library/jquery/jquery.js?' . staticCache() . '"></script>
 </head>
 
 <body>
-<script type="text/javascript" src="static/vendor/jquery.cookie.js?' . staticCache() . '"></script>
-<script type="text/javascript" src="static/vendor/validForm.js?' . staticCache() . '"></script>
-<script type="text/javascript" src="static/common/js/address.js?' . staticCache() . '"></script>
-<script type="text/javascript" src="static/vendor/LayUI/js/LayUI.js?' . staticCache() . '"></script>
-<script type="text/javascript" src="static/index/js/Order.js?' . staticCache() . '"></script>
-<link rel="stylesheet" type="text/css" href="static/vendor/LayUI/css/LayUI.css?' . staticCache() . '">
-<link rel="stylesheet" type="text/css" href="static/index/css/Template4.css?' . staticCache() . '">
-<script type="text/javascript">let ThinkPHP={"DISTRICT":"' . Config::get('url.web1') . Config::get('system.index_php') .
+<script type="text/javascript" src="static/library/jquery/cookie.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/library/valid_form.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/yj.admin.ui/js/address.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/library/lay_ui/js/lay_ui.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/index/js/order.js?' . staticCache() . '"></script>
+<link rel="stylesheet" type="text/css" href="static/library/lay_ui/css/lay_ui.css?' . staticCache() . '">
+<link rel="stylesheet" type="text/css" href="static/index/css/template4.css?' . staticCache() . '">
+<script type="text/javascript">let CONFIG={"DISTRICT":"' . Config::get('url.web1') . Config::get('system.index_php') .
                 'common/district"};</script>
 <style>.order{width:' . ($templateOne['is_show_send'] ? 950 : 614) . 'px;background:' .
                 $templateStyleOne['bg_color'] . ';border:1px solid ' . $templateStyleOne['border_color'] .
@@ -322,7 +322,7 @@ class Template
   <p style="clear:both"></p>
 </div>
 
-<script type="text/javascript" src="static/index/js/Visit.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="static/index/js/visit.js?' . staticCache() . '"></script>
 <div class="tip"></div>
 </body>
 </html>';

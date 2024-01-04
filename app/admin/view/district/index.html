@@ -3,14 +3,17 @@
 {block name="title"}数据{/block}
 
 {block name="head"}<script type="text/javascript">
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['INDEX'] = '{:url("/".parse_name(request()->controller())."/index")}';
-ThinkPHP['ADD'] = '{:url("/".parse_name(request()->controller())."/add",["parent_id"=>input("get.parent_id",0)])}';
-ThinkPHP['MULTI'] = '{:url("/".parse_name(request()->controller())."/multi",["parent_id"=>input("get.parent_id",0)])}';
-ThinkPHP['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
-ThinkPHP['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
-ThinkPHP['LEVEL'] = {$Whole['level']};
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['INDEX'] = '{:url("/".parse_name(request()->controller())."/index")}';
+CONFIG['ADD'] = '{:url("/".parse_name(request()->controller())."/add",["parent_id"=>input("get.parent_id",0)])}';
+CONFIG['ADD_DO'] = '{:url("/".parse_name(request()->controller())."/add",["parent_id"=>input("get.parent_id",0),"action"=>"do"])}';
+CONFIG['MULTI'] = '{:url("/".parse_name(request()->controller())."/multi",["parent_id"=>input("get.parent_id",0)])}';
+CONFIG['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
+CONFIG['UPDATE_DO'] = '{:url("/".parse_name(request()->controller())."/update",["action"=>"do"])}';
+CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
+CONFIG['LEVEL'] = {$Whole['level']};
 </script>{/block}
 
 {block name="main"}

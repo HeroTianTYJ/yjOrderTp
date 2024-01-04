@@ -4,7 +4,7 @@ $(function () {
   // 列表
   list(moduleName);
 
-  if (ThinkPHP['TYPE'] === 'index') {
+  if (CONFIG['TYPE'] === 'index') {
     // 添加
     add('添加' + moduleName);
 
@@ -20,7 +20,7 @@ $(function () {
 });
 
 function listItem (item) {
-  if (ThinkPHP['TYPE'] === 'index') {
+  if (CONFIG['TYPE'] === 'index') {
     let control = [];
     if (isPermission('update')) control.push('<a href="javascript:" class="update">修改</a>');
     if (isPermission('delete')) control.push('<a href="javascript:" class="delete">删除</a>');

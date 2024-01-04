@@ -5,23 +5,22 @@
 <meta name="viewport" content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>{:config('system.web_name')}</title>
 <base href="{:config('url.web1')}">
-<script type="text/javascript" src="static/vendor/jquery.js?{:staticCache()}"></script>
-<link rel="stylesheet" type="text/css" href="static/common/iconfont/iconfont.css?{:staticCache()}">
-<link rel="stylesheet" type="text/css" href="static/common/iconfont/iconfont.extra.css?{:staticCache()}">
-<link rel="stylesheet" type="text/css" href="static/common/css/Basic.css?{:staticCache()}">
-<link rel="stylesheet" type="text/css" href="static/{:app('http')->getName()}/css/{:request()->controller()}.css?{:staticCache()}">
-{block name="base_head"}<script type="text/javascript" src="static/common/js/jquery.page.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/vendor/layer/layer.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/vendor/iCheck/iCheck.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/vendor/LayUI/js/LayUI.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/common/js/Common.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/common/js/Base.js?{:staticCache()}"></script>
-<link rel="stylesheet" type="text/css" href="static/vendor/layer/layer.css?{:staticCache()}">
-<link rel="stylesheet" type="text/css" href="static/vendor/LayUI/css/LayUI.css?{:staticCache()}">
-<link rel="stylesheet" type="text/css" href="static/vendor/iCheck/iCheck.css?{:staticCache()}">{/block}
-{block name="base_js"}<script type="text/javascript" src="static/{:app('http')->getName()}/js/{:request()->controller()}.js?{:staticCache()}"></script>{/block}
+<script type="text/javascript" src="static/library/jquery/jquery.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont_extra.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/css/basic.css?{:staticCache()}">
+{block name="base_head"}<script type="text/javascript" src="static/yj.admin.ui/js/jquery/page.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/library/layer/layer.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/library/i_check/i_check.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/library/lay_ui/js/lay_ui.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/yj.admin.ui/js/common.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/yj.admin.ui/js/base.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/library/layer/layer.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/library/lay_ui/css/lay_ui.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/library/i_check/i_check.css?{:staticCache()}">{/block}
+{block name="base_js"}<script type="text/javascript" src="static/{:app('http')->getName()}/js/{:parse_name(request()->controller())}.js?{:staticCache()}"></script>{/block}
 <script type="text/javascript">
-let ThinkPHP = {
+let CONFIG = {
   FOLD_MAIN_WIDTH: 'calc(100% - 258px)',
   EXPAND_MAIN_WIDTH: 'calc(100% - 458px)',
   SESSION_LEVEL: {:session(config('system.session_key_admin').'.manage_info.level')},
@@ -47,7 +46,7 @@ let ThinkPHP = {
     <li{if condition="$value['active']"} class="active"{/if}>
       <a {if condition="isset($value['url'])"}href="{$value['url']}" target="_blank"{else/}href="{if condition="$value['two']"}javascript:{else/}{:url('/'.parse_name($key).'/index')}{/if}"{/if}><span class="iconfont icon-{$key}"></span> {$value['one']}</a>
       {if condition="$value['two']"}
-      <div class="child"{if condition="$value['active']"} style="display:block;"{/if}>
+      <div class="child">
         <ul>
           {foreach name="value['two']" key="k" item="v"}
           {if condition="is_array($v)"}
@@ -76,7 +75,7 @@ let ThinkPHP = {
 
 {block name="right"}{/block}
 
-<div class="tip"><div><span class="iconfont"></span> <span class="content"></span></div></div>
+<div class="tip"><div><span class="iconfont color"></span> <span class="content"></span></div></div>
 
 {$Run}
 </body>

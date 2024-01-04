@@ -3,13 +3,16 @@
 {block name="title"}模板{/block}
 
 {block name="head"}<script type="text/javascript">
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
-ThinkPHP['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
-ThinkPHP['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
-ThinkPHP['IS_DEFAULT'] = '{:url("/".parse_name(request()->controller())."/isDefault")}';
-ThinkPHP['CODE'] = '{:url("/".parse_name(request()->controller())."/code")}';
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
+CONFIG['ADD_DO'] = '{:url("/".parse_name(request()->controller())."/add",["action"=>"do"])}';
+CONFIG['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
+CONFIG['UPDATE_DO'] = '{:url("/".parse_name(request()->controller())."/update",["action"=>"do"])}';
+CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
+CONFIG['IS_DEFAULT'] = '{:url("/".parse_name(request()->controller())."/isDefault")}';
+CONFIG['CODE'] = '{:url("/".parse_name(request()->controller())."/code")}';
 </script>{/block}
 
 {block name="main"}
@@ -55,6 +58,6 @@ ThinkPHP['CODE'] = '{:url("/".parse_name(request()->controller())."/code")}';
     <li>模板设置默认后，在后台添加订单时将默认采用此模板勾选的字段进行验证。</li>
   </ul>
 
-  <span class="iconfont icon-expand"></span>
+  <span class="iconfont icon-expand color"></span>
 </div>
 {/block}

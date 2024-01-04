@@ -538,11 +538,11 @@ function loginLink()
             Config::get('system.wechat_open_app_secret'))
     ) {
         $link .= '<a href="' . Route::buildUrl('/' . parse_name(Request::controller()) . '/wechat') .
-            '"><span class="iconfont icon-wechat"></span></a>';
+            '"><span class="iconfont icon-wechat color"></span></a>';
     }
     if (Config::get('system.qq_app_id') && Config::get('system.qq_app_key') && device() != 'wxxcx') {
         $link .= '<a href="' . Route::buildUrl('/' . parse_name(Request::controller()) . '/qq') .
-            '"><span class="iconfont icon-qq"></span></a>';
+            '"><span class="iconfont icon-qq color"></span></a>';
     }
     return $link;
 }

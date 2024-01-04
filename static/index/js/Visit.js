@@ -3,7 +3,7 @@ visit();
 function visit () {
   AjaxVisit({
     method: 'post',
-    url: '//localhost/2/yjorder7/index.php/common/visit.html',
+    url: '//localhost/2/yjorder7/inde12x.php/common/visit.html',
     data: {
       url: location
     },

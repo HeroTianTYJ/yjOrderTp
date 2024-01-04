@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0">
 <title>{:config('system.web_name')}-订单查询</title>
 <base href="{:config('url.web1')}">
-<link rel="stylesheet" type="text/css" href="static/index/css/{:request()->controller()}.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/index/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
 </head>
 
 <body>
@@ -35,7 +35,15 @@
   {/foreach}
 </div>
 
-<script type="text/javascript" src="static/index/js/Visit.js?{:staticCache()}"></script>
-{if condition="config('app.demo')"}<p style="display:none;"><script type="text/javascript" src="//js.users.51.la/19104960.js?{:staticCache()}"></script><noscript><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="//img.users.51.la/19104960.asp"></noscript></p>{/if}
+<script type="text/javascript" src="static/index/js/visit.js?{:staticCache()}"></script>
+{if condition="config('app.demo')"}<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?c6bb5df23fe4ee546e63006da2093d81";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>{/if}
 </body>
 </html>

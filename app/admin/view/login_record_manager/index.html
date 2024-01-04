@@ -3,10 +3,11 @@
 {block name="title"}管理{/block}
 
 {block name="head"}<script type="text/javascript">
-ThinkPHP['PAGE_SIZE'] = {:config('app.page_size')};
-ThinkPHP['TOTAL'] = {$Total};
-ThinkPHP['OUTPUT'] = '{:url("/".parse_name(request()->controller())."/output")}';
-ThinkPHP['FILE_CONTROLLER'] = '{:url("/file/index")}';
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['OUTPUT'] = '{:url("/".parse_name(request()->controller())."/output")}';
+CONFIG['FILE_CONTROLLER'] = '{:url("/file/index")}';
 </script>{/block}
 
 {block name="main"}

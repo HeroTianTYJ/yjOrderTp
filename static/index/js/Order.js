@@ -3,13 +3,13 @@ $(function () {
   let $referrer = $('input[name=referrer]');
   if ($referrer.val() === '') $referrer.val($.cookie('referrer'));
 
+  let $district1 = $('.district1');
+  let $district2 = $('.district2');
   districtType($('input[name=district_type]:checked').val());
   $('input[name=district_type]').on('click', function () {
     districtType($(this).val());
   });
   function districtType (val) {
-    let $district1 = $('.district1');
-    let $district2 = $('.district2');
     switch (val) {
       case '0':
         $district1.show();
@@ -64,7 +64,7 @@ $(function () {
     }
   }).addRule([{
     ele: 'input[name=count]',
-    datatype: /^[\d]+$/,
+    datatype: /^\d+$/,
     nullmsg: '请填写订购数量！',
     errormsg: '订购数量必须是数字！'
   }, {
