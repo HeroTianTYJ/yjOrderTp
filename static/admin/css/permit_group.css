@@ -1,0 +1,24 @@
+@charset "utf-8";
+.main .list table tr td{
+	padding:5px;
+	vertical-align:top;
+}
+
+.form table tr td:nth-child(1){
+	width:84px;
+}
+.form table tr td table tr td:nth-child(1){
+	text-align:left;
+}
+.form table tr td.permit_manage table tr td:nth-child(1){
+	min-width:170px;
+}
+.form table tr td.permit_data table tr td:nth-child(1){
+	min-width:93px;
+}
+.form table tr td table tr td:nth-child(2){
+	width:auto;
+}
+.form table tr td label{
+	display:inline-block;
+}

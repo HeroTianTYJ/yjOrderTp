@@ -1,0 +1,16 @@
+@charset "utf-8";
+.pay{
+	text-align:center;
+}
+.pay img{
+	width:200px;
+	height:200px;
+}
+.pay2{
+	width:95%;
+	margin:50px auto;
+	text-align:center;
+}
+.pay2 p{
+	word-break:break-all;
+}

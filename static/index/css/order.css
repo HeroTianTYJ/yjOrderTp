@@ -1,0 +1,49 @@
+@charset "utf-8";
+*{
+	padding:0;
+	margin:0;
+	outline:none;
+}
+body{
+	margin:10px auto;
+	font-size:14px !important;
+	font-family:"宋体",serif;
+	color:#333;
+}
+a{
+	text-decoration:none;
+	color:#2366a8;
+}
+a:hover{
+	text-decoration:underline;
+}
+.order{
+	width:600px;
+	margin:0 auto 10px auto;
+}
+.order p{
+	color:red;
+	font-weight:bold;
+	margin:0 0 10px 15px;
+}
+.order table{
+	width:100%;
+	table-layout:fixed;
+	border-bottom:5px solid blue;
+}
+.order table tr td{
+	border-bottom:1px dashed #deeffb;
+	line-height:35px;
+	word-wrap:break-word;
+	font-size:14px;
+}
+.order table tr td:nth-child(1){
+	width:85px;
+	text-align:right;
+}
+
+@media (max-width: 600px){
+	.order{
+		width:95%;
+	}
+}
