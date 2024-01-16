@@ -532,7 +532,7 @@ function loginLink()
 {
     $link = '';
     if (
-        (in_array(device(), ['androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat', 'wxxcx']) &&
+        (in_array(device(), ['androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat']) &&
             Config::get('system.wechat_app_id') && Config::get('system.wechat_app_secret')) ||
         (in_array(device(), ['android', 'iphone', 'windows', 'mac']) && Config::get('system.wechat_open_app_id') &&
             Config::get('system.wechat_open_app_secret'))
@@ -540,7 +540,7 @@ function loginLink()
         $link .= '<a href="' . Route::buildUrl('/' . parse_name(Request::controller()) . '/wechat') .
             '"><span class="iconfont icon-wechat color"></span></a>';
     }
-    if (Config::get('system.qq_app_id') && Config::get('system.qq_app_key') && device() != 'wxxcx') {
+    if (Config::get('system.qq_app_id') && Config::get('system.qq_app_key')) {
         $link .= '<a href="' . Route::buildUrl('/' . parse_name(Request::controller()) . '/qq') .
             '"><span class="iconfont icon-qq color"></span></a>';
     }
