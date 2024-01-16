@@ -5,6 +5,9 @@ $(function () {
   // 列表
   list(moduleName);
 
+  // 排序
+  sort();
+
   // 添加
   add('添加' + moduleName);
 
@@ -36,6 +39,10 @@ $(function () {
 
   // 批量删除
   multiRemove(moduleName);
+
+  // 搜索
+  // 关键词
+  searchKeyword();
 });
 
 function listItem (item) {

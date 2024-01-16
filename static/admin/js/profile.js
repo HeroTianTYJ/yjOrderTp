@@ -28,6 +28,10 @@ $(function () {
     let moduleName = '登录记录';
     // 列表
     list(moduleName);
+
+    // 搜索
+    // 关键词
+    searchKeyword();
   }
 });
 

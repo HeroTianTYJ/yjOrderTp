@@ -14,47 +14,6 @@ function iCheck () {
   }
 }
 
-// 屏幕自适应
-function screenAuto () {
-  let $main = $('.main');
-  let $tool = $main.find('.tool');
-  let $list = $main.find('.list');
-  let $pagination = $main.find('.pagination');
-  let $window = $(window);
-  let $left = $('.left');
-  let $navigator = $left.find('ul.navigator');
-  let $top = $('.top');
-  let $right = $('.right');
-  $right.css({minHeight: $window.height() - 54});
-  $main.css({minHeight: $window.height() - 69});
-  $navigator.height($main.height() + 15);
-  $navigator.find('.child').height($main.height() - 1);
-  $list.height($window.height() - $top.height() - $tool.height() - $pagination.height() - 32);
-  boxShadow();
-}
-
-// 表格阴影
-function boxShadow () {
-  setTimeout(function () {
-    let $list = $('.list');
-    let $tr = $list.find('tr');
-    if ($list.scrollLeft() > 0) {
-      $tr.find('th:first-child').addClass('box-shadow1');
-      $tr.find('td:first-child').addClass('box-shadow1');
-    } else {
-      $tr.find('th:first-child').removeClass('box-shadow1');
-      $tr.find('td:first-child').removeClass('box-shadow1');
-    }
-    if ($list.width() + $list.scrollLeft() >= $list.find('table').width()) {
-      $tr.find('th:last-child').removeClass('box-shadow2');
-      $tr.find('td:last-child').removeClass('box-shadow2');
-    } else {
-      $tr.find('th:last-child').addClass('box-shadow2');
-      $tr.find('td:last-child').addClass('box-shadow2');
-    }
-  }, 200);
-}
-
 // 信息提示
 function showTip (content, state = 1) {
   if (state === 0) {

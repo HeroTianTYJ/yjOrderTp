@@ -25,6 +25,10 @@ $(function () {
   $('.right .js').on('click', function () {
     commonAjax(CONFIG['JS'], {}, false);
   });
+
+  // 搜索
+  // 关键词
+  searchKeyword();
 });
 
 function listItem (item) {

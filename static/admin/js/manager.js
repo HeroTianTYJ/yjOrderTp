@@ -70,6 +70,8 @@ $(function () {
   });
 
   // 搜索
+  // 关键词
+  searchKeyword();
   layui.use(['form', 'date'], function () {
     // 身份
     layui.form.on('select(level)', function (data) {

@@ -18,6 +18,10 @@ $(function () {
 
   // 批量删除
   multiRemove(moduleName);
+
+  // 搜索
+  // 关键词
+  searchKeyword();
 });
 
 function listItem (item) {

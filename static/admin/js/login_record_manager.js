@@ -28,6 +28,10 @@ $(function () {
       }
     );
   });
+
+  // 搜索
+  // 关键词
+  searchKeyword();
 });
 
 function listItem (item) {

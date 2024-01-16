@@ -20,6 +20,8 @@ $(function () {
   });
 
   // 搜索
+  // 关键词
+  searchKeyword();
   layui.use(['form'], function () {
     // 类型
     layui.form.on('select(type)', function (data) {

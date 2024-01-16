@@ -19,6 +19,10 @@ $(function () {
   $tool.find('.schema').on('click', function () {
     commonAjax(CONFIG['SCHEMA'], {}, false);
   });
+
+  // 搜索
+  // 关键词
+  searchKeyword();
 });
 
 function listItem (item) {
