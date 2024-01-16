@@ -5,7 +5,8 @@
 {block name="head"}<script type="text/javascript" src="static/library/jquery/jquery.js?{:staticCache()}"></script>
 <script type="text/javascript" src="static/library/valid_form.js?{:staticCache()}"></script>
 <script type="text/javascript" src="static/yj.admin.ui/js/common.js?{:staticCache()}"></script>
-<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}.js?{:staticCache()}"></script>{/block}
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">{/block}
 
 {block name="main"}
 <h1><span class="iconfont icon-logo"></span>{:config('system.web_name')}-重置密码</h1>

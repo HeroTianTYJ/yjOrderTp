@@ -2,6 +2,8 @@
 
 {block name="title"}系统安装-第1步{/block}
 
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">{/block}
+
 {block name="main"}
 <h1><span class="iconfont icon-logo"></span>{:config('system.web_name')}-系统安装-第1步</h1>
 
