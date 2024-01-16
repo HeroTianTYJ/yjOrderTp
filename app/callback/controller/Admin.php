@@ -82,7 +82,7 @@ class Admin extends Login
                     $Manager->wechatLogin($userInfo['unionid']) :
                     $Manager->wechatLogin2($userInfo['openid'])
             ) {
-                return $this->failed('此微信已绑定了其它账号，无法再绑定此账号！', 0, 2);
+                return $this->failed('此微信已绑定了其它账号，无法再绑定此账号！', 0);
             }
             if (
                 $Manager->wechatOpenId(
@@ -96,7 +96,7 @@ class Admin extends Login
                         '/profile/index.html') :
                     '<script type="text/javascript">window.opener.location.reload();window.close();</script>';
             } else {
-                return $this->failed('微信绑定失败，请重试！', 0, 2);
+                return $this->failed('微信绑定失败，请重试！', 0);
             }
         } else {
             return $this->failed('非法操作！');
@@ -143,14 +143,14 @@ class Admin extends Login
                 'redirect_uri' => Config::get('url.web1') . 'callback.php/admin/qqBind.html'
             ]))->getOpenid();
             if ($Manager->qqLogin($openId)) {
-                return $this->failed('此QQ已绑定了其它账号，无法再绑定此账号！', 0, 2);
+                return $this->failed('此QQ已绑定了其它账号，无法再绑定此账号！', 0);
             }
             return $Manager->qqOpenId(
                 $openId,
                 Session::get(Config::get('system.session_key_admin') . '.manage_info.id')
             ) ?
                 '<script type="text/javascript">window.opener.location.reload();window.close();</script>' :
-                $this->failed('QQ绑定失败，请重试！', 0, 2);
+                $this->failed('QQ绑定失败，请重试！', 0);
         } else {
             return $this->failed('非法操作！');
         }
