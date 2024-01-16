@@ -15,7 +15,7 @@ class Common extends Base
     {
         if (Request::isPost()) {
             if (Config::get('app.demo')) {
-                return '';
+                return showTip('演示站，无法上传！', 0);
             }
             try {
                 validate(['file' => 'fileExt:dat'])->check(Request::file());
@@ -26,9 +26,9 @@ class Common extends Base
                         return date('dHis') . rand(1000, 9999);
                     }
                 ), ROOT_DIR . '/data/qqwry.dat');
-                return QQWry::getVersion();
+                return showTip(QQWry::getVersion());
             } catch (Exception $e) {
-                return $e->getMessage();
+                return showTip($e->getMessage(), 0);
             }
         } else {
             return showTip('非法操作！', 0);

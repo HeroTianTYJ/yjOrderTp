@@ -9,7 +9,7 @@ $(function () {
   // 更新IP数据库
   let uploader = WebUploader.create({
     auto: true,
-    server: CONFIG['UPLOAD'],
+    server: CONFIG['UPLOAD_SERVER'],
     pick: {
       id: '.qqwry_picker',
       label: '更新IP数据库',
@@ -25,7 +25,12 @@ $(function () {
     duplicate: true
   });
   uploader.on('uploadSuccess', function (file, response) {
-    $('.qqwry').html('更新成功，当前IP数据库更新日期为：' + response._raw);
+    let json = JSON.parse(response._raw);
+    if (json['state'] === 1) {
+      $('.qqwry').html('更新成功，当前IP数据库更新日期为：' + json['content']);
+    } else {
+      showTip(json['content'], 0);
+    }
   });
   uploader.on('error', uploadValidate);
 
@@ -40,10 +45,10 @@ $(function () {
         if (json['state'] === 0) {
           showTip(json['content'], 0);
         } else if (json['state'] === 1) {
-          if (json['content'].url) {
-            showTip(json['content'].msg);
+          if (json['content']['url']) {
+            showTip(json['content']['msg']);
             setTimeout(function () {
-              window.location.href = json['content'].url;
+              window.location.href = json['content']['url'];
             }, 3000);
           } else {
             showTip(json['content']);
