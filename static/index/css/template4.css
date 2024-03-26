@@ -102,6 +102,9 @@
 .order .layui-form dl dd .form-select dl dd.this{
 	color: #FFF !important;
 }
+.order .layui-form dl dd .form-select dl dd.this:after{
+	content: '';
+}
 .order dl dd .form-select dl dd{
 	line-height:21px !important;
 }

@@ -75,6 +75,9 @@ select optgroup{
 .order .layui-form dl dd .form-select dl dd.this{
 	color: #FFF !important;
 }
+.order .layui-form dl dd .form-select dl dd.this:after{
+	content: '';
+}
 .order dl dd .form-select .input,.order dl dd .form-select .select{
 	border-radius:5px !important;
 	height:46px !important;
