@@ -272,7 +272,7 @@ div.top{
 .main .tool.advance form.search label,
 .main .tool.advance form.search span{
 	display: inline-block;
-	margin: 0 10px 0 0;
+	margin: 0 9px 0 0;
 	width: 265px;
 	text-align: right;
 }
