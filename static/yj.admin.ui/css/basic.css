@@ -277,8 +277,8 @@ div.top{
 	text-align: right;
 }
 .main .tool.advance form.search .form-select,
-.main .tool.advance form.search .search-text input.text{
-	width: 156px;
+.main .tool.advance form.search input.text{
+	width: 195px;
 	text-align: left;
 }
 .main .tool.advance form.search input.date{
