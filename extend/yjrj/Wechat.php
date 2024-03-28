@@ -50,7 +50,7 @@ class Wechat
         exit;
     }
 
-    public function getUserInfo($authOnly = true, $lang = 'zh_CN')
+    public function getUserInfo($authOnly = false, $lang = 'zh_CN')
     {
         $code = $_GET['code'] ?? '';
         if ($code) {
