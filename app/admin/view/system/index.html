@@ -1,0 +1,116 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}系统{/block}
+{block name="head"}<script type="text/javascript" src="static/library/web_uploader/web_uploader_html5.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/library/web_uploader/web_uploader.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+CONFIG['UPLOAD_SERVER'] = '{:url("/common/qqwry")}';
+</script>{/block}
+
+{block name="main"}
+<div class="tool">
+  <div class="row1">
+    <ul class="tab">
+      <li class="active"><a href="javascript:">系统信息</a></li>
+      <li><a href="javascript:">版权信息</a></li>
+      <li><a href="javascript:">订单设置</a></li>
+      <li><a href="javascript:">支付宝</a></li>
+      <li><a href="javascript:">微信支付</a></li>
+      <li><a href="javascript:">QQ登录</a></li>
+      <li><a href="javascript:">微信公众平台</a></li>
+      <li><a href="javascript:">微信开放平台</a></li>
+      <li><a href="javascript:">邮件设置</a></li>
+      <li><a href="javascript:">IP数据库</a></li>
+    </ul>
+    <p class="clear"></p>
+  </div>
+</div>
+
+<form method="post" action="" class="form layui-form">
+  <table class="column">
+    <tr><td>软件机器码：</td><td><input type="text" value="{:md5(passEncode($_SERVER['HTTP_HOST']))}" class="text" readonly></td><td>此码会根据域名的变动而变动</td></tr>
+    <tr><td>OpenID：</td><td><input type="text" name="openid" value="{:config('system.openid')}" class="text"></td></tr>
+    <tr><td>站点名称：</td><td><input type="text" name="web_name" value="{:config('system.web_name')}" class="text"></td></tr>
+    <tr><td>管理员邮箱：</td><td><input type="text" name="admin_mail" value="{:config('system.admin_mail')}" class="text"></td><td>多个邮箱请用“,”隔开，不得与<a href="{:url('/smtp/index')}">SMTP服务器</a>模块中的邮箱重复。<a href="https://www.yjrj.top/help/detail.html?id=1" target="_blank">如何设置短信提醒？</a></td></tr>
+    <tr><td>访问模式：</td><td><div class="check-box"><label><input type="checkbox" name="www" value="1" {if condition="config('system.www')==1"}checked{/if}>强制www访问</label></div><div class="check-box"><label><input type="checkbox" name="https" value="1" {if condition="config('system.https')==1"}checked{/if}>强制https访问</label></div></td><td>开启强制www访问前，请先确保您的主域名加上www后可以访问；开启强制https访问前，请先确保您的网站支持https访问。以上两项若不能确保，请先咨询客服人员，若在不能确保的情况下开启，会导致网站无法访问。变更设置后可能需要重新登录。</td></tr>
+    <tr><td>后台入口：</td><td><input type="text" name="manager_enter" value="{:config('system.manager_enter')}" class="text"></td><td>修改后会自动跳转到新入口</td></tr>
+    <tr><td>隐藏index.php：</td><td><div class="radio-box"><label><input type="radio" name="index_php" value="1" {if condition="config('system.index_php')==''"}checked{/if}>是</label></div><div class="radio-box"><label><input type="radio" name="index_php" value="0" {if condition="config('system.index_php')=='index.php/'"}checked{/if}>否</label></div></td><td>设置前台的访问地址中是否隐藏掉index.php，开启此设置，服务器需支持伪静态，若开启后导致前台无法访问，请联系客服解决</td></tr>
+  </table>
+  <table class="column none">
+    <tr><td>后台版权：</td><td><textarea name="copyright_backend" class="textarea">{:config('system.copyright_backend')}</textarea></td><td>后台登录页显示的版权信息</td></tr>
+  </table>
+  <table class="column none">
+    <tr><td>防刷单间隔：</td><td><input type="text" name="order_time" value="{:config('system.order_time')}" class="text"></td><td>设置同一IP下，订单提交间隔，防止刷单（订单入库时有效，单位：分钟）</td></tr>
+    <tr><td>订单查询：</td><td><div class="radio-box"><label><input type="radio" name="order_search" value="1" {if condition="config('system.order_search')==1"}checked{/if}>是</label></div><div class="radio-box"><label><input type="radio" name="order_search" value="0" {if condition="config('system.order_search')==0"}checked{/if}>否</label></div></td><td>是否开启前台查单</td></tr>
+    <tr><td>跨模板查询：</td><td><div class="radio-box"><label><input type="radio" name="order_search_step" value="1" {if condition="config('system.order_search_step')==1"}checked{/if}>是</label></div><div class="radio-box"><label><input type="radio" name="order_search_step" value="0" {if condition="config('system.order_search_step')==0"}checked{/if}>否</label></div></td><td>开启后，可跨模板查单。举例：通过A模板下的订单，通过B模板的查询入口也可查询到，即便A模板没有开启查询入口；注意，如果所有模板均没开启查单功能，但开启了此设置，也可通过输入网址进行查单。</td></tr>
+  </table>
+  <table class="column none">
+    <tr><td class="left tip" colspan="2"><a href="https://www.yjrj.top/help/detail.html?id=36" target="_blank">支付宝商户签约及配置流程</a></td></tr>
+    <tr><td>APPID：</td><td><input type="text" name="alipay_app_id" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.alipay_app_id')}{/if}" class="text"></td><td></td></tr>
+    <tr><td>应用私钥：</td><td><textarea name="alipay_merchant_private_key" class="textarea">{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.alipay_merchant_private_key')}{/if}</textarea></td><td></td></tr>
+    <tr><td>支付宝公钥：</td><td><textarea name="alipay_public_key" class="textarea">{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.alipay_public_key')}{/if}</textarea></td><td></td></tr>
+  </table>
+  <table class="column none">
+    <tr><td>AppID：</td><td><input type="text" name="wechat_pay_app_id" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_pay_app_id')}{/if}" class="text"></td><td></td></tr>
+    <tr><td>AppSecret：</td><td><input type="text" name="wechat_pay_app_secret" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_pay_app_secret')}{/if}" class="text"></td><td></td></tr>
+    <tr><td>商户号：</td><td><input type="text" name="wechat_pay_mch_id" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_pay_mch_id')}{/if}" class="text"></td><td></td></tr>
+    <tr><td>商户密钥：</td><td><input type="text" name="wechat_pay_key" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_pay_key')}{/if}" class="text"></td><td></td></tr>
+    <tr><td>证书序列号：</td><td><input type="text" name="wechat_pay_cert_serial_number" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_pay_cert_serial_number')}{/if}" class="text"></td><td></td></tr>
+    <tr><td>证书私钥：</td><td><textarea name="wechat_pay_cert_private_key" class="textarea">{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_pay_cert_private_key')}{/if}</textarea></td><td></td></tr>
+    <tr><td></td><td class="tip" colspan="2">如果您还没有签约，请先签约，<a href="https://kf.qq.com/faq/210423UrIRB7210423by6fQn.html" target="_blank">点击此处</a>查看签约教程</td></tr>
+    <tr><td></td><td class="tip" colspan="2">1、如果已完成签约，请<a href="https://pay.weixin.qq.com/index.php/extend/product/lists?tid=3" target="_blank">点击此处</a>进入到微信支付商户平台的产品中心，开通H5支付业务，此举是为了实现移动端浏览器（非微信端）支持微信支付；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">2、以上5个字段的获取方法：</td></tr>
+    <tr><td></td><td class="tip" colspan="2">2-1、请登录开通了微信支付的微信公众号，点击“开发 - 基本配置”，即可获取到开发者ID（AppID）和开发者密码（AppSecret）；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">2-2、点击微信公众平台中的“微信支付”，即可获取到商户号；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">2-3、<a href="https://pay.weixin.qq.com/index.php/core/cert/api_cert" target="_blank">点击此处</a>设置商户的APIv3密钥；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">2-4、<a href="https://pay.weixin.qq.com/index.php/core/cert/api_cert#/api-cert-manage" target="_blank">点击此处</a>进入到微信商户平台的API证书管理页面，点击“申请新证书”按钮，完成证书申请，即可获取到证书序列号及证书私钥；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">3-1、登录微信公众平台，然后点击“设置 - 公众号设置 - 功能设置”，将“{:request()->server('HTTP_HOST')}”分别填入“JS接口安全域名”和“网页授权域名”设置项中，保存即可；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">3-2、如需验证网站所属权，请<a href="{:url('/validate_file/index')}">点击此处</a>；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">4、<a href="https://pay.weixin.qq.com/index.php/extend/pay_setting" target="_blank">点击此处</a>登录到微信支付商户平台的开发配置中，在“支付授权目录”设置项中添加{:config('url.web1')}{:config('system.index_php')}pay/wechatPay/order_id/。</td></tr>
+  </table>
+  <table class="column none">
+    <tr><td class="left tip" colspan="3" style="word-break:break-all;"><a href="https://wiki.connect.qq.com/%e6%88%90%e4%b8%ba%e5%bc%80%e5%8f%91%e8%80%85" target="_blank">申请教程</a>，申请时，请将网站地址填写为：<span class="green">{:config('url.web3')}</span>，网站回调地址填写为：<span class="green">{:config('url.web1')}callback.php/admin/qqLogin.html;{:config('url.web1')}callback.php/admin/qqBind.html</span>。申请通过后，查看应用详情，将获取到的APP ID和APP Key填入下方表单中。</td></tr>
+    <tr><td>APP ID：</td><td><input type="text" name="qq_app_id" value="{:config('system.qq_app_id')}" class="text"></td><td></td></tr>
+    <tr><td>APP Key：</td><td><input type="text" name="qq_app_key" value="{:config('system.qq_app_key')}" class="text"></td><td></td></tr>
+  </table>
+  <table class="column none">
+    <tr><td>AppID：</td><td><input type="text" name="wechat_app_id" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_app_id')}{/if}" class="text"></td><td></td></tr>
+    <tr><td>AppSecret：</td><td><input type="text" name="wechat_app_secret" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_app_secret')}{/if}" class="text"></td><td></td></tr>
+    <tr><td></td><td class="tip" colspan="2">首先，要保证您的微信公众号已通过主体认证，并且网站进行了备案，然后登录到微信公众平台，进行如下操作：</td></tr>
+    <tr><td></td><td class="tip" colspan="2">1、点击“开发 - 基本配置”，将获取到的开发者ID（AppID）和开发者密码（AppSecret）填入如上文本框中，提交修改；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">2、将服务器IP填入“基本配置”中的“IP白名单”中，<a href="{:url('/'.parse_name(request()->controller()).'/wechatIp')}" target="_blank">点击此处</a>查看服务器IP；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">3、点击“设置 - 公众号设置 - 功能设置”，然后点击“JS接口安全域名”设置项，将“{:request()->server('HTTP_HOST')}”填入其中，保存即可；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">4、如果想去除在微信中访问网站时“防欺诈盗号，请勿支付或输入QQ密码”的提示，请将“{:request()->server('HTTP_HOST')}”也填入“功能设置”中的“业务域名”中，保存即可；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">5、如需验证网站所属权，请<a href="{:url('/validate_file/index')}">点击此处</a>。</td></tr>
+  </table>
+  <table class="column none">
+    <tr><td>AppID：</td><td><input type="text" name="wechat_open_app_id" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_open_app_id')}{/if}" class="text"></td><td></td></tr>
+    <tr><td>AppSecret：</td><td><input type="text" name="wechat_open_app_secret" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_open_app_secret')}{/if}" class="text"></td><td></td></tr>
+    <tr><td></td><td class="tip" colspan="2">设置微信开放平台是为了用户使用多端（PC端、微信端）登录的身份信息保持一致，设置方法如下：</td></tr>
+    <tr><td></td><td class="tip" colspan="2">1、如果您还没有注册微信开放平台帐号，请先<a href="https://open.weixin.qq.com/cgi-bin/readtemplate?t=regist/regist_tmpl" target="_blank">点击此处</a>注册帐号并完成资质认证；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">2、登录微信开放平台的管理中心；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">3、关联您在“微信公众平台”栏目下设置的微信公众号；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">4、创建网站应用，官网域名填写为：{:request()->server('HTTP_HOST')}，点击“下一步”后，将“授权回调域”也设置为：{:request()->server('HTTP_HOST')}；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">5、审核通过后，查看应用详情，将页面上方的AppID和AppSecret填写到本系统。</td></tr>
+  </table>
+  <table class="column none">
+    <tr><td colspan="2" class="left tip"><a href="https://www.yjrj.top/help/detail.html?id=2" target="_blank">点击此处</a>查看邮件变量列表</td></tr>
+    <tr><td colspan="2" class="left">订单提醒邮件</td></tr>
+    <tr><td>邮件标题：</td><td><input type="text" name="mail_order_subject" value="{:config('system.mail_order_subject')}" class="text"></td></tr>
+    <tr><td>邮件内容：</td><td><textarea name="mail_order_content" class="textarea">{:config('system.mail_order_content')}</textarea></td><td>支持HTML</td></tr>
+    <tr><td colspan="2" class="left">支付提醒邮件</td></tr>
+    <tr><td>邮件标题：</td><td><input type="text" name="mail_pay_subject" value="{:config('system.mail_pay_subject')}" class="text"></td></tr>
+    <tr><td>邮件内容：</td><td><textarea name="mail_pay_content" class="textarea">{:config('system.mail_pay_content')}</textarea></td><td>支持HTML</td></tr>
+    <tr><td colspan="2" class="left">发货提醒邮件</td></tr>
+    <tr><td>邮件标题：</td><td><input type="text" name="mail_send_subject" value="{:config('system.mail_send_subject')}" class="text"></td></tr>
+    <tr><td>邮件内容：</td><td><textarea name="mail_send_content" class="textarea">{:config('system.mail_send_content')}</textarea></td><td>支持HTML</td></tr>
+  </table>
+  <table class="column none">
+    <tr><td><span class="qqwry">当前IP数据库更新日期为：{$IpVersion}</span> <span class="qqwry_picker" style="display:inline-block;width:115px;"></span> <a href="https://www.yjrj.top/help/detail.html?id=37" target="_blank">最新版IP数据库获取方法</a></td></tr>
+  </table>
+  <table>
+    <tr><td colspan="2" class="left"><input type="submit" value="确认修改" class="button"></td></tr>
+  </table>
+</form>
+{/block}

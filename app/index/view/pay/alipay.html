@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0">
+<title>{:config('system.web_name')}-支付宝支付</title>
+<base href="{:config('url.web1')}">
+<link rel="stylesheet" type="text/css" href="static/index/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+</head>
+
+<body>
+{if condition="$Pay"}
+{$Pay}
+{else/}
+<div class="pay2">
+  <p>您当前使用的是微信端访问，无法进行支付宝支付，请复制以下链接，然后通过浏览器打开进行支付</p>
+  <p>{:config('url.web1')}{:config('system.index_php')}pay/alipay/order_id/{:input('order_id')}.html</p>
+</div>
+{/if}
+</body>
+</html>

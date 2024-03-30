@@ -1,0 +1,60 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}管理{/block}
+
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/library/lay_ui/css/date.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
+CONFIG['ADD_DO'] = '{:url("/".parse_name(request()->controller())."/add",["action"=>"do"])}';
+CONFIG['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
+CONFIG['UPDATE_DO'] = '{:url("/".parse_name(request()->controller())."/update",["action"=>"do"])}';
+CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
+CONFIG['WECHAT_OPEN_ID'] = '{:url("/".parse_name(request()->controller())."/wechatOpenId")}';
+CONFIG['QQ_OPEN_ID'] = '{:url("/".parse_name(request()->controller())."/qqOpenId")}';
+CONFIG['IS_ACTIVATION'] = '{:url("/".parse_name(request()->controller())."/isActivation")}';
+</script>{/block}
+
+{block name="main"}
+<div class="tool advance">
+  <div class="row1">
+    <h2>管理员</h2>
+
+    <input type="hidden" name="ids">
+
+    <div class="button">
+      {if condition="isPermission('add')"}<input type="button" value="添加管理员" class="button add">{/if}
+      {if condition="isPermission('delete')"}<input type="button" value="批量删除" class="button disabled must_select delete" disabled>{/if}
+    </div>
+
+    <p class="clear"></p>
+  </div>
+
+  <form method="get" action="" class="search layui-form" onsubmit="return false;">
+    <span>帐　　号：<div class="search-text"><input type="text" name="keyword" value="{:input('get.keyword')}" class="text"><span class="iconfont icon-search"></span></div></span>
+    <span>身　　份：<select name="level" lay-filter="level" lay-search><option value="0">不限</option>{$Level}</select></span>
+    <span>权 限 组：<select name="permit_group_id" lay-filter="permit_group_id" lay-search><option value="0">不限</option>{$PermitGroup}</select></span>
+    <span>订单权限：<select name="order_permit" lay-filter="order_permit" lay-search><option value="0">不限</option>{$OrderPermit}</select></span>
+    <span>注册时间：<input type="text" name="date1" value="{:input('get.date1')}" class="text date"> ～ <input type="text" name="date2" value="{:input('get.date2')}" class="text date"></span>
+    <span>微信绑定：<select name="wechat" lay-filter="wechat" lay-search><option value="-1">不限</option>{$Wechat}</select></span>
+    <span>QQ绑定：<select name="qq" lay-filter="qq" lay-search><option value="-1">不限</option>{$Qq}</select></span>
+    <span>是否激活：<select name="is_activation" lay-filter="is_activation" lay-search><option value="-1">不限</option>{$IsActivation}</select></span>
+  </form>
+</div>
+
+<div class="list">
+  {if condition="$Total>0"}
+  <table class="{if condition="isPermission('delete')"}left-fix{/if}{if condition="isPermission('update')||isPermission('delete')"} right-fix{/if}">
+    <thead><tr class="row1">{if condition="isPermission('delete')"}<th style="width:60px;"><div class="check-box"><label><input type="checkbox" class="all">全选</label></div></th>{/if}<th style="width:215px;">帐号</th><th style="width:90px;">身份</th><th style="width:130px;">所属权限组</th><th style="width:150px;">订单权限</th><th style="width:160px;">注册时间</th>{if condition="isPermission('wechatOpenId')"}<th style="width:80px;">微信绑定</th>{/if}{if condition="isPermission('qqOpenId')"}<th style="width:80px;">QQ绑定</th>{/if}{if condition="isPermission('isActivation')"}<th style="width:110px;">是否激活</th>{/if}{if condition="isPermission('update')||isPermission('delete')"}<th style="width:80px;">操作</th>{/if}</tr></thead>
+    <tbody class="items"></tbody>
+  </table>
+
+  <div class="pagination"><ul></ul></div>
+  {else/}
+  <p class="nothing"></p>
+  {/if}
+</div>
+{/block}

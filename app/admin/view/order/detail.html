@@ -1,0 +1,26 @@
+<table class="detail">
+  <tr><td>订 单 号：</td><td>{$One['order_id']}</td></tr>
+  <tr><td>管 理 员：</td><td>{$One['manager']}</td></tr>
+  <tr><td>下单模板：</td><td>{$One['template']}</td></tr>
+  <tr><td>订购商品：</td><td>{$One['product']}</td></tr>
+  <tr><td>成交单价：</td><td>{$One['price']}元</td></tr>
+  <tr><td>订购数量：</td><td>{$One['count']}</td></tr>
+  <tr><td>成交总价：</td><td>{$One['total']}元</td></tr>
+  <tr><td>姓　　名：</td><td>{$One['name']}</td></tr>
+  <tr><td>联系电话：</td><td>{$One['tel']}</td></tr>
+  <tr><td>所在地区：</td><td>{$One['province']} {$One['city']} {$One['county']}</td></tr>
+  <tr><td>详细地址：</td><td>{$One['address']}</td></tr>
+  <tr><td>备　　注：</td><td>{$One['note']}</td></tr>
+  <tr><td>电子邮箱：</td><td>{$One['email']}</td></tr>
+  <tr><td>支付方式：</td><td>{:config('payment.'.$One['payment_id'])}</td></tr>
+  <tr><td>支付订单号：</td><td>{$One['pay_id']}</td></tr>
+  <tr><td>支付场景：</td><td>{$One['pay_scene']}</td></tr>
+  <tr><td>支付时间：</td><td>{if condition="$One['pay_date']"}{$One['pay_date']|dateFormat}{/if}</td></tr>
+  <tr><td>支付链接：</td><td>支付宝 <a href="{$One['pay_url']['alipay']}" target="_blank">{$One['pay_url']['alipay']}</a><br>微信支付 <a href="{$One['pay_url']['wechat_pay']}" target="_blank">{$One['pay_url']['wechat_pay']}</a></td></tr>
+  <tr><td>下单IP：</td><td>{$One['ip']}</td></tr>
+  <tr><td>下单来路：</td><td>{if condition="$One['referrer']"}<a href="{$One['referrer']}" target="_blank">{$One['referrer']}</a>{else/}直接进入{/if}</td></tr>
+  <tr><td>下单时间：</td><td>{$One['date']|dateFormat}</td></tr>
+  <tr><td>订单状态：</td><td>{$One['order_state']}</td></tr>
+  <tr><td>快递公司：</td><td>{$One['express_name']}</td></tr>
+  <tr><td>快递单号：</td><td>{$One['express_number']}{if condition="$One['express_name']&&$One['express_number']"}，<a href="https://www.kuaidi100.com/chaxun?com={$One['express_code']}&nu={$One['express_number']}" target="_blank">查询进度</a>{/if}</td></tr>
+</table>

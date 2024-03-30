@@ -1,0 +1,27 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="base_head"}<script type="text/javascript" src="static/yj.admin.ui/js/common.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/yj.admin.ui/js/base.js?{:staticCache()}"></script>{/block}
+{block name="base_js"}{/block}
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+CONFIG['FOLD_MAIN_WIDTH'] = 'calc(100% - 122px)';
+CONFIG['EXPAND_MAIN_WIDTH'] = 'calc(100% - 322px)';
+</script>{/block}
+
+{block name="main"}
+{foreach name="Data" key="key" item="value"}
+<div class="card">
+  <h3>{$key}</h3>
+  {foreach name="value" key="k" item="v"}
+  {if condition="is_numeric($k)"}
+  <dl {if condition="$k==count($value)-2"}class="last"{/if} style="width:{$value['width']}%;">
+    <dt>{$v[0]}</dt>
+    <dd>{$v[1]}</dd>
+  </dl>
+  {/if}
+  {/foreach}
+  <p class="clear"></p>
+</div>
+{/foreach}
+{/block}

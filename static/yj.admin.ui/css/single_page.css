@@ -1,0 +1,62 @@
+@charset "utf-8";
+/*
+@Name：《昱杰后台UI框架》
+@Author：风形火影
+@Site：https://www.yjrj.top
+*/
+body{
+    background: #F0F3F7 url("../images/single_page_bg.png") no-repeat fixed top center;
+}
+h1 {
+    color: #000;
+    font-size: 26px;
+    margin: 20px 0 46px 54px;
+}
+h1 span {
+    margin: 0 18px 0 0;
+    font-size: 35px;
+    color: #C81723;
+    position: relative;
+    top: 5px;
+}
+
+.form{
+    width: 700px;
+    max-width: 95%;
+    background: #FFF;
+    border-radius: 2px;
+    padding: 25px 50px 50px 50px;
+    box-sizing: border-box;
+}
+.form table tr td.title{
+    text-align: center;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.65);
+    padding: 25px 0 5px 0;
+}
+.form table tr td.button-td{
+    text-align: center;
+    padding: 20px 0 0 0;
+}
+.form table tr td.button-td input.button{
+    width: 95%;
+    height: 40px;
+}
+
+footer.copyright{
+    margin: 40px 0 20px 0;
+    text-align: center;
+    color: #999;
+}
+
+@media (max-width:720px){
+    h1{
+        margin-top: 30px;
+        margin-left: 0;
+        text-align: center;
+    }
+    .form{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}

@@ -1,0 +1,40 @@
+<script type="text/javascript" src="static/library/xm_select.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}_form.js?{:staticCache()}"></script>
+<script type="text/javascript">
+CONFIG['AJAX'] = '{:url("/".parse_name(request()->controller())."/ajaxProduct")}';
+CONFIG['AJAX2'] = '{:url("/".parse_name(request()->controller())."/ajaxProduct2")}';
+</script>
+
+<form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
+  <table>
+    <tr><td>模 板 名：</td><td><input type="text" name="name" class="text"></td></tr>
+    <tr><td>指定代理：</td><td><select name="manager_id" lay-search><option value="0">不指定</option>{$Manager}</select></td></tr>
+    <tr><td>使用模板：</td><td><select name="template" lay-filter="template" lay-search>{$Template}</select></td></tr>
+    <tr class="tip"><td></td><td><span class="view_url"></span></td></tr>
+    <tr><td>皮肤样式：</td><td><select name="template_style_id" lay-search>{$TemplateStyle}</select></td></tr>
+    <tr class="tip"><td></td><td>手机版2和手机版3推荐使用11号皮肤样式，手机版4推荐使用12号皮肤样式</td></tr>
+    <tr><td>商品分类：</td><td><div class="radio-box"><label><input type="radio" name="product_type" value="0" checked>单分类</label></div><div class="radio-box"><label><input type="radio" name="product_type" value="1">多分类</label></div></td></tr>
+    <tr class="product_sort1"><td>选择分类：</td><td><select name="product_sort_id" lay-filter="product_sort_id" lay-search>{$ProductSort}</select></td></tr>
+    <tr class="product1"><td>选择商品：</td><td><input type="hidden" name="product_ids1"><div class="product_ids1 xm-select"></div></td></tr>
+    <tr class="product2"><td>选择商品：</td><td><input type="hidden" name="product_sort_ids"><input type="hidden" name="product_ids2"><div class="product_ids2 xm-select"></div></td></tr>
+    <tr class="tip"><td></td><td>生成的下单页只显示勾选且在<a href="{:url('/product/index')}" target="_blank">商品管理</a>模块中设置了前台显示的商品</td></tr>
+    <tr class="product_default1"><td>默认商品：</td><td><select name="product_default1" lay-search></select></td></tr>
+    <tr class="product_default2"><td>默认商品：</td><td><select name="product_default2" lay-search></select></td></tr>
+    <tr><td>商品显示：</td><td><div class="radio-box"><label><input type="radio" name="product_view_type" value="0" checked>单选按钮</label></div><div class="radio-box"><label><input type="radio" name="product_view_type" value="1">下拉框</label></div></td></tr>
+    <tr><td>下单字段：</td><td class="field">{$Field}<p style="margin:10px 0 0 0;"><input type="button" value="全选" class="button all"> <input type="button" value="全部不选" class="button no"> <input type="button" value="默认字段" class="button default"></p></td></tr>
+    <tr class="tip"><td></td><td>红色部分为默认字段</td></tr>
+    <tr><td>支付方式：</td><td>{$Payment}</td></tr>
+    <tr><td>默认方式：</td><td><select name="payment_default" lay-search>{$PaymentDefault}</select></td></tr>
+    <tr><td>订单查询：</td><td><div class="radio-box"><label><input type="radio" name="is_show_search" value="0" checked>关闭</label></div><div class="radio-box"><label><input type="radio" name="is_show_search" value="1">开启</label></div></td></tr>
+    <tr class="tip"><td></td><td>在<a href="{:url('/system/index')}" target="_blank">系统设置</a>模块中开启“订单查询”后，此设置才可生效</td></tr>
+    <tr><td>发货通知：</td><td><div class="radio-box"><label><input type="radio" name="is_show_send" value="0" checked>关闭</label></div><div class="radio-box"><label><input type="radio" name="is_show_send" value="1">开启</label></div></td></tr>
+    <tr class="tip"><td></td><td>为模拟发货通知，并非从数据库里提取的数据</td></tr>
+    <tr><td>验 证 码：</td><td><div class="radio-box"><label><input type="radio" name="is_captcha" value="0" checked>关闭</label></div><div class="radio-box"><label><input type="radio" name="is_captcha" value="1">开启</label></div></td></tr>
+    <tr><td>提示信息　</td></tr>
+    <tr><td>提交成功：</td><td><textarea name="success" class="textarea">订单提交成功，订单号为：{order_id}，可用于后续的查单操作。请保持您的联系电话畅通，以便和您取得联系！</textarea></td></tr>
+    <tr class="tip"><td></td><td>{order_id}表示订单号</td></tr>
+    <tr><td>支付成功：</td><td><textarea name="success2" class="textarea">订单支付成功，订单号为：{order_id}，可用于后续的查单操作。</textarea></td></tr>
+    <tr class="tip"><td></td><td>{order_id}表示订单号</td></tr>
+    <tr><td>频繁提交：</td><td><textarea name="often" class="textarea">请勿频繁提交订单！</textarea></td></tr>
+  </table>
+</form>

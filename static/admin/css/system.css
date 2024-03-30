@@ -1,0 +1,14 @@
+@charset "utf-8";
+.form table.column:nth-child(1) tr td:nth-child(1){
+    width:109px;
+}
+.form table.column:nth-child(3) tr td:nth-child(1),.form table.column:nth-child(4) tr td:nth-child(1),.form table.column:nth-child(5) tr td:nth-child(1){
+    width:84px;
+}
+.form table.column:nth-child(7) tr td:nth-child(1),.form table.column:nth-child(8) tr td:nth-child(1){
+    width:83px;
+}
+.form table.column:nth-child(10) tr td:nth-child(1){
+    width:auto;
+    text-align:left;
+}

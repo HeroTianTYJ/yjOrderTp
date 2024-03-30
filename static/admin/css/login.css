@@ -1,0 +1,104 @@
+@charset "utf-8";
+/*
+@Name：《昱杰后台UI框架》
+@Author：风形火影
+@Site：https://www.yjrj.top
+*/
+body {
+	background: url("../images/login_bg.jpg") no-repeat fixed top center;
+	background-size: 100% 100%;
+}
+form.login {
+	width: 50%;
+	position: absolute;
+	top: 20%;
+	right: 9%;
+}
+form.login h1 {
+	color: #000;
+	text-align: center;
+	font-size: 26px;
+}
+form.login h1 span {
+	margin: 0 18px 0 0;
+	font-size: 35px;
+	color: #C81723;
+	position: relative;
+	top: 5px;
+}
+form.login dl {
+	width: 50%;
+	margin: 8% auto 0 auto;
+}
+form.login dl dt {
+	font-size: 19px;
+	font-weight: bold;
+	color: #444;
+	margin: 0 0 5% 0;
+}
+form.login dl dd {
+	margin: 0 0 5% 0;
+}
+form.login dl dd input.text {
+	width: 100%;
+	height: 46px;
+	background: rgba(232, 232, 232, 0.5);
+	border-radius: 7px;
+	border: none;
+	padding: 0 22px;
+	font-size: 16px;
+	color: #787E8C;
+	font-family:"微软雅黑",serif;
+}
+form.login dl dd.submit {
+	margin-top: 3%;
+}
+form.login dl dd.submit input {
+	width: 100%;
+	height: 42px;
+	background: #0059FF;
+	border-radius: 8px;
+	font-family:"微软雅黑",serif;
+	color: #fff;
+	font-size: 18px;
+	border: none;
+	cursor: pointer;
+}
+form.login dl dd.third {
+	text-align: center;
+	margin-bottom: 0;
+}
+form.login dl dd.third a {
+	display: inline-block;
+	margin: 10px 20px;
+	text-decoration: none;
+}
+form.login dl dd.third a span.icon-wechat,
+form.login dl dd.third a span.icon-qq{
+	font-size: 32px;
+}
+form.login footer.copyright{
+	text-align: center;
+	margin: 2% 0 0 0;
+	color: #999;
+}
+
+@media (max-width:720px){
+	body {
+		background: #F2F3FF url("../images/login_bg2.png") no-repeat fixed top center;
+		background-size: 100% 100%;
+	}
+	form.login {
+		width: 95%;
+		margin: 100px auto 0 auto;
+		padding: 40px;
+		box-sizing: border-box;
+		position: inherit;
+		background: #FFF;
+		box-shadow: 0 0 13px 12px rgba(0, 0, 0, 0.04);
+		border-radius: 8px;
+	}
+	form.login dl {
+		width: 100%;
+	}
+}

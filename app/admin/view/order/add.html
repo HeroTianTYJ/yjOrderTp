@@ -1,0 +1,40 @@
+<script type="text/javascript" src="static/yj.admin.ui/js/address.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}_form.js?{:staticCache()}"></script>
+<script type="text/javascript">
+CONFIG['DISTRICT'] = '{:config("url.web1")}{:config("system.index_php")}common/district.html';
+</script>
+
+<form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
+  <input type="hidden" name="province">
+  <input type="hidden" name="city">
+  <input type="hidden" name="county">
+  <input type="hidden" name="town">
+  <table>
+    <tr><td>下单模板：</td><td><select name="template_id" lay-search>{$Template}</select></td></tr>
+    <tr><td>订购商品：</td><td><select name="product_id" class="product_id" lay-filter="product_id" lay-search>{$Product}</select></td></tr>
+    <tr><td>成交单价：</td><td><input type="text" name="price" class="text"></td></tr>
+    <tr><td>订购数量：</td><td><input type="text" name="count" value="1" class="text"></td></tr>
+    <tr><td>姓　　名：</td><td><input type="text" name="name" class="text"></td></tr>
+    <tr><td>联系电话：</td><td><input type="text" name="tel" class="text"></td></tr>
+    <tr><td>所在地区：</td><td><div class="radio-box"><label><input type="radio" name="district_type" value="0" checked>选择填写</label></div><div class="radio-box"><label><input type="radio" name="district_type" value="1">手动填写</label></div></td></tr>
+    <tbody class="district1">
+    <tr><td>省　　份：</td><td><select class="province" lay-filter="province" lay-search><option value="">请选择省份</option></select></td></tr>
+    <tr><td>城　　市：</td><td><select class="city" lay-filter="city" lay-search><option value="">请选择城市</option></select></td></tr>
+    <tr><td>区 / 县：</td><td><select class="county" lay-filter="county" lay-search><option value="">请选择区/县</option></select></td></tr>
+    <tr><td>乡镇/街道：</td><td><select class="town" lay-filter="town" lay-search><option value="">若不清楚乡镇/街道，可不选</option></select></td></tr>
+    </tbody>
+    <tbody class="district2">
+    <tr><td>省　　份：</td><td><input type="text" name="province2" class="text"></td></tr>
+    <tr><td>城　　市：</td><td><input type="text" name="city2" class="text"></td></tr>
+    <tr><td>区 / 县：</td><td><input type="text" name="county2" class="text"></td></tr>
+    <tr><td>乡镇/街道：</td><td><input type="text" name="town2" class="text" placeholder="若不清楚，可留空"></td></tr>
+    </tbody>
+    <tr><td>详细地址：</td><td><input type="text" name="address" class="text"></td></tr>
+    <tr><td>电子邮箱：</td><td><input type="text" name="email" class="text"></td></tr>
+    <tr><td>备　　注：</td><td><textarea name="note" class="textarea"></textarea></td></tr>
+    <tr><td>支付方式：</td><td>{$Payment}</td></tr>
+    <tr><td>订单状态：</td><td>{$OrderState}</td></tr>
+    <tr><td>快递公司：</td><td><select name="express_id" lay-search><option value="">请选择</option>{$Express}</select></td></tr>
+    <tr><td>快递单号：</td><td><input type="text" name="express_number" class="text"></td></tr>
+  </table>
+</form>

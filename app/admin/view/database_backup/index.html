@@ -1,0 +1,31 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}数据库{/block}
+
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">{/block}
+
+{block name="main"}
+<div class="tool">
+  <div class="row1">
+    <h2>数据库备份</h2>
+    <p class="clear"></p>
+  </div>
+</div>
+
+<form method="post" action="" class="form layui-form">
+  <table>
+    <tr><td class="tip left">数据表，不选则为备份全部数据表</td></tr>
+  </table>
+  <table>
+    {foreach name="All" key="key" item="value"}
+    {if condition="($key+1)%4==1"}<tr>{/if}
+    <td>{if condition="$value['Name']"}<div class="check-box"><label><input type="checkbox" name="table_name[]" value="{$value['Name']}">{$value['Name']}</label></div>{/if}</td>
+    {if condition="($key+1)%4==0"}</tr>{/if}
+    {/foreach}
+  </table>
+  <table>
+    <tr><td>分　　卷：</td><td><input type="text" name="file_size" value="2000" class="text"></td><td>（KB，填0为不分卷）</td></tr>
+    <tr><td colspan="2" class="left"><input type="submit" value="确认备份" class="button"></td></tr>
+  </table>
+</form>
+{/block}

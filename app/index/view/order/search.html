@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0">
+<title>{:config('system.web_name')}-订单查询</title>
+<base href="{:config('url.web1')}">
+<link rel="stylesheet" type="text/css" href="static/index/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+</head>
+
+<body>
+<div class="order">
+  <p>共查询到{$Total}个订单：</p>
+  {foreach name="All" key="key" item="value"}
+  <table>
+    <tr><td>订 单 号：</td><td>{$value['order_id']}</td></tr>
+    <tr><td>订购商品：</td><td>{$value['product']}</td></tr>
+    <tr><td>成交单价：</td><td>{$value['price']}元</td></tr>
+    <tr><td>订购数量：</td><td>{$value['count']}</td></tr>
+    <tr><td>成交总价：</td><td>{$value['total']}元</td></tr>
+    <tr><td>姓　　名：</td><td>{$value['name']}</td></tr>
+    <tr><td>联系电话：</td><td>{$value['tel']}</td></tr>
+    <tr><td>所在地区：</td><td>{$value['province']} {$value['city']} {$value['county']} {$value['town']}</td></tr>
+    <tr><td>详细地址：</td><td>{$value['address']}</td></tr>
+    <tr><td>备　　注：</td><td>{$value['note']}</td></tr>
+    <tr><td>电子邮箱：</td><td>{$value['email']}</td></tr>
+    <tr><td>支付方式：</td><td>{:config('payment.'.$value['payment_id'])}</td></tr>
+    <tr><td>下单IP：</td><td>{$value['ip']}</td></tr>
+    <tr><td>下单来路：</td><td>{if condition="$value['referrer']"}<a href="{$value['referrer']}" target="_blank">{$value['referrer']}</a>{else/}直接进入{/if}</td></tr>
+    <tr><td>下单时间：</td><td>{$value['date']|dateFormat}</td></tr>
+    <tr><td>订单状态：</td><td>{$value['order_state']}</td></tr>
+    <tr><td>快递公司：</td><td>{$value['express_name']}</td></tr>
+    <tr><td>快递单号：</td><td>{$value['express_number']}{if condition="$value['express_name']&&$value['express_number']"}，<a href="http://www.kuaidi100.com/chaxun?com={$value['express_code']}&nu={$value['express_number']}" target="_blank">查询进度</a>{/if}</td></tr>
+  </table>
+  {/foreach}
+</div>
+
+<script type="text/javascript" src="static/index/js/visit.js?{:staticCache()}"></script>
+{if condition="config('app.demo')"}<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?c6bb5df23fe4ee546e63006da2093d81";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>{/if}
+</body>
+</html>

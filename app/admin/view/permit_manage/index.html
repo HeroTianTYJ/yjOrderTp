@@ -1,0 +1,51 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}管理{/block}
+
+{block name="head"}<script type="text/javascript">
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['IS_DEFAULT'] = '{:url("/".parse_name(request()->controller())."/isDefault")}';
+</script>{/block}
+
+{block name="main"}
+<div class="tool">
+  <div class="row1">
+    <h2>管理权限</h2>
+  
+    <form method="get" action="" class="search layui-form" onsubmit="return false;">
+      <div class="search-text"><input type="text" name="keyword" value="{:input('get.keyword')}" class="text"><span class="iconfont icon-search"></span></div>
+    </form>
+  
+    <p class="clear"></p>
+  </div>
+</div>
+
+<div class="list">
+  {if condition="$Total>0"}
+  <table>
+    <thead><tr class="row1"><th style="width:150px;">权限名称</th><th style="width:100px;">模块</th><th style="width:100px;">子模块</th>{if condition="isPermission('isDefault')"}<th style="width:110px;">是否默认</th>{/if}</tr></thead>
+    <tbody class="items"></tbody>
+  </table>
+
+  <div class="pagination"><ul></ul></div>
+  {else/}
+  <p class="nothing"></p>
+  {/if}
+</div>
+{/block}
+
+{block name="right"}
+<div class="right">
+  <h3>温馨提示 <span class="iconfont icon-fold"></span></h3>
+  <ul>
+    <li>1、以黑色字体显示的管理权限为模块的主权限，以蓝色字体显示的管理权限为此模块中的子权限，分页中的总条数为主管理权限的总条数；</li>
+    <li>2、可在<a href="{:url('/permit_group/index')}">权限组</a>模块中的添加和修改中为相应的权限组分配管理权限；</li>
+    <li>3、超级管理员不受管理权限的限制；</li>
+    <li>4、您可将管理权限设置为默认权限，在添加权限组时，将自动勾选上默认权限。</li>
+  </ul>
+
+  <span class="iconfont icon-expand color"></span>
+</div>
+{/block}

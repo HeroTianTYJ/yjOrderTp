@@ -1,0 +1,59 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}订单{/block}
+
+{block name="head"}<script type="text/javascript" src="static/yj.admin.ui/js/jquery/number.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/library/lay_ui/css/date.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+CONFIG['TYPE'] = 'index';
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+</script>{/block}
+
+{block name="main"}
+<div class="tool advance">
+  <div class="row1">
+    <h2>订单统计</h2>
+
+    <ul class="tab">
+      {if condition="isPermission('index')"}<li class="active"><a href="{:url('/'.parse_name(request()->controller()).'/index')}">概况</a></li>{/if}
+      {if condition="isPermission('day')"}<li><a href="{:url('/'.parse_name(request()->controller()).'/day')}">按天</a></li>{/if}
+      {if condition="isPermission('month')"}<li><a href="{:url('/'.parse_name(request()->controller()).'/month')}">按月</a></li>{/if}
+      {if condition="isPermission('year')"}<li><a href="{:url('/'.parse_name(request()->controller()).'/year')}">按年</a></li>{/if}
+    </ul>
+
+    <p class="clear"></p>
+  </div>
+
+  {include file="order/search" /}
+</div>
+
+<div class="list">
+  {if condition="$Total>0"}
+  <table>
+    <thead>
+      <tr class="row1"><th style="width:280px;" rowspan="2">时间</th><th colspan="6">订单数（单位：笔）</th><th colspan="6">订单金额（单位：元）</th><th colspan="4">合计</th></tr>
+      <tr><th style="width:80px;">待支付</th><th style="width:80px;">待发货</th><th style="width:80px;">已发货</th><th style="width:80px;">已签收</th><th style="width:80px;">售后中</th><th style="width:80px;">交易关闭</th><th style="width:80px;">待支付</th><th style="width:80px;">待发货</th><th style="width:80px;">已发货</th><th style="width:80px;">已签收</th><th style="width:80px;">售后中</th><th style="width:80px;">交易关闭</th><th style="width:80px;">订单数</th><th style="width:80px;">成交数</th><th style="width:80px;">订单金额</th><th style="width:80px;">成交金额</th></tr>
+    </thead>
+    <tbody class="items"></tbody>
+  </table>
+
+  <div class="pagination"><ul></ul></div>
+  {else/}
+  <p class="nothing"></p>
+  {/if}
+</div>
+{/block}
+
+{block name="right"}
+<div class="right">
+  <h3>温馨提示 <span class="iconfont icon-fold"></span></h3>
+  <ul>
+    <li>成交数和成交金额不计算交易关闭的订单。</li>
+  </ul>
+
+  <span class="iconfont icon-expand color"></span>
+</div>
+{/block}

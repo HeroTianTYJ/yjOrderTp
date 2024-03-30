@@ -1,0 +1,77 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}订单{/block}
+
+{block name="head"}<script type="text/javascript" src="static/yj.admin.ui/js/jquery/number.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/library/lay_ui/css/date.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+{if condition="request()->controller()=='Order'"}
+CONFIG['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
+CONFIG['ADD_DO'] = '{:url("/".parse_name(request()->controller())."/add",["action"=>"do"])}';
+CONFIG['EXPRESS'] = '{:url("/".parse_name(request()->controller())."/express")}';
+CONFIG['STATE'] = '{:url("/".parse_name(request()->controller())."/state")}';
+{else/}
+CONFIG['RECOVER'] = '{:url("/".parse_name(request()->controller())."/recover")}';
+{/if}
+CONFIG['OUTPUT'] = '{:url("/".parse_name(request()->controller())."/output")}';
+CONFIG['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
+CONFIG['UPDATE_DO'] = '{:url("/".parse_name(request()->controller())."/update",["action"=>"do"])}';
+CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
+CONFIG['DETAIL'] = '{:url("/".parse_name(request()->controller())."/detail")}';
+</script>{/block}
+
+{block name="main"}
+<div class="tool advance">
+  <div class="row1">
+    <h2>订单{if condition="request()->controller()=='Order'"}管理{else/}回收站{/if}</h2>
+  
+    <input type="hidden" name="ids">
+  
+    <div class="button">
+      {if condition="request()->controller()=='Order'&&isPermission('add')"}<input type="button" value="添加订单" class="button add">{/if}
+      {if condition="request()->controller()=='OrderRecycle'&&isPermission('recover')"}<input type="button" value="批量还原" class="button disabled must_select recover" disabled>{/if}
+      {if condition="isPermission('delete')"}<input type="button" value="批量删除" class="button disabled must_select delete" disabled>{/if}
+      {if condition="request()->controller()=='Order'&&isPermission('state')"}<input type="button" value="修改订单状态" class="button disabled must_select state">{/if}
+      {if condition="request()->controller()=='Order'&&isPermission('express')"}<input type="button" value="修改快递单号" class="button disabled must_select express">{/if}
+      {if condition="isPermission('output')"}<input type="button" value="导出当前订单" class="button output1">
+      <input type="button" value="导出选定订单" class="button disabled must_select output2">
+      <div class="check-box"><label><input type="checkbox" name="siwu" value="1">四五打印格式</label></div>{/if}
+    </div>
+
+    <p class="clear"></p>
+  </div>
+
+  {include file="order/search" /}
+</div>
+
+<div class="list">
+  {if condition="$Total>0"}
+  <table class="{if condition="isPermission('delete')"}left-fix{/if}{if condition="isPermission('detail')||isPermission('update')||isPermission('delete')"} right-fix{/if}">
+    <thead><tr class="row1">{if condition="isPermission('delete')"}<th style="width:60px;"><div class="check-box"><label><input type="checkbox" class="all">全选</label></div></th>{/if}<th style="width:100px;">订单号</th><th style="width:130px;">管理员</th><th style="width:130px;">下单模板</th><th style="width:85px;">姓名</th><th style="width:130px;">订购商品</th><th style="width:70px;">成交单价</th><th style="width:70px;">订购数量</th><th style="width:70px;">成交总价</th><th style="width:100px;">联系电话</th><th style="width:200px;">详细地址</th><th style="width:150px;">电子邮箱</th><th style="width:120px;">下单IP</th><th style="width:80px;">下单来路</th><th style="width:80px;">下单时间</th><th style="width:80px;">支付方式</th><th style="width:210px;">支付订单号</th><th style="width:90px;">支付场景</th><th style="width:80px;">支付时间</th><th style="width:80px;">订单状态</th><th style="width:140px;">快递信息</th>{if condition="isPermission('detail')||isPermission('update')||isPermission('delete')"}<th style="width:110px;">操作</th>{/if}</tr></thead>
+    <tbody class="items"></tbody>
+  </table>
+
+  <div class="pagination"><ul></ul></div>
+  {else/}
+  <p class="nothing"></p>
+  {/if}
+</div>
+{/block}
+
+{block name="right"}
+<div class="right">
+  <h3>温馨提示 <span class="iconfont icon-fold"></span></h3>
+  <ul>
+    <li>1、列表中的详细地址默认显示25个字符（1个汉字表示2个字符），鼠标悬停在地址上，将显示地址的全部内容；</li>
+    <li>2、点击快递单号可查询物流进度；</li>
+    <li>3、如勾选了“四五打印格式”，导出的订单可以导入到“四五打印助手”软件，用来打印快递单；</li>
+    <li>4、“四五打印助手”软件下载地址：<a href="http://www.siwuprint.com/display.asp?id=260" target="_blank">http://www.siwuprint.com/display.asp?id=260</a>，使用教程：<a href="http://help.siwuprint.com/" target="_blank">http://help.siwuprint.com/</a>。</li>
+  </ul>
+
+  <span class="iconfont icon-expand color"></span>
+</div>
+{/block}

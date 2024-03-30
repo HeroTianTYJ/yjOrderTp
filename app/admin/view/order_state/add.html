@@ -1,0 +1,10 @@
+<script type="text/javascript" src="static/library/jquery/color_picker.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}_form.js?{:staticCache()}"></script>
+
+<form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
+  <table>
+    <tr><td>状态名称：</td><td><input type="text" name="name" class="text"></td></tr>
+    <tr><td>状态颜色：</td><td><input type="text" name="color" class="text"></td></tr>
+    <tr class="tip"><td></td><td>留空则为黑色，颜色值可以为：表示颜色的英文单词，如red；16进制的颜色代码，如#FF0000；10进制的颜色代码，如rgb(255,0,0)。</td></tr>
+  </table>
+</form>

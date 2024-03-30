@@ -1,0 +1,26 @@
+{extend name="../../common/view/public/base2" /}
+
+{block name="title"}系统安装-第2步{/block}
+
+{block name="head"}<style>
+.form table tr td:nth-child(1){
+	width:98px;
+}
+</style>{/block}
+
+{block name="main"}
+<h1><span class="iconfont icon-logo"></span>{:config('system.web_name')}-系统安装-第2步</h1>
+
+<form method="post" action="" class="form">
+  <table>
+    <tr><td colspan="2" class="title">数据库信息</td></tr>
+    <tr><td>数据库服务器：</td><td><input type="text" name="hostname" value="127.0.0.1" class="text"></td></tr>
+    <tr><td>服务器端口：</td><td><input type="text" name="hostport" value="3306" class="text"></td></tr>
+    <tr><td>数据库名：</td><td><input type="text" name="database" class="text"></td></tr>
+    <tr><td>数据库用户名：</td><td><input type="text" name="username" value="root" class="text"></td></tr>
+    <tr><td>数据库密码：</td><td><input type="text" name="password" class="text"></td></tr>
+    <tr><td>数据表前缀：</td><td><input type="text" name="prefix" value="yjorder_" class="text"></td></tr>
+    <tr><td colspan="2" class="button-td"><input type="submit" value="下一步" class="button"></td></tr>
+  </table>
+</form>
+{/block}

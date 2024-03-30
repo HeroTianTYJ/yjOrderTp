@@ -1,0 +1,56 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}数据{/block}
+
+{block name="head"}<script type="text/javascript">
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['OUTPUT'] = '{:url("/".parse_name(request()->controller())."/output")}';
+CONFIG['JS'] = '{:url("/".parse_name(request()->controller())."/js")}';
+CONFIG['FILE_CONTROLLER'] = '{:url("/file/index")}';
+</script>{/block}
+
+{block name="main"}
+<div class="tool">
+  <div class="row1">
+    <h2>访问统计</h2>
+  
+    <div class="button">
+      {if condition="isPermission('output')"}<input type="button" value="导出并清空" class="button output">{/if}
+    </div>
+  
+    <form method="get" action="" class="search layui-form" onsubmit="return false;">
+      <div class="search-text"><input type="text" name="keyword" value="{:input('get.keyword')}" class="text"><span class="iconfont icon-search"></span></div>
+    </form>
+  
+    <p class="clear"></p>
+  </div>
+</div>
+
+<div class="list">
+  {if condition="$Total>0"}
+  <table>
+    <thead><tr class="row1"><th style="width:200px;">IP</th><th style="width:420px;">访问页面</th><th style="width:100px;">当日访问次数</th><th style="width:90px;">第一次</th><th style="width:90px;">最后一次</th></tr></thead>
+    <tbody class="items"></tbody>
+  </table>
+
+  <div class="pagination"><ul></ul></div>
+  {else/}
+  <p class="nothing"></p>
+  {/if}
+</div>
+{/block}
+
+{block name="right"}
+<div class="right">
+  <h3>温馨提示 <span class="iconfont icon-fold"></span></h3>
+  <ul>
+    <li style="word-break:break-all;">1、在需要统计的页面引入&lt;script type="text/javascript" src="{:config('url.web1')}static/index/js/visit.js?{:staticCache()}"&gt;&lt;/script&gt;即可进行统计；</li>
+    <li>2、为了节省数据库空间，系统会每天自动将统计的数据导出到文件，请到<a href="{:url('/output/index')}">导出的数据</a>模块中进行下载，您也可以点击“导出并清空”按钮自行导出数据{if condition="isPermission('js')"}；{else/}。{/if}</li>
+    {if condition="isPermission('js')"}<li>3、如果发生统计不到的情况，请尝试<a href="javascript:" class="js">点击此处</a>更新visit.js文件。</li>{/if}
+  </ul>
+
+  <span class="iconfont icon-expand color"></span>
+</div>
+{/block}

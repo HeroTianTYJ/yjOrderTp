@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0">
+<title>{:config('system.web_name')}-{block name="title"}{/block}</title>
+<base href="{:config('url.web1')}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont_extra.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/css/basic.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/css/single_page.css?{:staticCache()}">
+{block name="head"}{/block}
+</head>
+
+<body>
+{if condition="config('app.demo')"}
+<div class="guide"><a href="https://github.com/HeroTianTYJ/yjOrderTp" target="_blank">下载本系统源码</a> <a href="https://www.yjrj.top/mall/index.html" target="_blank">功能更强大的《昱杰商城系统》</a> <a href="https://www.yjrj.top/web/index.html" target="_blank">《昱杰单页制作系统》，可视化制作产品单页</a></div>
+{/if}
+
+{block name="main"}{/block}
+
+<footer class="copyright">{:config('system.copyright_backend')}</footer>
+
+<div class="tip"><div><span class="iconfont color"></span> <span class="content"></span></div></div>
+
+{if condition="isset($Run)"}{$Run}{/if}
+</body>
+</html>

@@ -1,0 +1,25 @@
+{extend name="../../common/view/public/base2" /}
+
+{block name="title"}系统安装-第3步{/block}
+
+{block name="main"}
+<h1><span class="iconfont icon-logo"></span>{:config('system.web_name')}-系统安装-第3步</h1>
+
+<form method="post" action="" class="form">
+  <table>
+    <tr><td colspan="2" class="title">系统信息</td></tr>
+    <tr><td>OpenID：</td><td><input type="text" name="openid" class="text"></td></tr>
+    <tr class="tip"><td></td><td><a href="https://www.yjrj.top/mp/member.php?action=quick_add&soft_id2=1&code2={:md5(passEncode($_SERVER['HTTP_HOST'],$PassKey))}" target="_blank">点击此处</a>并通过微信扫码登录，登录后快速添加机器码，然后将页面上方以绿色字体显示的OpenID复制过来即可</td></tr>
+    <tr><td>网站名称：</td><td><input type="text" name="web_name" class="text" placeholder="显示在后台起始页和后台所有网页的标题中，中英文均可"></td></tr>
+    <tr><td>后台入口：</td><td><input type="text" name="manager_enter" class="text" placeholder="英文、数字、英文+数字.php，如abc.php、abc123.php"></td></tr>
+    <tr class="tip"><td></td><td>说明：默认为admin.php，但为了不让其他人猜解到后台入口，请设置一个不太为人知的入口（.php不能省略）。</td></tr>
+    <tr><td>&nbsp;</td></tr>
+    <tr><td colspan="2" class="title">管理员信息</td></tr>
+    <tr><td>用 户 名：</td><td><input type="text" name="admin_name" class="text" placeholder="安装成功后，用来登录后台的管理员帐号"></td></tr>
+    <tr><td>密　　码：</td><td><input type="password" name="admin_pass" class="text" placeholder="管理员密码"></td></tr>
+    <tr><td>确认密码：</td><td><input type="password" name="admin_repass" class="text" placeholder="同上"></td></tr>
+    <tr><td>电子邮箱：</td><td><input type="text" name="admin_mail" class="text" placeholder="管理员邮箱，可用来接收订单提醒邮件"></td></tr>
+    <tr><td colspan="2" class="button-td"><input type="submit" value="确认安装" class="button"></td></tr>
+  </table>
+</form>
+{/block}

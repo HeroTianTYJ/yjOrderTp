@@ -1,0 +1,2 @@
+@charset "utf-8";
+.webuploader-container{position:relative;}.webuploader-element-invisible{position:absolute !important;clip:rect(1px 1px 1px 1px);}.webuploader-pick{padding:6px 15px;background:#0059FF;border-radius:4px;color:#fff;font-size:14px;cursor:pointer;outline:none;border:1px solid #0059FF;}.webuploader-pick-hover{background:#226FFF;}.webuploader-pick-disable{opacity:0.6;pointer-events:none;}

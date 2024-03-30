@@ -1,0 +1,7 @@
+@charset "utf-8";
+.main .list table tr:last-child td,
+.main .list table tr:last-child:hover td{
+	background:#D3DCE3 !important;
+	font-weight:bold;
+	cursor: auto;
+}

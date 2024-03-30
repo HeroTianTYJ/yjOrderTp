@@ -1,0 +1,11 @@
+@charset "utf-8";
+.main .list table tr.footer td{
+	background:#D3DCE3 !important;
+	font-weight:bold;
+	cursor: auto;
+}
+
+ul.tab{
+	margin: 0 0  0 16px;
+	float: left;
+}

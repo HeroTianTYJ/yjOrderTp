@@ -1,0 +1,7 @@
+<form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
+  <input type="hidden" name="parent_id" value="{:input('parent_id',0)}">
+  <table>
+    <tr><td>区划名称：</td><td><textarea name="multi" class="textarea"></textarea></td></tr>
+    <tr class="tip"><td></td><td>每一行代表一个行政区划</td></tr>
+  </table>
+</form>

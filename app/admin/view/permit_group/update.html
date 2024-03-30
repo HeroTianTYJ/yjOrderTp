@@ -1,0 +1,13 @@
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}_form.js?{:staticCache()}"></script>
+
+<form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
+  <table>
+    <tr><td>权限组名称：</td><td><input type="text" name="name" value="{$One['name']}" class="text"></td><td></td></tr>
+    <tr><td>管理权限：</td><td class="tip">以黑色字体显示的权限为模块的主权限，以蓝色字体显示的权限为此模块中的子权限，以红色字体显示的权限为默认权限</td></tr>
+    <tr><td></td><td><input type="button" value="全选" class="button all"> <input type="button" value="全部不选" class="button no"> <input type="button" value="默认权限" class="button default"></td></tr>
+    <tr><td></td><td class="permit_manage">{$PermitManage}</td></tr>
+    <tr><td>数据权限：</td><td class="tip">以黑色字体显示的数据权限为权限分组，以蓝色字体显示的权限为此权限分组中的数据权限，以红色字体显示的权限为默认权限</td></tr>
+    <tr><td></td><td><input type="button" value="全选" class="button all2"> <input type="button" value="全部不选" class="button no2"> <input type="button" value="默认权限" class="button default2"></td></tr>
+    <tr><td></td><td class="permit_data">{$PermitData}</td></tr>
+  </table>
+</form>

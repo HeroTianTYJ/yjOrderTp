@@ -1,0 +1,31 @@
+@charset "utf-8";
+/*
+@Name：《昱杰后台UI框架》
+@Author：风形火影
+@Site：https://www.yjrj.top
+*/
+.icon-wechat.color:before {
+    color: #46BB36;
+}
+.icon-qq.color:before {
+    color: #68A5E1;
+}
+.icon-tip-succeed.color:before {
+    color: #52C41A;
+}
+.icon-tip-failed.color:before {
+    color: #F5222D;
+}
+.icon-tip-warning.color:before {
+    color: #FAAD14;
+}
+.icon-tip-info.color:before,
+.icon-expand.color:before {
+    color: #0059FF;
+}
+.icon-star.color:before {
+    color: #999;
+}
+.icon-star-whole.color:before {
+    color: #F8D41C;
+}

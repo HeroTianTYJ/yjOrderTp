@@ -1,0 +1,45 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}数据库{/block}
+
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+CONFIG['PAGE_SIZE'] = CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['OPTIMIZE'] = '{:url("/".parse_name(request()->controller())."/optimize")}';
+CONFIG['REPAIR_AUTO_INCREMENT'] = '{:url("/".parse_name(request()->controller())."/repairAutoIncrement")}';
+CONFIG['SCHEMA'] = '{:url("/".parse_name(request()->controller())."/schema")}';
+</script>{/block}
+
+{block name="main"}
+<div class="tool">
+  <div class="row1">
+    <h2>数据表状态</h2>
+  
+    <div class="button">
+      {if condition="isPermission('optimize')"}<input type="button" value="优化表" class="button optimize">{/if}
+      {if condition="isPermission('repairAutoIncrement')"}<input type="button" value="修复AutoIncrement" class="button repair_auto_increment">{/if}
+      {if condition="isPermission('schema')"}<input type="button" value="更新表缓存" class="button schema">{/if}
+    </div>
+  
+    <form method="get" action="" class="search layui-form" onsubmit="return false;">
+      <div class="search-text"><input type="text" name="keyword" value="{:input('get.keyword')}" class="text"><span class="iconfont icon-search"></span></div>
+    </form>
+  
+    <p class="clear"></p>
+  </div>
+</div>
+
+<div class="list">
+  {if condition="$Total>0"}
+  <table>
+    <thead><tr class="row1"><th style="width:150px;">表</th><th style="width:70px;">记录数</th><th style="width:120px;">AutoIncrement</th><th style="width:100px;">大小</th><th style="width:100px;">多余</th></tr></thead>
+    <tbody class="items"></tbody>
+  </table>
+
+  <div class="pagination"><ul></ul></div>
+  {else/}
+  <p class="nothing"></p>
+  {/if}
+</div>
+{/block}

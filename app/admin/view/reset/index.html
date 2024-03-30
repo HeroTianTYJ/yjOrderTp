@@ -1,0 +1,23 @@
+{extend name="../../common/view/public/base2" /}
+
+{block name="title"}重置密码{/block}
+
+{block name="head"}<script type="text/javascript" src="static/library/jquery/jquery.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/library/valid_form.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/yj.admin.ui/js/common.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">{/block}
+
+{block name="main"}
+<h1><span class="iconfont icon-logo"></span>{:config('system.web_name')}-重置密码</h1>
+
+<form method="post" action="" class="form layui-form">
+  <table>
+    <tr><td colspan="2" class="left">此功能仅供系统创始人使用，如果您非系统创始人，请联系创始人登录后台为您重置密码</td></tr>
+    <tr><td>重置密钥：</td><td><input type="text" name="reset_pass_key" class="text"></td></tr>
+    <tr><td>新 密 码：</td><td><input type="password" name="pass" class="text"></td></tr>
+    <tr><td>重复新密码：</td><td><input type="password" name="repass" class="text"></td></tr>
+    <tr><td colspan="2" class="button-td"><input type="submit" value="立即重置" class="button"></td></tr>
+  </table>
+</form>
+{/block}

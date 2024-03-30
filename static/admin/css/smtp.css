@@ -1,0 +1,4 @@
+@charset "utf-8";
+.form table tr td:nth-child(1){
+    width: 95px;
+}

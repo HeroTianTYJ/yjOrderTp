@@ -1,0 +1,52 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}数据{/block}
+
+{block name="head"}<script type="text/javascript">
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['INDEX'] = '{:url("/".parse_name(request()->controller())."/index")}';
+CONFIG['ADD'] = '{:url("/".parse_name(request()->controller())."/add",["parent_id"=>input("get.parent_id",0)])}';
+CONFIG['ADD_DO'] = '{:url("/".parse_name(request()->controller())."/add",["parent_id"=>input("get.parent_id",0),"action"=>"do"])}';
+CONFIG['MULTI'] = '{:url("/".parse_name(request()->controller())."/multi",["parent_id"=>input("get.parent_id",0)])}';
+CONFIG['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
+CONFIG['UPDATE_DO'] = '{:url("/".parse_name(request()->controller())."/update",["action"=>"do"])}';
+CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
+CONFIG['LEVEL'] = {$Whole['level']};
+</script>{/block}
+
+{block name="main"}
+<div class="tool">
+  <div class="row1">
+    {if condition="input('parent_id',0)==0"}<h2>行政区划</h2>{else/}<h3><a href="{:url('/'.parse_name(request()->controller()).'/index')}">行政区划</a> - {$Whole['name']}</h3>{/if}
+  
+    <input type="hidden" name="ids">
+  
+    <div class="button">
+      {if condition="isPermission('add')"}<input type="button" value="添加行政区划" class="button add">{/if}
+      {if condition="isPermission('multi')"}<input type="button" value="批量添加行政区划" class="button multi">{/if}
+      {if condition="isPermission('delete')"}<input type="button" value="批量删除" class="button disabled must_select delete" disabled>{/if}
+    </div>
+  
+    <form method="get" action="" class="search layui-form" onsubmit="return false;">
+      <div class="search-text"><input type="text" name="keyword" value="{:input('get.keyword')}" class="text"><span class="iconfont icon-search"></span></div>
+    </form>
+  
+    <p class="clear"></p>
+  </div>
+</div>
+
+<div class="list">
+  {if condition="$Total>0"}
+  <table class="{if condition="isPermission('delete')"}left-fix{/if}{if condition="isPermission('update')||isPermission('delete')"} right-fix{/if}">
+    <thead><tr class="row1">{if condition="isPermission('delete')"}<th style="width:60px;"><div class="check-box"><label><input type="checkbox" class="all">全选</label></div></th>{/if}<th style="width:350px;">区划名称</th><th style="width:160px;">操作</th></tr></thead>
+    <tbody class="items"></tbody>
+  </table>
+
+  <div class="pagination"><ul></ul></div>
+  {else/}
+  <p class="nothing"></p>
+  {/if}
+</div>
+{/block}

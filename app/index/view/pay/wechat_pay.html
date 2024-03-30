@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0">
+<title>{:config('system.web_name')}-微信支付</title>
+<base href="{:config('url.web1')}">
+<script type="text/javascript" src="static/library/jquery/jquery.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/index/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+$(function(){
+  let TIP = '{:url("/".parse_name(request()->controller())."/wechatPayTip",["order_id"=>input("order_id")])}';
+  {if condition="$jsApiParameters"}
+  function jsApiCall(){
+    WeixinJSBridge.invoke(
+      'getBrandWCPayRequest',
+      {$jsApiParameters},
+      function (res) {
+        if (res.err_msg === 'get_brand_wcpay_request:ok') window.location.href = TIP;
+      }
+    );
+  }
+  if (typeof WeixinJSBridge === 'undefined') {
+    if (document.addEventListener) {
+      document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+    } else if (document.attachEvent) {
+      document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+      document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+    }
+  } else {
+    jsApiCall();
+  }
+  {elseif condition="$Url"/}
+  setInterval(function(){
+    $.ajax({
+        type: 'POST',
+        url: '{:url("/".parse_name(request()->controller())."/wechatPayAjax")}',
+        data: {
+            order_id: '{:input("order_id")}'
+        },
+        success: function (data) {
+          if (data === '2') window.location.href = TIP;
+        }
+    });
+  },1000);
+  {/if}
+});
+</script>
+</head>
+
+<body>
+{if condition="$Url"}
+<div class="pay">
+  <p><img src="{:url('/common/qrcode',['data'=>$Url])}" alt="微信扫码支付"></p>
+  <p>请使用微信扫一扫进行扫码支付</p>
+</div>
+{/if}
+</body>
+</html>

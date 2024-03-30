@@ -1,0 +1,34 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}系统{/block}
+
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">{/block}
+
+{block name="main"}
+<div class="tool">
+  <div class="row1">
+    <h2>生成验证文件</h2>
+    <p class="clear"></p>
+  </div>
+</div>
+
+<form method="post" action="" class="form layui-form">
+  <table>
+    <tr><td>文 件 名：</td><td><input type="text" name="name" value="{:config('validate_file.name')}" class="text"></td><td></td></tr>
+    <tr><td>文件扩展名：</td><td>{$Extension}</td><td></td></tr>
+    <tr><td>文件内容：</td><td><textarea name="content" class="textarea">{:config('validate_file.content')}</textarea></td><td></td></tr>
+    <tr><td colspan="2" class="left"><input type="submit" value="确认生成" class="button"></td></tr>
+  </table>
+</form>
+{/block}
+
+{block name="right"}
+<div class="right">
+  <h3>温馨提示 <span class="iconfont icon-fold"></span></h3>
+  <ul>
+    <li>此功能可按照您输入的内容在您的系统根目录生成对应的文件，用于第三方平台中的网站所属权验证；每次生成验证文件，将会自动删除上一次生成的验证文件。</li>
+  </ul>
+
+  <span class="iconfont icon-expand color"></span>
+</div>
+{/block}

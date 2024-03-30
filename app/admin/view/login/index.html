@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0">
+<title>{:config('system.web_name')}</title>
+<base href="{:config('url.web1')}">
+<script type="text/javascript" src="static/library/jquery/jquery.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/library/valid_form.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont_extra.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/css/basic.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+</head>
+
+<body>
+{if condition="config('app.demo')"}
+<div class="guide"><a href="https://github.com/HeroTianTYJ/yjOrderTp" target="_blank">下载本系统源码</a> <a href="https://www.yjrj.top/mall/index.html" target="_blank">功能更强大的《昱杰商城系统》</a> <a href="https://www.yjrj.top/web/index.html" target="_blank">《昱杰单页制作系统》，可视化制作产品单页</a></div>
+{/if}
+
+<form method="post" action="" class="login">
+  <h1><span class="iconfont icon-logo"></span>{:config('system.web_name')}</h1>
+
+  <dl>
+    <dt>{if condition="session(config('system.session_key_admin').'.login_info')"}帐号绑定{else/}帐号密码登录{/if}</dt>
+    <dd><input type="text" name="name" {if condition="config('app.demo')"}value="风形火影"{/if} class="text"></dd>
+    <dd><input type="password" name="pass" {if condition="config('app.demo')"}value="tyj"{/if} class="text"></dd>
+    <dd class="tip red"></dd>
+    <dd style="text-align:right;"><a href="{:url('/reset/index')}">重置密码</a></dd>
+    <dd class="submit"><input type="submit" value="{if condition="session(config('system.session_key_admin').'.login_info')"}帐号绑定{else/}登录{/if}"></dd>
+    {if condition="!session(config('system.session_key_admin').'.login_info')"}
+    <dd class="third">{:loginLink()}</dd>
+    {/if}
+  </dl>
+
+  <footer class="copyright">{:config('system.copyright_backend')}</footer>
+</form>
+
+{$Run}
+</body>
+</html>

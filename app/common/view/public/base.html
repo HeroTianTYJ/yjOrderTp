@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>{:config('system.web_name')}</title>
+<base href="{:config('url.web1')}">
+<script type="text/javascript" src="static/library/jquery/jquery.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/iconfont/iconfont_extra.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/css/basic.css?{:staticCache()}">
+{block name="base_head"}<script type="text/javascript" src="static/yj.admin.ui/js/jquery/page.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/library/layer/layer.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/library/i_check/i_check.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/library/lay_ui/js/lay_ui.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/yj.admin.ui/js/common.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/yj.admin.ui/js/base.js?{:staticCache()}"></script>
+<link rel="stylesheet" type="text/css" href="static/library/layer/layer.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/library/lay_ui/css/lay_ui.css?{:staticCache()}">
+<link rel="stylesheet" type="text/css" href="static/library/i_check/i_check.css?{:staticCache()}">{/block}
+{block name="base_js"}<script type="text/javascript" src="static/{:app('http')->getName()}/js/{:parse_name(request()->controller())}.js?{:staticCache()}"></script>{/block}
+<script type="text/javascript">
+let CONFIG = {
+  FOLD_MAIN_WIDTH: 'calc(100% - 258px)',
+  EXPAND_MAIN_WIDTH: 'calc(100% - 458px)',
+  SESSION_LEVEL: {:session(config('system.session_key_admin').'.manage_info.level')},
+  SESSION_PERMIT_MANAGE: {:str_replace('"','',json_encode(session(config('system.session_key_admin').'.manage_info.permit_manage')))},
+  PERMIT_MANAGE: JSON.parse('{:json_encode(config("permit_manage"))}'),
+  CONTROLLER: '{:request()->controller()}',
+  ACTION: '{:request()->action()}'
+};
+</script>
+{block name="head"}{/block}
+</head>
+
+<body class="big">
+{if condition="config('app.demo')"}
+<div class="guide"><a href="https://github.com/HeroTianTYJ/yjOrderTp" target="_blank">下载本系统源码</a> <a href="https://www.yjrj.top/mall/index.html" target="_blank">功能更强大的《昱杰商城系统》</a> <a href="https://www.yjrj.top/web/index.html" target="_blank">《昱杰单页制作系统》，可视化制作产品单页</a></div>
+{/if}
+
+<div class="left">
+  <div class="logo"><a href="{:url('/index/index')}"><span class="iconfont icon-logo"></span></a></div>
+
+  <ul class="navigator">
+    {foreach name="Navigator" key="key" item="value"}
+    <li{if condition="$value['active']"} class="active"{/if}>
+      <a {if condition="isset($value['url'])"}href="{$value['url']}" target="_blank"{else/}href="{if condition="$value['two']"}javascript:{else/}{:url('/'.parse_name($key).'/index')}{/if}"{/if}><span class="iconfont icon-{$key}"></span> {$value['one']}</a>
+      {if condition="$value['two']"}
+      <div class="child">
+        <ul>
+          {foreach name="value['two']" key="k" item="v"}
+          {if condition="is_array($v)"}
+          <li {if condition="request()->controller().'/'.request()->action()==$k"}class="active"{/if}><a href="{:url('/'.parse_name(explode('/',$k)[0]).'/'.explode('/',$k)[1])}">{$v[0]}</a></li>
+          {else/}
+          <li {if condition="request()->controller().'/index'==$k"}class="active"{/if}><a href="{:url('/'.parse_name(explode('/',$k)[0]).'/'.explode('/',$k)[1])}">{$v}</a></li>
+          {/if}
+          {/foreach}
+        </ul>
+      </div>
+      {/if}
+    </li>
+    {/foreach}
+  </ul>
+</div>
+
+<div class="top">
+  <h1>{block name="title"}{:config('system.web_name')}{/block}</h1>
+
+  <div class="user">{:session(config('system.session_key_'.app('http')->getName()).'.manage_info.name')}（{:session(config('system.session_key_admin').'.manage_info.permit_group')}） [<a href="{:url('/profile/index')}">个人资料</a>] [<a href="{:url('/profile/loginRecord')}">登录记录</a>] [<a href="https://item.taobao.com/item.htm?id=531038056831" target="_blank">赞助作者</a>] [<a href="{:url('/login/logout')}">退出</a>]</div>
+</div>
+
+<div class="main">
+  {block name="main"}{/block}
+</div>
+
+{block name="right"}{/block}
+
+<div class="tip"><div><span class="iconfont color"></span> <span class="content"></span></div></div>
+
+{$Run}
+</body>
+</html>

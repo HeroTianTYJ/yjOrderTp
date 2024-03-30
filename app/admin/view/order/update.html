@@ -1,0 +1,31 @@
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}_form.js?{:staticCache()}"></script>
+
+<form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
+  <input type="hidden" name="order_id" value="{$One['order_id']}">
+  <input type="hidden" name="ip" value="{$One['ip']}">
+  <input type="hidden" name="pay_id" value="{$One['pay_id']}">
+  <input type="hidden" name="pay_scene" value="{$One['pay_scene']}">
+  <input type="hidden" name="pay_date" value="{$One['pay_date']}">
+  <input type="hidden" name="date" value="{$One['date']}">
+  <table>
+    <tr><td>下单模板：</td><td><select name="template_id" lay-search>{$Template}</select></td></tr>
+    <tr><td>订购商品：</td><td><select name="product_id" class="product_id" lay-filter="product_id" lay-search>{$Product}</select></td></tr>
+    <tr><td>成交单价：</td><td><input type="text" name="price" value="{$One['price']}" class="text"></td></tr>
+    <tr><td>订购数量：</td><td><input type="text" name="count" value="{$One['count']}" class="text"></td></tr>
+    <tr><td>姓　　名：</td><td><input type="text" name="name" value="{$One['name']}" class="text"></td></tr>
+    <tr><td>联系电话：</td><td><input type="text" name="tel" value="{$One['tel']}" class="text"></td></tr>
+    <tr><td>省　　份：</td><td><input type="text" name="province" value="{$One['province']}" class="text"></td></tr>
+    <tr><td>城　　市：</td><td><input type="text" name="city" value="{$One['city']}" class="text"></td></tr>
+    <tr><td>区 / 县：</td><td><input type="text" name="county" value="{$One['county']}" class="text"></td></tr>
+    <tr><td>乡镇/街道：</td><td><input type="text" name="town" value="{$One['town']}" class="text" placeholder="若不清楚，可留空"></td></tr>
+    <tr><td>详细地址：</td><td><input type="text" name="address" value="{$One['address']}" class="text"></td></tr>
+    <tr><td>电子邮箱：</td><td><input type="text" name="email" value="{$One['email']}" class="text"></td></tr>
+    <tr><td>备　　注：</td><td><textarea name="note" class="textarea">{$One['note']}</textarea></td></tr>
+    <tr><td>支付方式：</td><td>{$Payment}</td></tr>
+    <tr><td>支付链接：</td><td>支付宝 <a href="{$One['pay_url']['alipay']}" target="_blank">{$One['pay_url']['alipay']}</a><br>微信支付 <a href="{$One['pay_url']['wechat_pay']}" target="_blank">{$One['pay_url']['wechat_pay']}</a></td></tr>
+    <tr><td>订单状态：</td><td>{$OrderState}</td></tr>
+    <tr><td>快递公司：</td><td><select name="express_id" lay-search><option value="">请选择</option>{$Express}</select></td></tr>
+    <tr><td>快递单号：</td><td><input type="text" name="express_number" value="{$One['express_number']}" class="text"></td></tr>
+    <tr><td>发送邮件：</td><td><div class="radio-box"><label><input type="radio" name="send_mail" value="0" checked>不发送</label></div><div class="radio-box"><label><input type="radio" name="send_mail" value="1">发送支付信息给客户</label></div><div class="radio-box"><label><input type="radio" name="send_mail" value="2">发送发货信息给客户</label></div></td></tr>
+  </table>
+</form>

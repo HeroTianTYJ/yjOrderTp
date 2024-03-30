@@ -1,0 +1,8 @@
+<form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
+  <table>
+    <tr><td>订 单 号：</td><td><textarea name="order_ids" class="textarea">{$OrderIds}</textarea></td></tr>
+    <tr><td>快递公司：</td><td><select name="express_id" lay-search>{$Express}</select></td></tr>
+    <tr><td>快递单号：</td><td><textarea name="express_numbers" class="textarea"></textarea></td></tr>
+    <tr class="tip"><td></td><td>每一行代表一个快递单号，请与上方的订单号顺序保持一致，修改成功后，会将订单状态改为“已发货”</td></tr>
+  </table>
+</form>

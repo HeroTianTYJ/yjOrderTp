@@ -1,0 +1,67 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}系统{/block}
+
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
+<script type="text/javascript">
+CONFIG['TYPE'] = 'index';
+CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
+CONFIG['TOTAL'] = {$Total};
+CONFIG['LIST'] = window.location;
+CONFIG['ADD'] = '{:url("/".parse_name(request()->controller())."/add")}';
+CONFIG['ADD_DO'] = '{:url("/".parse_name(request()->controller())."/add",["action"=>"do"])}';
+CONFIG['UPDATE'] = '{:url("/".parse_name(request()->controller())."/update")}';
+CONFIG['UPDATE_DO'] = '{:url("/".parse_name(request()->controller())."/update",["action"=>"do"])}';
+CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
+</script>{/block}
+
+{block name="main"}
+<div class="tool">
+  <div class="row1">
+    <!--<h2>SMTP服务器</h2>-->
+
+    <ul class="tab">
+      {if condition="isPermission('index')"}<li class="active"><a href="{:url('/'.parse_name(request()->controller()).'/index')}">SMTP服务器</a></li>{/if}
+      {if condition="isPermission('state')"}<li><a href="{:url('/'.parse_name(request()->controller()).'/state')}">运行状态</a></li>{/if}
+    </ul>
+  
+    <input type="hidden" name="ids">
+  
+    <div class="button">
+      {if condition="isPermission('add')"}<input type="button" value="添加SMTP服务器" class="button add">{/if}
+      {if condition="isPermission('delete')"}<input type="button" value="批量删除" class="button disabled must_select delete" disabled>{/if}
+    </div>
+    <form method="get" action="" class="search layui-form" onsubmit="return false;">
+      <div class="search-text"><input type="text" name="keyword" value="{:input('get.keyword')}" class="text"><span class="iconfont icon-search"></span></div>
+    </form>
+  
+    <p class="clear"></p>
+  </div>
+</div>
+
+<div class="list">
+  {if condition="$Total>0"}
+  <table class="{if condition="isPermission('delete')"}left-fix{/if}{if condition="isPermission('update')||isPermission('delete')"} right-fix{/if}">
+    <thead><tr class="row1">{if condition="isPermission('delete')"}<th style="width:60px;"><div class="check-box"><label><input type="checkbox" class="all">全选</label></div></th>{/if}<th style="width:140px;">SMTP服务器</th><th style="width:80px;">SMTP端口</th><th style="width:180px;">发件人邮箱</th><th style="width:180px;">发件人名称</th>{if condition="isPermission('update')||isPermission('delete')"}<th style="width:80px;">操作</th>{/if}</tr></thead>
+    <tbody class="items"></tbody>
+  </table>
+
+  <div class="pagination"><ul></ul></div>
+  {else/}
+  <p class="nothing"></p>
+  {/if}
+</div>
+{/block}
+
+{block name="right"}
+<div class="right">
+  <h3>温馨提示 <span class="iconfont icon-fold"></span></h3>
+  <ul>
+    <li>1、本系统可以每小时自动切换一台SMTP服务器，若想实现切换效果，请至少设置两台SMTP服务器；</li>
+    <li>2、建议使用QQ邮箱，但注意：①要开通SMTP服务，开通方法请<a href="http://service.mail.qq.com/cgi-bin/help?subtype=1&no=166&id=28" target="_blank">点击此处</a>查看 ②发件人邮箱请不要和<a href="{:url('/system/index')}">系统设置</a>模块中的管理员邮箱重复；</li>
+    <li>3、设置参数，以QQ邮箱为例。SMTP服务器和SMTP端口分别为：smtp.qq.com、25或ssl://smtp.qq.com、465（后者较稳定） | 发件人邮箱为邮箱地址（注意加@qq.com） | 发件人密码为邮箱密码（如果是新开通的SMTP服务，开通时会生成一个授权码，发件人密码为这个授权码） | 发件人名称为您自定义的名称。</li>
+  </ul>
+
+  <span class="iconfont icon-expand color"></span>
+</div>
+{/block}

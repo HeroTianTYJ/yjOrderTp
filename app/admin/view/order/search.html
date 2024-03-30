@@ -1,0 +1,16 @@
+<form method="get" action="" class="search layui-form">
+  <span>关 键 词：<input type="text" name="keyword" value="{:input('get.keyword')}" class="text"></span>
+  <span>订购商品：<select name="product_id" lay-search><option value="0">不限</option>{$Product}</select></span>
+  <span>成交单价：<div name="price1" value="{:input('get.price1')}" class="number"></div> ～ <div name="price2" value="{:input('get.price2')}" class="number"></div></span>
+  <span>订购数量：<div name="count1" value="{:input('get.count1')}" class="number"></div> ～ <div name="count2" value="{:input('get.count2')}" class="number"></div></span>
+  <span>成交总价：<div name="total1" value="{:input('get.total1')}" class="number"></div> ～ <div name="total2" value="{:input('get.total2')}" class="number"></div></span>
+  <span>管 理 员：<select name="manager_id" lay-search><option value="-1">不限</option>{$Manager}</select></span>
+  <span>下单时间：<input type="text" name="date1" value="{:input('get.date1')}" class="text date"> ～ <input type="text" name="date2" value="{:input('get.date2')}" class="text date"></span>
+  <span>支付方式：<select name="payment_id" lay-filter="payment_id" lay-search><option value="0">不限</option>{$Payment}</select></span>
+  <span class="alipay_scene">支付场景：<select name="alipay_scene" lay-search><option value="0">不限</option>{$AlipayScene}</select></span>
+  <span class="wechat_pay_scene">支付场景：<select name="wechat_pay_scene" lay-search><option value="0">不限</option>{$WxpayScene}</select></span>
+  <span>订单状态：<select name="order_state_id" lay-search><option value="0">不限</option>{$OrderState}</select></span>
+  <span>快递公司：<select name="express_id" lay-search><option value="0">不限</option>{$Express}</select></span>
+  <span>下单模板：<select name="template_id" lay-search><option value="0">不限</option>{$Template}</select></span>
+  <input type="submit" value="查询" class="button third">
+</form>

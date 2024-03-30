@@ -1,0 +1,81 @@
+@font-face {
+  font-family: "iconfont"; /* Project id  */
+  src: url('iconfont.ttf?t=16286698306155') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont", serif !important;
+  font-style: normal;
+}
+
+.icon-web:before {
+  content: "\e659";
+}
+
+.icon-question:before {
+  content: "\e656";
+}
+
+.icon-template:before {
+  content: "\e655";
+}
+
+.icon-product:before {
+  content: "\e621";
+}
+
+.icon-order:before {
+  content: "\e623";
+}
+
+.icon-fold:before {
+  content: "\e62b";
+}
+
+.icon-expand:before {
+  content: "\e62c";
+}
+
+.icon-qq:before {
+  content: "\e65d";
+}
+
+.icon-tip-failed:before {
+  content: "\e64a";
+}
+
+.icon-tip-succeed:before {
+  content: "\e64b";
+}
+
+.icon-manage:before {
+  content: "\e64c";
+}
+
+.icon-search:before {
+  content: "\e64d";
+}
+
+.icon-database:before {
+  content: "\e64e";
+}
+
+.icon-setting:before {
+  content: "\e64f";
+}
+
+.icon-logo:before {
+  content: "\e650";
+}
+
+.icon-index:before {
+  content: "\e651";
+}
+
+.icon-wechat:before {
+  content: "\e654";
+}
+
+.icon-data:before {
+  content: "\e622";
+}

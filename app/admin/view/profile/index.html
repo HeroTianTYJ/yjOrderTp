@@ -1,0 +1,30 @@
+{extend name="../../common/view/public/base" /}
+
+{block name="title"}个人中心{/block}
+
+{block name="head"}<link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">{/block}
+
+{block name="main"}
+<div class="tool">
+  <div class="row1">
+    <h2>个人资料</h2>
+    <p class="clear"></p>
+  </div>
+</div>
+
+<form method="post" action="" class="form layui-form">
+  <table>
+    <tr><td>用 户 名：</td><td>{$One['name']}</td></tr>
+    <tr><td>身　　份：</td><td>{if condition="$One['id']==1"}创始人{elseif condition="$One['level']==1"/}超级管理员{elseif condition="$One['level']==2"/}普通管理员{/if}</td></tr>
+    <tr><td>所属权限组：</td><td>{:session(config('system.session_key_admin').'.manage_info.permit_group')}</td></tr>
+    <tr><td>订单权限：</td><td>{if condition="$One['id']==1"}创始人，不受限{elseif condition="$One['level']==1"/}超级管理员，不受限{elseif condition="$One['order_permit']==1"/}自己订单{elseif condition="$One['order_permit']==2"/}自己订单 + 前台订单{elseif condition="$One['order_permit']==3"/}所有订单{/if}</td></tr>
+    <tr><td>旧 密 码：</td><td><input type="password" name="old_pass" class="text"></td></tr>
+    <tr><td>新 密 码：</td><td><input type="password" name="pass" class="text"></td><td>留空则不修改</td></tr>
+    <tr><td>重复密码：</td><td><input type="password" name="repass" class="text"></td></tr>
+    <tr><td>微信绑定：</td><td><span class="wechat_yes {if condition="!$One['wechat_open_id']&&!$One['wechat_union_id']"}none{/if}">是 | <div class="check-box"><label><input type="checkbox" name="wechat_open_id" value="1">解除绑定</label></div></span><span class="wechat_no {if condition="$One['wechat_open_id']||$One['wechat_union_id']"}none{/if}">否 | <a href="javascript:" onclick="window.open('{:url('/'.parse_name(request()->controller()).'/wechat')}','wechat')">点此绑定</a></span></td></tr>
+    <tr><td>QQ绑定：</td><td><span class="qq_yes {if condition="!$One['qq_open_id']"}none{/if}">是 | <div class="check-box"><label><input type="checkbox" name="qq_open_id" value="1">解除绑定</label></div></span><span class="qq_no {if condition="$One['qq_open_id']"}none{/if}">否 | <a href="javascript:" onclick="window.open('{:url('/'.parse_name(request()->controller()).'/qq')}','qq')">点此绑定</a></span></td></tr>
+    <tr><td>注册时间：</td><td>{$One['date']|dateFormat}</td></tr>
+    <tr><td colspan="2" class="left"><input type="submit" value="确认修改" class="button"></td></tr>
+  </table>
+</form>
+{/block}

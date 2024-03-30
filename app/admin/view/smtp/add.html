@@ -1,0 +1,9 @@
+<form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
+  <table>
+    <tr><td>SMTP服务器：</td><td><input type="text" name="smtp" class="text"></td></tr>
+    <tr><td>SMTP端口：</td><td><input type="text" name="port" value="25" class="text"></td></tr>
+    <tr><td>发件人邮箱：</td><td><input type="text" name="email" class="text"></td></tr>
+    <tr><td>发件人密码：</td><td><input type="text" name="pass" class="text"></td></tr>
+    <tr><td>发件人名称：</td><td><input type="text" name="from_name" class="text"></td></tr>
+  </table>
+</form>
