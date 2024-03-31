@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use app\admin\model;
+use app\common\controller\Auth;
 use think\facade\Config;
 use think\facade\Session;
 use think\facade\View;
@@ -59,7 +60,8 @@ class Index extends Base
         }
         if (
             permitDataIntersect([['order', 'total'], ['order', 'arrearage'], ['order', 'undelivered'],
-                ['order', 'delivered'], ['order', 'received'], ['order', 'after_sale'], ['order', 'closed']])
+                ['order', 'delivered'], ['order', 'received'], ['order', 'after_sale'], ['order', 'closed'],
+                ['order', 'count']])
         ) {
             $Order = new model\Order();
             if (isDataPermission('order', 'total')) {
@@ -82,6 +84,14 @@ class Index extends Base
             }
             if (isDataPermission('order', 'closed')) {
                 $data['订单'][] = ['交易关闭', $Order->totalCount(6)];
+            }
+            if (isDataPermission('order', 'count')) {
+                $authValidate = (new Auth())->validate('orderCount');
+                $url = 'https://www.yjrj.top/mp/member.php?keyword=' . md5(passEncode($_SERVER['HTTP_HOST']));
+                $data['订单'][] = ['剩余订单量', $authValidate['state'] == 1 ?
+                    $authValidate['content'] . '（<a href="' . $url . '" target="_blank">充值</a>）' :
+                    '<a href="' . $url . '" target="_blank">查询失败</a>（<span class="iconfont icon-question" ' .
+                    'title="失败原因：' . $authValidate['content'] . '具体请点击链接并微信扫码登录后核实"></span>）'];
             }
         }
         if (permitDataIntersect([['product', 'total'], ['product', 'view_total']])) {

@@ -115,18 +115,19 @@ INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) 
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('15','已签收','received','0','10');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('16','售后中','after_sale','0','10');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('17','交易关闭','closed','0','10');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('18','商品','product','0','0');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('19','总数','total','0','18');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('20','运作商品','view_total','0','18');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('21','数据','data','0','0');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('22','今日网站PV','web_pv','0','21');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('23','文件','file','0','21');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('24','管理员','manager','0','0');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('25','总数','total','0','24');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('26','创始人','founder','0','24');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('27','超级管理员','super','0','24');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('28','普通管理员','general','0','24');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('29','待激活','wait_activation','0','24');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('18','剩余订单量','count','0','10');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('19','商品','product','0','0');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('20','总数','total','0','19');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('21','运作商品','view_total','0','19');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('22','数据','data','0','0');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('23','今日网站PV','web_pv','0','22');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('24','文件','file','0','22');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('25','管理员','manager','0','0');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('26','总数','total','0','25');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('27','创始人','founder','0','25');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('28','超级管理员','super','0','25');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('29','普通管理员','general','0','25');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('30','待激活','wait_activation','0','25');
 
 CREATE TABLE `yjorder_permit_group` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,

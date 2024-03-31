@@ -19,21 +19,22 @@ return [
         'delivered' => 14,
         'received' => 15,
         'after_sale' => 16,
-        'closed' => 17
+        'closed' => 17,
+        'count' => 18
     ],
     'product' => [
-        'total' => 19,
-        'view_total' => 20
+        'total' => 20,
+        'view_total' => 21
     ],
     'data' => [
-        'web_pv' => 22,
-        'file' => 23
+        'web_pv' => 23,
+        'file' => 24
     ],
     'manager' => [
-        'total' => 25,
-        'founder' => 26,
-        'super' => 27,
-        'general' => 28,
-        'wait_activation' => 29
+        'total' => 26,
+        'founder' => 27,
+        'super' => 28,
+        'general' => 29,
+        'wait_activation' => 30
     ]
 ];
