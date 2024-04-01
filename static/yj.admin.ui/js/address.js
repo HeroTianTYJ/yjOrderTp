@@ -28,7 +28,7 @@
   layui.use(['form'], function () {
     layui.form.on('select(province)', function (data) {
       $countySelect.html('<option value="">请选择区/县</option>');
-      $townSelect.html('<option value="">若不清楚乡镇/街道，可不选</option>');
+      $townSelect.html('<option value="">若不清楚，可不选</option>');
       $city.val('');
       $county.val('');
       $town.val('');
@@ -56,7 +56,7 @@
     });
 
     layui.form.on('select(city)', function (data) {
-      $townSelect.html('<option value="">若不清楚乡镇/街道，可不选</option>');
+      $townSelect.html('<option value="">若不清楚，可不选</option>');
       $county.val('');
       $town.val('');
       if (data.value === '') {
@@ -86,7 +86,7 @@
       $town.val('');
       if (data.value === '') {
         $county.val('');
-        $townSelect.html('<option value="">若不清楚乡镇/街道，可不选</option>');
+        $townSelect.html('<option value="">若不清楚，可不选</option>');
         layui.form.render();
       } else {
         $county.val(data.elem[data.elem.selectedIndex].text);
@@ -97,7 +97,7 @@
             parent_id: data.value
           }
         }).then(function (data) {
-          let html = '<option value="">若不清楚乡镇/街道，可不选</option>';
+          let html = '<option value="">若不清楚，可不选</option>';
           $.each(JSON.parse(data), function (index, value) {
             html += '<option value="' + value.id + '">' + value.name + '</option>';
           });

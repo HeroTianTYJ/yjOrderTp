@@ -113,7 +113,7 @@ class Template
                 '<select class="city" lay-filter="city"><option value="">请选择城市</option></select></span></dd><dd>' .
                 '<span class="left">区 / 县 ：</span><span class="right"><select class="county" lay-filter="county">' .
                 '<option value="">请选择区/县</option></select></span></dd><dd><span class="left">乡镇/街道：</span>' .
-                '<span class="right"><select class="town" lay-filter="town"><option value="">若不清楚乡镇/街道，可不选</option>' .
+                '<span class="right"><select class="town" lay-filter="town"><option value="">若不清楚，可不选</option>' .
                 '</select></span></dd></div>',
                 '<div class="district2"><dd><span class="left">省　　份：</span><span class="right">' .
                 '<input type="text" name="province2" class="text"></span></dd><dd><span class="left">城　　市：</span>' .
@@ -227,7 +227,7 @@ class Template
                 '<select class="province" lay-filter="province"><option value="">请选择省份</option></select></dd><dd>' .
                 '城　　市：<select class="city" lay-filter="city"><option value="">请选择城市</option></select></dd><dd>区 / 县 ：' .
                 '<select class="county" lay-filter="county"><option value="">请选择区/县</option></select></dd>' .
-                '<dd class="town-dd">乡镇/街道：<select class="town" lay-filter="town"><option value="">若不清楚乡镇/街道，可不选' .
+                '<dd class="town-dd">乡镇/街道：<select class="town" lay-filter="town"><option value="">若不清楚，可不选' .
                 '</option></select></dd></div>',
                 '<div class="district2"><dd>省　　份：<input type="text" name="province2" class="text"></dd><dd>城　　市：' .
                 '<input type="text" name="city2" class="text"></dd><dd>区 / 县 ：' .
