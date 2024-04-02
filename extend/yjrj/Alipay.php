@@ -11,10 +11,10 @@ class Alipay
 
     public function __construct($config)
     {
-        $this->appId = $config['app_id'] ?? trim($config['app_id']);
-        $this->merchantPrivateKey = $config['merchant_private_key'] ?? trim($config['merchant_private_key']);
-        $this->publicKey = $config['public_key'] ?? trim($config['public_key']);
-        $this->method = $config['method'] ?? trim($config['method']);
+        $this->appId = isset($config['app_id']) ? trim($config['app_id']) : '';
+        $this->merchantPrivateKey = isset($config['merchant_private_key']) ? trim($config['merchant_private_key']) : '';
+        $this->publicKey = isset($config['public_key']) ? trim($config['public_key']) : '';
+        $this->method = isset($config['method']) ? trim($config['method']) : '';
     }
 
     public function pay($product = [], $url = [])

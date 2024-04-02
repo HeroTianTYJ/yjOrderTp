@@ -22,8 +22,7 @@ class Index extends Base
             (new Alipay([
                 'app_id' => Config::get('system.alipay_app_id'),
                 'merchant_private_key' => Config::get('system.alipay_merchant_private_key'),
-                'public_key' => Config::get('system.alipay_public_key'),
-                'method' => in_array(device(), ['android', 'iphone']) ? 'wap' : 'page'
+                'public_key' => Config::get('system.alipay_public_key')
             ]))->check($_POST)
         ) {
             (new model\Order())->modify(
