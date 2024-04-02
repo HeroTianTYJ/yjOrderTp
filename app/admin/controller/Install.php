@@ -121,4 +121,9 @@ return [
     {
         return (new Auth())->install();
     }
+
+    public function openid()
+    {
+        return json_encode((new Auth())->openid());
+    }
 }

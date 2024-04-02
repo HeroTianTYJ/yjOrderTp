@@ -1,6 +1,11 @@
 {extend name="../../common/view/public/base2" /}
 
 {block name="title"}系统安装-第3步{/block}
+{block name="head"}<script type="text/javascript" src="static/library/jquery/jquery.js?{:staticCache()}"></script>
+<script type="text/javascript" src="static/admin/js/{:parse_name(request()->controller())}.js?{:staticCache()}"></script>
+<script type="text/javascript">
+let CONFIG = {'OPENID': '{:url("/".parse_name(request()->controller())."/openid")}'};
+</script>{/block}
 
 {block name="main"}
 <h1><span class="iconfont icon-logo"></span>{:config('system.web_name')}-系统安装-第3步</h1>
@@ -9,7 +14,7 @@
   <table>
     <tr><td colspan="2" class="title">系统信息</td></tr>
     <tr><td>OpenID：</td><td><input type="text" name="openid" class="text"></td></tr>
-    <tr class="tip"><td></td><td><a href="https://www.yjrj.top/mp/member.php?action=quick_add&soft_id2=1&code2={:md5(passEncode($_SERVER['HTTP_HOST'],$PassKey))}" target="_blank">点击此处</a>并通过微信扫码登录，登录后快速添加机器码，然后将页面上方以绿色字体显示的OpenID复制过来即可</td></tr>
+    <tr class="tip"><td></td><td><a href="https://www.yjrj.top/mp/member.php?action=quick_add&soft_id2=1&code2={:md5(passEncode($_SERVER['HTTP_HOST'],$PassKey))}" target="_blank">点击此处</a>并通过微信扫码登录，登录后快速添加机器码，添加后OpenID将自动填入，如果没有填入，手动将页面上方以绿色字体显示的OpenID复制过来即可</td></tr>
     <tr><td>网站名称：</td><td><input type="text" name="web_name" class="text" placeholder="显示在后台起始页和后台所有网页的标题中，中英文均可"></td></tr>
     <tr><td>后台入口：</td><td><input type="text" name="manager_enter" class="text" placeholder="英文、数字、英文+数字.php，如abc.php、abc123.php"></td></tr>
     <tr class="tip"><td></td><td>说明：默认为admin.php，但为了不让其他人猜解到后台入口，请设置一个不太为人知的入口（.php不能省略）。</td></tr>
