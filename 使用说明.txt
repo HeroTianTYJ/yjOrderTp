@@ -2,17 +2,17 @@
 
 将本系统源码上传到您的服务器或虚拟主机后，在浏览器中输入“http://您的域名/check.php”即可检测运行环境是否支持，检测页面暂不支持目录及文件权限的检测，还请您自行核实目录及文件权限是否为777。
 
-如果您的PHP版本低于8.0，建议您升级PHP版本，使运行环境更安全。如确实不能升级，请下载本系统的PHP7.4版支持包：https://pan.baidu.com/s/14NtpvNxD-S-_a7LZAjCU7g?pwd=5q9w，下载后，删除本系统根目录中的vendor目录及run.inc.php文件，并将支持包解压到本系统根目录，即可进行系统安装。
+如果您的PHP版本低于8.0，建议您升级PHP版本，使运行环境更安全。如确实不能升级，请下载本系统的PHP7.4版支持包：https://www.yjrj.top/3，下载后，删除本系统根目录中的vendor目录及run.inc.php文件，并将支持包解压到本系统根目录，即可进行系统安装。
 
 第一次使用本系统，在浏览器中输入“http://您的域名/admin.php/install”进行安装，根据提示输入相关信息即可完成安装。
 
-系统安装和使用的常见问题请见：https://mp.weixin.qq.com/s/k76lM_MxTFk-GZg8F71waQ
+系统安装和使用的常见问题请见：https://www.yjrj.top/4
 
-《昱杰订单管理系统》问题答疑群：https://mp.weixin.qq.com/s/EzjCjCqn8HxMcvIYp4i9dw
+《昱杰订单管理系统》问题答疑群：https://www.yjrj.top/5
 
 如果您是在源码网站下载的，可能更新不及时，您可通过我们的官方途径免费下载到本系统最新版源码。
-1、GitHub：https://github.com/HeroTianTYJ/yjOrderTp（进入GitHub页面，点击右侧的“Code”的绿色按钮，然后点击“Download ZIP”即可进行下载，国内用户下载速度可能会稍慢）；
-2、Gitee：https://gitee.com/tyj568/yjOrderTp（进入Gitee页面，点击右侧的“克隆/下载”的橙色按钮，然后点击“下载ZIP”，完成机器验证后即可进行下载，国内用户下载速度正常）。
+1、GitHub：https://www.yjrj.top/1（进入GitHub页面，点击右侧的“Code”的绿色按钮，然后点击“Download ZIP”即可进行下载，国内用户下载速度可能会稍慢）；
+2、Gitee：https://www.yjrj.top/2（进入Gitee页面，点击右侧的“克隆/下载”的橙色按钮，然后点击“下载ZIP”，完成机器验证后即可进行下载，国内用户下载速度正常）。
 
 本系统在线演示：https://www.yjrj.top/product/demo.html。
 
@@ -21,5 +21,5 @@ QQ：584167831
 微信：fengxinghuoying
 阿里旺旺：风形火影
 唯一官网：https://www.yjrj.top/
-官方唯一淘宝店：https://fxhy520.taobao.com/
-本系统技术支持购买链接：https://item.taobao.com/item.htm?id=42951107703
+官方唯一淘宝店：https://www.yjrj.top/8
+本系统技术支持购买链接：https://www.yjrj.top/9

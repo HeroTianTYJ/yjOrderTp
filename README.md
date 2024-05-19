@@ -8,9 +8,9 @@
 
 ## 一、常见问题解决途径
 
-系统安装和使用的常见问题请见：https://mp.weixin.qq.com/s/k76lM_MxTFk-GZg8F71waQ
+系统安装和使用的常见问题请见：https://www.yjrj.top/4
 
-《昱杰订单管理系统》问题答疑群：https://mp.weixin.qq.com/s/EzjCjCqn8HxMcvIYp4i9dw
+《昱杰订单管理系统》问题答疑群：https://www.yjrj.top/5
 
 ## 二、在线演示
 
@@ -24,9 +24,9 @@ https://www.yjrj.top/version/index.html?product_id=2
 
 我们提供了两个官方途径获取本系统的最新版源码。
 
-1、GitHub：https://github.com/HeroTianTYJ/yjOrderTp （进入GitHub页面，点击右侧的“Code”的绿色按钮，然后点击“Download ZIP”即可进行下载，国内用户下载速度可能会稍慢）；
+1、GitHub：https://www.yjrj.top/1 （进入GitHub页面，点击右侧的“Code”的绿色按钮，然后点击“Download ZIP”即可进行下载，国内用户下载速度可能会稍慢）；
 
-2、Gitee：https://gitee.com/tyj568/yjOrderTp （进入Gitee页面，点击右侧的“克隆/下载”的橙色按钮，然后点击“下载ZIP”，完成机器验证后即可进行下载，国内用户下载速度正常）。
+2、Gitee：https://www.yjrj.top/2 （进入Gitee页面，点击右侧的“克隆/下载”的橙色按钮，然后点击“下载ZIP”，完成机器验证后即可进行下载，国内用户下载速度正常）。
 
 另外站长之家、A5下载等源码平台也收录了本系统的源码，但可能会收录不及时，因此我们不能保证源码平台中的源码为最新版。
 
@@ -34,7 +34,7 @@ https://www.yjrj.top/version/index.html?product_id=2
 
 将本系统源码上传到您的服务器或虚拟主机后，在浏览器中输入“`http://您的域名/check.php`”即可检测运行环境是否支持，检测页面暂不支持目录及文件权限的检测，还请您自行核实目录及文件权限是否为777。
 
-如果您的PHP版本低于8.0，建议您升级PHP版本，使运行环境更安全。如确实不能升级，请下载本系统的PHP7.4版支持包：https://pan.baidu.com/s/14NtpvNxD-S-_a7LZAjCU7g?pwd=5q9w ，下载后，删除本系统根目录中的vendor目录及run.inc.php文件，并将支持包解压到本系统根目录，即可进行系统安装。
+如果您的PHP版本低于8.0，建议您升级PHP版本，使运行环境更安全。如确实不能升级，请下载本系统的PHP7.4版支持包：https://www.yjrj.top/3 ，下载后，删除本系统根目录中的vendor目录及run.inc.php文件，并将支持包解压到本系统根目录，即可进行系统安装。
 
 第一次使用本系统，在浏览器中输入“`http://您的域名/admin.php/install`”进行安装，根据提示输入相关信息即可完成安装。
 
@@ -42,11 +42,11 @@ https://www.yjrj.top/version/index.html?product_id=2
 
 本系统可以作为学习和研究之用，您无需支付任何费用；但是如果用来商用，您产生的订单，我们将收取一定的服务费，仅在后台添加订单和前台下单时收取，修改和删除订单，不会影响订单额度变化，暂定0.5元/每单（实际费用请以付款页面为准）。
 
-关于《昱杰订单管理系统（ThinkPHP版）》业务调整的几点说明：https://mp.weixin.qq.com/s/0JZwTMr7GkGKQ8XZfW2fFQ
+关于《昱杰订单管理系统（ThinkPHP版）》业务调整的几点说明：https://www.yjrj.top/6
 
 这是我们做的唯一限制，为了这一限制的有效性，我们对系统源码中的两个文件做了加密处理，其它源码完全开源，基本上不会影响您进行二次开发。希望这一限制不会给您带来不便，并希望得到您的理解。
 
-关于《昱杰订单管理系统（ThinkPHP版）》新版本用户信息收集的说明：https://mp.weixin.qq.com/s/a2v2KOhnwHSgvUU1-b35dQ
+关于《昱杰订单管理系统（ThinkPHP版）》新版本用户信息收集的说明：https://www.yjrj.top/7
 
 ## 五、增值业务
 

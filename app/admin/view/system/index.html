@@ -58,19 +58,19 @@ CONFIG['UPLOAD_SERVER'] = '{:url("/common/qqwry")}';
     <tr><td>商户密钥：</td><td><input type="text" name="wechat_pay_key" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_pay_key')}{/if}" class="text"></td><td></td></tr>
     <tr><td>证书序列号：</td><td><input type="text" name="wechat_pay_cert_serial_number" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_pay_cert_serial_number')}{/if}" class="text"></td><td></td></tr>
     <tr><td>证书私钥：</td><td><textarea name="wechat_pay_cert_private_key" class="textarea">{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_pay_cert_private_key')}{/if}</textarea></td><td></td></tr>
-    <tr><td></td><td class="tip" colspan="2">如果您还没有签约，请先签约，<a href="https://kf.qq.com/faq/210423UrIRB7210423by6fQn.html" target="_blank">点击此处</a>查看签约教程</td></tr>
-    <tr><td></td><td class="tip" colspan="2">1、如果已完成签约，请<a href="https://pay.weixin.qq.com/index.php/extend/product/lists?tid=3" target="_blank">点击此处</a>进入到微信支付商户平台的产品中心，开通H5支付业务，此举是为了实现移动端浏览器（非微信端）支持微信支付；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">如果您还没有签约，请先签约，<a href="https://www.yjrj.top/14" target="_blank">点击此处</a>查看签约教程</td></tr>
+    <tr><td></td><td class="tip" colspan="2">1、如果已完成签约，请<a href="https://www.yjrj.top/15" target="_blank">点击此处</a>进入到微信支付商户平台的产品中心，开通H5支付业务，此举是为了实现移动端浏览器（非微信端）支持微信支付；</td></tr>
     <tr><td></td><td class="tip" colspan="2">2、以上5个字段的获取方法：</td></tr>
     <tr><td></td><td class="tip" colspan="2">2-1、请登录开通了微信支付的微信公众号，点击“开发 - 基本配置”，即可获取到开发者ID（AppID）和开发者密码（AppSecret）；</td></tr>
     <tr><td></td><td class="tip" colspan="2">2-2、点击微信公众平台中的“微信支付”，即可获取到商户号；</td></tr>
-    <tr><td></td><td class="tip" colspan="2">2-3、<a href="https://pay.weixin.qq.com/index.php/core/cert/api_cert" target="_blank">点击此处</a>设置商户的APIv3密钥；</td></tr>
-    <tr><td></td><td class="tip" colspan="2">2-4、<a href="https://pay.weixin.qq.com/index.php/core/cert/api_cert#/api-cert-manage" target="_blank">点击此处</a>进入到微信商户平台的API证书管理页面，点击“申请新证书”按钮，完成证书申请，即可获取到证书序列号及证书私钥；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">2-3、<a href="https://www.yjrj.top/16" target="_blank">点击此处</a>设置商户的APIv3密钥；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">2-4、<a href="https://www.yjrj.top/17" target="_blank">点击此处</a>进入到微信商户平台的API证书管理页面，点击“申请新证书”按钮，完成证书申请，即可获取到证书序列号及证书私钥；</td></tr>
     <tr><td></td><td class="tip" colspan="2">3-1、登录微信公众平台，然后点击“设置 - 公众号设置 - 功能设置”，将“{:request()->server('HTTP_HOST')}”分别填入“JS接口安全域名”和“网页授权域名”设置项中，保存即可；</td></tr>
     <tr><td></td><td class="tip" colspan="2">3-2、如需验证网站所属权，请<a href="{:url('/validate_file/index')}">点击此处</a>；</td></tr>
-    <tr><td></td><td class="tip" colspan="2">4、<a href="https://pay.weixin.qq.com/index.php/extend/pay_setting" target="_blank">点击此处</a>登录到微信支付商户平台的开发配置中，在“支付授权目录”设置项中添加{:config('url.web1')}{:config('system.index_php')}pay/wechatPay/order_id/。</td></tr>
+    <tr><td></td><td class="tip" colspan="2">4、<a href="https://www.yjrj.top/18" target="_blank">点击此处</a>登录到微信支付商户平台的开发配置中，在“支付授权目录”设置项中添加{:config('url.web1')}{:config('system.index_php')}pay/wechatPay/order_id/。</td></tr>
   </table>
   <table class="column none">
-    <tr><td class="left tip" colspan="3" style="word-break:break-all;"><a href="https://wiki.connect.qq.com/%e6%88%90%e4%b8%ba%e5%bc%80%e5%8f%91%e8%80%85" target="_blank">申请教程</a>，申请时，请将网站地址填写为：<span class="green">{:config('url.web3')}</span>，网站回调地址填写为：<span class="green">{:config('url.web1')}callback.php/admin/qqLogin.html;{:config('url.web1')}callback.php/admin/qqBind.html</span>。申请通过后，查看应用详情，将获取到的APP ID和APP Key填入下方表单中。</td></tr>
+    <tr><td class="left tip" colspan="3" style="word-break:break-all;"><a href="https://www.yjrj.top/19" target="_blank">申请教程</a>，申请时，请将网站地址填写为：<span class="green">{:config('url.web3')}</span>，网站回调地址填写为：<span class="green">{:config('url.web1')}callback.php/admin/qqLogin.html;{:config('url.web1')}callback.php/admin/qqBind.html</span>。申请通过后，查看应用详情，将获取到的APP ID和APP Key填入下方表单中。</td></tr>
     <tr><td>APP ID：</td><td><input type="text" name="qq_app_id" value="{:config('system.qq_app_id')}" class="text"></td><td></td></tr>
     <tr><td>APP Key：</td><td><input type="text" name="qq_app_key" value="{:config('system.qq_app_key')}" class="text"></td><td></td></tr>
   </table>
@@ -88,7 +88,7 @@ CONFIG['UPLOAD_SERVER'] = '{:url("/common/qqwry")}';
     <tr><td>AppID：</td><td><input type="text" name="wechat_open_app_id" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_open_app_id')}{/if}" class="text"></td><td></td></tr>
     <tr><td>AppSecret：</td><td><input type="text" name="wechat_open_app_secret" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_open_app_secret')}{/if}" class="text"></td><td></td></tr>
     <tr><td></td><td class="tip" colspan="2">设置微信开放平台是为了用户使用多端（PC端、微信端）登录的身份信息保持一致，设置方法如下：</td></tr>
-    <tr><td></td><td class="tip" colspan="2">1、如果您还没有注册微信开放平台帐号，请先<a href="https://open.weixin.qq.com/cgi-bin/readtemplate?t=regist/regist_tmpl" target="_blank">点击此处</a>注册帐号并完成资质认证；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">1、如果您还没有注册微信开放平台帐号，请先<a href="https://www.yjrj.top/20" target="_blank">点击此处</a>注册帐号并完成资质认证；</td></tr>
     <tr><td></td><td class="tip" colspan="2">2、登录微信开放平台的管理中心；</td></tr>
     <tr><td></td><td class="tip" colspan="2">3、关联您在“微信公众平台”栏目下设置的微信公众号；</td></tr>
     <tr><td></td><td class="tip" colspan="2">4、创建网站应用，官网域名填写为：{:request()->server('HTTP_HOST')}，点击“下一步”后，将“授权回调域”也设置为：{:request()->server('HTTP_HOST')}；</td></tr>

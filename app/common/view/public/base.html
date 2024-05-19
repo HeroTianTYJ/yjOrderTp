@@ -35,7 +35,7 @@ let CONFIG = {
 
 <body class="big">
 {if condition="config('app.demo')"}
-<div class="guide"><a href="https://github.com/HeroTianTYJ/yjOrderTp" target="_blank">下载本系统源码</a> <a href="https://www.yjrj.top/mall/index.html" target="_blank">功能更强大的《昱杰商城系统》</a> <a href="https://www.yjrj.top/web/index.html" target="_blank">《昱杰单页制作系统》，可视化制作产品单页</a></div>
+<div class="guide"><a href="https://www.yjrj.top/1" target="_blank">下载本系统源码</a> <a href="https://www.yjrj.top/mall/index.html" target="_blank">功能更强大的《昱杰商城系统》</a> <a href="https://www.yjrj.top/web/index.html" target="_blank">《昱杰单页制作系统》，可视化制作产品单页</a></div>
 {/if}
 
 <div class="left">
@@ -66,7 +66,7 @@ let CONFIG = {
 <div class="top">
   <h1>{block name="title"}{:config('system.web_name')}{/block}</h1>
 
-  <div class="user">{:session(config('system.session_key_'.app('http')->getName()).'.manage_info.name')}（{:session(config('system.session_key_admin').'.manage_info.permit_group')}） [<a href="{:url('/profile/index')}">个人资料</a>] [<a href="{:url('/profile/loginRecord')}">登录记录</a>] [<a href="https://item.taobao.com/item.htm?id=531038056831" target="_blank">赞助作者</a>] [<a href="{:url('/login/logout')}">退出</a>]</div>
+  <div class="user">{:session(config('system.session_key_'.app('http')->getName()).'.manage_info.name')}（{:session(config('system.session_key_admin').'.manage_info.permit_group')}） [<a href="{:url('/profile/index')}">个人资料</a>] [<a href="{:url('/profile/loginRecord')}">登录记录</a>] [<a href="https://www.yjrj.top/21" target="_blank">赞助作者</a>] [<a href="{:url('/login/logout')}">退出</a>]</div>
 </div>
 
 <div class="main">
