@@ -47,7 +47,7 @@ CONFIG['FILE_CONTROLLER'] = '{:url("/file/index")}';
   <h3>温馨提示 <span class="iconfont icon-fold"></span></h3>
   <ul>
     <li style="word-break:break-all;">1、在需要统计的页面引入&lt;script type="text/javascript" src="{:config('url.web1')}static/index/js/visit.js?{:staticCache()}"&gt;&lt;/script&gt;即可进行统计；</li>
-    <li>2、为了节省数据库空间，系统会每天自动将统计的数据导出到文件，请到<a href="{:url('/output/index')}">导出的数据</a>模块中进行下载，您也可以点击“导出并清空”按钮自行导出数据{if condition="isPermission('js')"}；{else/}。{/if}</li>
+    <li>2、为了节省数据库空间，系统会每天自动将统计的数据导出到文件，请到<a href="{:url('/file/index')}">文件管理</a>模块中进行下载，您也可以点击“导出并清空”按钮自行导出数据{if condition="isPermission('js')"}；{else/}。{/if}</li>
     {if condition="isPermission('js')"}<li>3、如果发生统计不到的情况，请尝试<a href="javascript:" class="js">点击此处</a>更新visit.js文件。</li>{/if}
   </ul>
 
