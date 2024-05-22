@@ -56,7 +56,7 @@ $(function () {
   });
   // 数字调节器
   $('div.number').number({
-    width: 84,
+    width: 86,
     top: 11,
     min: 0
   });
