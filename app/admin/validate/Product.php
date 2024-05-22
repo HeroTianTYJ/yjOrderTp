@@ -9,7 +9,7 @@ class Product extends Base
     protected $rule = [
         'name' => 'require|max:30',
         'product_sort_id' => 'require',
-        'price' => 'priceRequire',
+        'price' => 'require|price',
         'color' => 'max:20',
     ];
     protected $message = [

@@ -15,9 +15,4 @@ class Base extends Validate
     {
         return !!preg_match('/^([1-9]\d*|0)(\.\d{1,2})?$/', $value);
     }
-
-    public function priceRequire($value = 0)
-    {
-        return $value && $this->price($value);
-    }
 }
