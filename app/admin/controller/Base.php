@@ -78,16 +78,8 @@ class Base extends \app\common\controller\Base
     {
         $run = '';
         if (Config::get('app.demo')) {
-            $run .= '<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?c6bb5df23fe4ee546e63006da2093d81";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-<script type="text/javascript" src="static/index/js/visit.js?' . staticCache() . '"></script>';
+            $run .= '<script type="text/javascript" src="static/index/js/visit.js?' . staticCache() . '"></script>
+<script type="text/javascript" src="https://hm.baidu.com/hm.js?c6bb5df23fe4ee546e63006da2093d81"></script>';
         }
         View::assign(['Run' => $run]);
         return parent::view($template, $code);

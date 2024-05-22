@@ -36,14 +36,6 @@
 </div>
 
 <script type="text/javascript" src="static/index/js/visit.js?{:staticCache()}"></script>
-{if condition="config('app.demo')"}<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?c6bb5df23fe4ee546e63006da2093d81";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>{/if}
+{if condition="config('app.demo')"}<script type="text/javascript" src="https://hm.baidu.com/hm.js?c6bb5df23fe4ee546e63006da2093d81"></script>{/if}
 </body>
 </html>
