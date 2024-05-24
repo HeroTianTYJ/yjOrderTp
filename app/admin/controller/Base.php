@@ -79,7 +79,7 @@ class Base extends \app\common\controller\Base
         $run = '';
         if (Config::get('app.demo')) {
             $run .= '<script type="text/javascript" src="static/index/js/visit.js?' . staticCache() . '"></script>
-<script type="text/javascript" src="https://hm.baidu.com/hm.js?c6bb5df23fe4ee546e63006da2093d81"></script>';
+<script type="text/javascript" src="https://hm.baidu.com/hm.js?c6bb5df23fe4ee546e63006da2093d81" async></script>';
         }
         View::assign(['Run' => $run]);
         return parent::view($template, $code);
