@@ -140,7 +140,7 @@ div.left{
 	font-size: 14px;
 }
 .left ul.navigator li .child{
-	width: 120px;
+	width: 137px;
 	margin: 0 14px 0 92px;
 	padding: 8px;
 	background: #fff;
@@ -149,6 +149,7 @@ div.left{
 	top: 54px;
 	display: none;
 	border-right: 1px solid #dcdcdc;
+	box-sizing: border-box;
 }
 .left ul.navigator li.active .child{
 	display: block;
@@ -204,6 +205,7 @@ div.top{
 	position: relative;
 	margin: 15px 15px 0 151px;
 	background: #fff;
+	box-sizing: border-box;
 }
 .main.no-child-navigator{
 	margin: 15px 15px 0 15px;
@@ -487,7 +489,6 @@ ul.tab li.active a{
 
 .right{
 	width: 200px;
-	height: 500px;
 	float: left;
 	background: #fff;
 	padding: 20px 16px;

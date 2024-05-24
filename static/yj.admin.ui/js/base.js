@@ -40,12 +40,12 @@ function screenAuto () {
   let $main = $('.main');
   let $window = $(window);
   let $navigator = $('.left ul.navigator');
-  $navigator.height($main.height() + 15);
-  $navigator.find('.child').height($main.height() - 1);
   $main.css({minHeight: $window.height() - 69});
   $main.find('.list').height($window.height() - $('.top').height() - $main.find('.tool').height() - $main.find('.pagination').height() - 32);
   boxShadow();
-  $('.right').css({minHeight: $window.height() - 54});
+  $navigator.css({minHeight: $main.height() + 15});
+  $navigator.find('.child').css({minHeight: $navigator.height()});
+  $('.right').css({minHeight: $navigator.height()});
 }
 
 // 列表阴影
