@@ -180,7 +180,7 @@ class Base extends \app\common\controller\Base
                 $navigator['setting']['two']['Smtp/index'] = 'SMTP服务器';
             }
         }
-        if (permitIntersect(['Database'])) {
+        if (permitIntersect(['Database', 'DatabaseBackup'])) {
             $navigator['database']['one'] = '数据库';
             if (isPermission('index', 'Database')) {
                 $navigator['database']['two']['Database/index'] = '数据表状态';
