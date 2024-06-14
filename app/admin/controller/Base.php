@@ -136,7 +136,7 @@ class Base extends \app\common\controller\Base
         $navigator['web'] = [
             'one' => '单页',
             'two' => [],
-            'url' => 'https://www.yjrj.top/web.php'
+            'url' => 'https://www.yjrj.cn/web.php'
         ];
         if (permitIntersect(['Visit', 'File', 'District'])) {
             $navigator['data']['one'] = '数据';

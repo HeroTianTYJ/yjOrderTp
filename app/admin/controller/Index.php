@@ -87,7 +87,7 @@ class Index extends Base
             }
             if (isDataPermission('order', 'count')) {
                 $authValidate = (new Auth())->validate('orderCount');
-                $url = 'https://www.yjrj.top/mp/member.php?keyword=' . md5(passEncode($_SERVER['HTTP_HOST']));
+                $url = 'https://www.yjrj.cn/mp/member.php?keyword=' . md5(passEncode($_SERVER['HTTP_HOST']));
                 $data['订单'][] = ['剩余订单量', $authValidate['state'] == 1 ?
                     $authValidate['content'] . '（<a href="' . $url . '" target="_blank">充值</a>）' :
                     '<a href="' . $url . '" target="_blank">查询失败</a>（<span class="iconfont icon-question" ' .

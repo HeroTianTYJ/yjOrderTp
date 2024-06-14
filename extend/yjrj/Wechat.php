@@ -70,7 +70,7 @@ class Wechat
 
     private function getAccessToken2()
     {
-        if ($_SERVER['HTTP_HOST'] == 'www.yjrj.top' || $_SERVER['HTTP_HOST'] == 'www.yvjie.cn') {
+        if ($_SERVER['HTTP_HOST'] == 'www.yjrj.top' || $_SERVER['HTTP_HOST'] == 'www.yjrj.cn') {
             $file = ROOT_DIR . '/../../../common/' . $this->appId . '.php';
             $config = include($file);
             if (isset($config['cache'], $config['token']) && time() - $config['cache'] < 5400 && $config['token']) {
