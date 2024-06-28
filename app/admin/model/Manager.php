@@ -150,7 +150,7 @@ class Manager extends Model
         $validate = new validate();
         if ($validate->remove('admin_mail', true)->check($data)) {
             if ($this->repeat()) {
-                return '此帐号已存在！';
+                return '此账号已存在！';
             }
             $data['pass'] = passEncode(Request::post('pass'));
             unset($data['repass']);
@@ -217,7 +217,7 @@ class Manager extends Model
         $validate = new validate();
         if ($validate->only($scene)->check($data)) {
             if ($this->repeat(true)) {
-                return '此帐号已存在！';
+                return '此账号已存在！';
             }
             if (Request::post('pass')) {
                 $data['pass'] = passEncode(Request::post('pass'));

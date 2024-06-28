@@ -52,7 +52,7 @@ class Admin extends Login
                 Session::set(Config::get('system.session_key_admin') . '.login_info', $loginInfo);
                 return $this->succeed(
                     Config::get('url.web1') . Config::get('system.manager_enter'),
-                    '您的微信号尚未绑定管理员帐号，即将跳转到绑定页面。。。'
+                    '您的微信号尚未绑定管理员账号，即将跳转到绑定页面。。。'
                 );
             }
         } else {
@@ -125,7 +125,7 @@ class Admin extends Login
                 );
                 return $this->succeed(
                     Config::get('url.web1') . Config::get('system.manager_enter'),
-                    '您的QQ号尚未绑定管理员帐号，即将跳转到绑定页面。。。'
+                    '您的QQ号尚未绑定管理员账号，即将跳转到绑定页面。。。'
                 );
             }
         } else {

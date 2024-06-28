@@ -16,7 +16,7 @@ class Manager extends Base
         'order_permit' => 'require|between:1,3',
     ];
     protected $message = [
-        'name' => '帐号不得为空或大于20位！',
+        'name' => '账号不得为空或大于20位！',
         'pass' => '密码不得为空！',
         'repass' => '两次输入的密码不相同！',
         'admin_mail' => '管理员邮箱不得为空！',

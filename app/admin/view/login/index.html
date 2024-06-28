@@ -23,12 +23,12 @@
   <h1><span class="iconfont icon-logo"></span>{:config('system.web_name')}</h1>
 
   <dl>
-    <dt>{if condition="session(config('system.session_key_admin').'.login_info')"}帐号绑定{else/}帐号密码登录{/if}</dt>
+    <dt>{if condition="session(config('system.session_key_admin').'.login_info')"}账号绑定{else/}账号密码登录{/if}</dt>
     <dd><input type="text" name="name" {if condition="config('app.demo')"}value="风形火影"{/if} class="text"></dd>
     <dd><input type="password" name="pass" {if condition="config('app.demo')"}value="tyj"{/if} class="text"></dd>
     <dd class="tip red"></dd>
     <dd style="text-align:right;"><a href="{:url('/reset/index')}">重置密码</a></dd>
-    <dd class="submit"><input type="submit" value="{if condition="session(config('system.session_key_admin').'.login_info')"}帐号绑定{else/}登录{/if}"></dd>
+    <dd class="submit"><input type="submit" value="{if condition="session(config('system.session_key_admin').'.login_info')"}账号绑定{else/}登录{/if}"></dd>
     {if condition="!session(config('system.session_key_admin').'.login_info')"}
     <dd class="third">{:loginLink()}</dd>
     {/if}

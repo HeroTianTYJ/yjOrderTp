@@ -16,7 +16,7 @@ class Reset extends Base
             if (is_numeric($managerModify)) {
                 return $this->succeed(
                     '',
-                    '创始人登录密码重置成功，登录帐号为：' . $Manager->one(1)['name'] . '，<a href="' . Route::buildUrl('/login/index') .
+                    '创始人登录密码重置成功，登录账号为：' . $Manager->one(1)['name'] . '，<a href="' . Route::buildUrl('/login/index') .
                     '">点击此处</a>跳转到后台登录页！',
                     0
                 );

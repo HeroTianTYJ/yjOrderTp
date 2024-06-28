@@ -88,7 +88,7 @@ CONFIG['UPLOAD_SERVER'] = '{:url("/common/qqwry")}';
     <tr><td>AppID：</td><td><input type="text" name="wechat_open_app_id" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_open_app_id')}{/if}" class="text"></td><td></td></tr>
     <tr><td>AppSecret：</td><td><input type="text" name="wechat_open_app_secret" value="{if condition="config('app.demo')"}演示站，不能修改{else/}{:config('system.wechat_open_app_secret')}{/if}" class="text"></td><td></td></tr>
     <tr><td></td><td class="tip" colspan="2">设置微信开放平台是为了用户使用多端（PC端、微信端）登录的身份信息保持一致，设置方法如下：</td></tr>
-    <tr><td></td><td class="tip" colspan="2">1、如果您还没有注册微信开放平台帐号，请先<a href="https://www.yjrj.cn/20" target="_blank">点击此处</a>注册帐号并完成资质认证；</td></tr>
+    <tr><td></td><td class="tip" colspan="2">1、如果您还没有注册微信开放平台账号，请先<a href="https://www.yjrj.cn/20" target="_blank">点击此处</a>注册账号并完成资质认证；</td></tr>
     <tr><td></td><td class="tip" colspan="2">2、登录微信开放平台的管理中心；</td></tr>
     <tr><td></td><td class="tip" colspan="2">3、关联您在“微信公众平台”栏目下设置的微信公众号；</td></tr>
     <tr><td></td><td class="tip" colspan="2">4、创建网站应用，官网域名填写为：{:request()->server('HTTP_HOST')}，点击“下一步”后，将“授权回调域”也设置为：{:request()->server('HTTP_HOST')}；</td></tr>

@@ -19,7 +19,7 @@ class Login extends Base
             $managerLogin = (new model\Manager())->login();
             if (is_object($managerLogin)) {
                 if (passEncode(Request::post('pass')) != $managerLogin['pass']) {
-                    return showTip('帐号或密码不正确！', 0);
+                    return showTip('账号或密码不正确！', 0);
                 }
                 $loginDo = $this->loginDo($managerLogin);
                 if ($loginDo != '1') {
@@ -29,7 +29,7 @@ class Login extends Base
             } elseif (is_string($managerLogin)) {
                 return showTip($managerLogin, 0);
             } else {
-                return showTip('帐号或密码不正确！', 0);
+                return showTip('账号或密码不正确！', 0);
             }
         }
         return $this->view();
