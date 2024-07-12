@@ -47,7 +47,6 @@ $(function () {
   // 商品单分类
   let $selectProductDefault1 = $('select[name=product_default1]');
   let $productIds1 = $('input[name=product_ids1]');
-  let $productSortIdOption = $('select[name=product_sort_id] option:selected');
   let $productDefault = $('.product_default');
   product();
   layui.use(['form'], function () {
@@ -88,7 +87,7 @@ $(function () {
       type: 'POST',
       url: CONFIG['AJAX'],
       data: {
-        product_sort_id: $productSortIdOption.val(),
+        product_sort_id: $('select[name=product_sort_id] option:selected').val(),
         product_ids1: $productIds1.val()
       },
       success: function (data) {
