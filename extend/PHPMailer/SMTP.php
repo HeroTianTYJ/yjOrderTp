@@ -423,7 +423,7 @@ class SMTP
         restore_error_handler();
     }
 
-    private function getError()
+    public function getError()
     {
         return $this->error;
     }
