@@ -1,181 +1,182 @@
 @charset "utf-8";
-*{
-	margin:0;
-	padding:0;
-	outline:none;
+* {
+    margin: 0;
+    padding: 0;
+    outline: none;
 }
-.order{
-	margin:0 auto;
+.order {
+    margin: 0 auto;
 }
-.order div.left{
-	width:614px;
-	float:left;
+.order div.left {
+    width: 614px;
+    float: left;
 }
-.order div.left dl{
-	width:525px;
-	margin:0 auto;
-	padding:15px 0;
+.order div.left dl {
+    width: 525px;
+    margin: 0 auto;
+    padding: 15px 0;
 }
-.order div.left dl dd{
-	line-height:30px;
-	clear:both;
+.order div.left dl dd {
+    line-height: 30px;
+    clear: both;
 }
-.order div.left dl dd.pro span.protext,.order div.left dl dd.pro span.prolist{
-	float:left;
+.order div.left dl dd.pro span.protext, .order div.left dl dd.pro span.prolist {
+    float: left;
 }
-.order div.left dl dd.pro span.prolist{
-	width:445px;
+.order div.left dl dd.pro span.prolist {
+    width: 445px;
 }
-.order div.left dl dd.pro label{
-	display:inline-block;
+.order div.left dl dd.pro label {
+    display: inline-block;
 }
-.order div.left dl dd input.text{
-	width:445px;
-	height:19px;
-	border:1px solid #666;
-	padding: 0 15px;
-	box-sizing: border-box;
+.order div.left dl dd input.text {
+    width: 445px;
+    height: 19px;
+    border: 1px solid #666;
+    padding: 0 15px;
+    box-sizing: border-box;
 }
-.order div.left dl dd input.text2{
-	width:120px;
-	height:19px;
-	border:1px solid #666;
-	padding: 0 15px;
-	box-sizing: border-box;
+.order div.left dl dd input.text2 {
+    width: 120px;
+    height: 19px;
+    border: 1px solid #666;
+    padding: 0 15px;
+    box-sizing: border-box;
 }
-.order div.left dl dd.textarea{
-	height:87px;
-	margin:5px 0;
+.order div.left dl dd.textarea {
+    height: 87px;
+    margin: 5px 0;
 }
-.order div.left dl dd.textarea span{
-	vertical-align:top;
+.order div.left dl dd.textarea span {
+    vertical-align: top;
 }
-.order div.left dl dd.textarea textarea{
-	width:445px;
-	height:85px;
-	border:1px solid #666;
-	resize:none;
-	padding: 10px 15px;
-	box-sizing: border-box;
+.order div.left dl dd.textarea textarea {
+    width: 445px;
+    height: 85px;
+    border: 1px solid #666;
+    resize: none;
+    padding: 10px 15px;
+    box-sizing: border-box;
 }
-.order div.left dl dd.submit{
-	text-align:center;
-	margin:10px 0;
+.order div.left dl dd.submit {
+    text-align: center;
+    margin: 10px 0;
 }
-.order div.left dl dd.submit input{
-	width:200px;
-	height:40px;
-	border:none;
-	cursor:pointer;
-	color:#FFF;
-	font-weight:bold;
-	font:120% Microsoft YaHei, 微软雅黑, SimSun, 宋体, Arial, Verdana;
+.order div.left dl dd.submit input {
+    width: 200px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    color: #FFF;
+    font-weight: bold;
+    font: 120% Microsoft YaHei, 微软雅黑, SimSun, 宋体, Arial, Verdana;
 }
-.order div.left dl dd.sms_verify input.button{
-	border:none;
-	cursor:pointer;
-	color:#FFF;
-	font-weight:bold;
-	font:100% Microsoft YaHei, 微软雅黑, SimSun, 宋体, Arial, Verdana;
+.order div.left dl dd.sms_verify input.button {
+    padding: 0 10px;
+    border: none;
+    cursor: pointer;
+    color: #FFF;
+    font-weight: bold;
+    font: 100% Microsoft YaHei, 微软雅黑, SimSun, 宋体, Arial, Verdana;
 }
-.order div.left dl dd.submit img{
-	cursor:pointer;
+.order div.left dl dd.submit img {
+    cursor: pointer;
 }
-.order dl dd .form-select{
-	margin:0 0 5px 0;
-	width:445px;
+.order .layui-form dl dd .form-select {
+    margin: 0 0 5px 0;
+    width: 445px;
 }
-.order dl dd dl.anim{
-	width:445px;
-	margin:0;
-	top:21px !important;
-	padding:5px 0 !important;
+.order dl dd dl.anim {
+    width: 445px;
+    margin: 0;
+    top: 21px !important;
+    padding: 5px 0 !important;
 }
-.order dl dd.town-dd .form-select,
-.order dl dd.town-dd dl.anim{
-	width:437px;
+.order .layui-form dl dd.town-dd .form-select,
+.order .layui-form dl dd.town-dd dl.anim {
+    width: 437px;
 }
-.order dl dd .form-select-up dl.anim{
-	top:auto !important;
-	bottom:17px !important;
+.order .layui-form dl dd .form-select-up dl.anim {
+    top: auto !important;
+    bottom: 17px !important;
 }
-.order .layui-form dl dd .form-select dl dd.this{
-	color: #FFF !important;
+.order .layui-form dl dd .form-select dl dd.this {
+    color: #FFF !important;
 }
-.order .layui-form dl dd .form-select dl dd.this:after{
-	content: '';
+.order .layui-form dl dd .form-select dl dd.this:after {
+    content: '';
 }
-.order dl dd .form-select dl dd{
-	line-height:21px !important;
+.order .layui-form dl dd .form-select dl dd {
+    line-height: 21px !important;
 }
-.order dl dd .form-select .input,.order dl dd .form-select .select{
-	height:19px !important;
-	line-height:19px !important;
-	border-color:#666 !important;
+.order .layui-form dl dd .form-select .input, .order .layui-form dl dd .form-select .select {
+    height: 19px !important;
+    line-height: 19px !important;
+    border-color: #666 !important;
 }
-.order div.left dl dd.captcha{
-	height:auto;
+.order div.left dl dd.captcha {
+    height: auto;
 }
-.order div.left dl dd.captcha span{
-	vertical-align:top;
+.order div.left dl dd.captcha span {
+    vertical-align: top;
 }
-.order div.left dl dd.captcha img{
-	cursor:pointer;
+.order div.left dl dd.captcha img {
+    cursor: pointer;
 }
-.order div.left dl dd.info{
-	border:2px solid red;
-	text-align:center;
+.order div.left dl dd.info {
+    border: 2px solid red;
+    text-align: center;
 }
-.order div.left dl .attr dd span.left,.order div.left dl .attr dd span.right{
-	float:left;
+.order div.left dl .attr dd span.left, .order div.left dl .attr dd span.right {
+    float: left;
 }
-.order div.left dl .attr dd span.right{
-	width:450px;
+.order div.left dl .attr dd span.right {
+    width: 450px;
 }
-.order div.left dl .attr dd span.right label{
-	margin:0 5px 0 0;
-	display:inline-block;
+.order div.left dl .attr dd span.right label {
+    margin: 0 5px 0 0;
+    display: inline-block;
 }
-.order div.right{
-	width:335px;
-	float:right;
+.order div.right {
+    width: 335px;
+    float: right;
 }
-.order div.right .list{
-	overflow:hidden;
-	width:90%;
-	height:500px;
-	margin:20px auto;
-	font-size:12px;
-	color:#666;
+.order div.right .list {
+    overflow: hidden;
+    width: 90%;
+    height: 500px;
+    margin: 20px auto;
+    font-size: 12px;
+    color: #666;
 }
-.order div.right .list dl{
-	margin:0 0 10px 0;
-	line-height:20px;
-	border-bottom:1px dashed #999;
+.order div.right .list dl {
+    margin: 0 0 10px 0;
+    line-height: 20px;
+    border-bottom: 1px dashed #999;
 }
-.order div.left .buy,.order div.right .send{
-	padding:8px 0 6px 0;
-	height:50px;
+.order div.left .buy, .order div.right .send {
+    padding: 8px 0 6px 0;
+    height: 50px;
 }
-.order div.left .buy{
-	background:url(../images/buy.gif) no-repeat left center;
+.order div.left .buy {
+    background: url(../images/buy.gif) no-repeat left center;
 }
-.order div.right .send{
-	background:url(../images/send.gif) no-repeat left center;
+.order div.right .send {
+    background: url(../images/send.gif) no-repeat left center;
 }
 
-.tip{
-	width:480px;
-	max-width:80%;
-	background:rgba(50,50,51,.88);
-	transform:translate3d(-50%,-50%,0);
-	padding:16px;
-	color:#fff;
-	text-align:center;
-	border-radius:4px;
-	position:fixed;
-	top:50%;
-	left:50%;
-	display:none;
-	font-family:"宋体",serif;
+.tip {
+    width: 480px;
+    max-width: 80%;
+    background: rgba(50, 50, 51, .88);
+    transform: translate3d(-50%, -50%, 0);
+    padding: 16px;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    display: none;
+    font-family: "宋体", serif;
 }
