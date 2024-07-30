@@ -93,10 +93,11 @@ class Captcha
 
     /**
      * 创建验证码
+	 * @param string $id
      * @return array
      * @throws Exception
      */
-    protected function generate(): array
+    protected function generate($id = ''): array
     {
         $bag = '';
 
@@ -125,7 +126,7 @@ class Captcha
 
         $hash = password_hash($key, PASSWORD_BCRYPT, ['cost' => 10]);
 
-        $this->session->set('captcha', [
+        $this->session->set('captcha' . $id, [
             'key' => $hash,
         ]);
 
@@ -141,20 +142,20 @@ class Captcha
      * @param string $code 用户验证码
      * @return bool 用户验证码是否正确
      */
-    public function check(string $code): bool
+    public function check(string $code, $id = ''): bool
     {
-        if (!$this->session->has('captcha')) {
+        if (!$this->session->has('captcha' . $id)) {
             return false;
         }
 
-        $key = $this->session->get('captcha.key');
+        $key = $this->session->get('captcha' . $id . '.key');
 
         $code = mb_strtolower($code, 'UTF-8');
 
         $res = password_verify($code, $key);
 
         if ($res) {
-            $this->session->delete('captcha');
+            $this->session->delete('captcha' . $id);
         }
 
         return $res;
@@ -171,7 +172,7 @@ class Captcha
     {
         $this->configure($config);
 
-        $generator = $this->generate();
+        $generator = $this->generate($config);
 
         // 图片宽(px)
         $this->imageW || $this->imageW = $this->length * $this->fontSize * 1.5 + $this->length * $this->fontSize / 2;
