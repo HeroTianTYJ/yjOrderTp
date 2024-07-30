@@ -89,7 +89,8 @@ class Index extends Base
                 $authValidate = (new Auth())->validate('orderCount');
                 $url = 'https://www.yjrj.cn/mp/member.php?keyword=' . md5(passEncode($_SERVER['HTTP_HOST']));
                 $data['订单'][] = ['剩余订单量', $authValidate['state'] == 1 ?
-                    $authValidate['content'] . '（<a href="' . $url . '" target="_blank">充值</a>）' :
+                    $authValidate['content'] . ($authValidate['content'] != '不限量' ?
+                        '（<a href="' . $url . '" target="_blank">充值</a>）' : '') :
                     '<a href="' . $url . '" target="_blank">查询失败</a>（<span class="iconfont icon-question" ' .
                     'title="失败原因：' . $authValidate['content'] . '具体请点击链接并微信扫码登录后核实"></span>）'];
             }
