@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use app\admin\model;
+use think\facade\Config;
 use think\facade\Request;
 use think\facade\View;
 
@@ -51,7 +52,9 @@ class Database extends Base
         if (Request::isAjax()) {
             $Common = new model\Common();
             foreach ($Common->info() as $value) {
-                $Common->repairAutoIncrement($value['Name']);
+                if ($value['Name'] != Config::get('database.connections.mysql.prefix') . 'order') {  //此判断勿删，否则可能将无法登录后台
+                    $Common->repairAutoIncrement($value['Name']);
+                }
             }
             return showTip('AutoIncrement修复成功！');
         } else {
