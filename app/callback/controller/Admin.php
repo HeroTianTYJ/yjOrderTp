@@ -21,7 +21,7 @@ class Admin extends Login
     public function wechatLogin()
     {
         if (Request::get('code')) {
-            if (in_array(device(), ['androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat'])) {
+            if (in_array(device(), ['harmonyWechat', 'androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat'])) {
                 $Wechat = new Wechat([
                     'app_id' => Config::get('system.wechat_app_id'),
                     'app_secret' => Config::get('system.wechat_app_secret')
@@ -63,7 +63,7 @@ class Admin extends Login
     public function wechatBind()
     {
         if (Request::get('code')) {
-            if (in_array(device(), ['androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat'])) {
+            if (in_array(device(), ['harmonyWechat', 'androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat'])) {
                 $Wechat = new Wechat([
                     'app_id' => Config::get('system.wechat_app_id'),
                     'app_secret' => Config::get('system.wechat_app_secret')
@@ -91,7 +91,7 @@ class Admin extends Login
                     Session::get(Config::get('system.session_key_admin') . '.manage_info.id')
                 )
             ) {
-                return in_array(device(), ['androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat']) ?
+                return in_array(device(), ['harmonyWechat', 'androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat']) ?
                     $this->succeed(Config::get('url.web1') . Config::get('system.manager_enter') .
                         '/profile/index.html') :
                     '<script type="text/javascript">window.opener.location.reload();window.close();</script>';

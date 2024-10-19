@@ -498,6 +498,10 @@ function device()
     ) {
         return 'wxxcx';
     } elseif (
+        strstr($_SERVER['HTTP_USER_AGENT'], 'OpenHarmony') && !strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')
+    ) {
+        return 'harmony';
+    } elseif (
         strstr($_SERVER['HTTP_USER_AGENT'], 'Android') && !strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')
     ) {
         return 'android';
@@ -505,6 +509,10 @@ function device()
         strstr($_SERVER['HTTP_USER_AGENT'], 'iPhone OS') && !strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')
     ) {
         return 'iphone';
+    } elseif (
+        strstr($_SERVER['HTTP_USER_AGENT'], 'OpenHarmony') && strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')
+    ) {
+        return 'harmonyWechat';
     } elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'Android') && strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {
         return 'androidWechat';
     } elseif (
@@ -532,9 +540,9 @@ function loginLink()
 {
     $link = '';
     if (
-        (in_array(device(), ['androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat']) &&
+        (in_array(device(), ['harmonyWechat', 'androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat']) &&
             Config::get('system.wechat_app_id') && Config::get('system.wechat_app_secret')) ||
-        (in_array(device(), ['android', 'iphone', 'windows', 'mac']) && Config::get('system.wechat_open_app_id') &&
+        (in_array(device(), ['harmony', 'android', 'iphone', 'windows', 'mac']) && Config::get('system.wechat_open_app_id') &&
             Config::get('system.wechat_open_app_secret'))
     ) {
         $link .= '<a href="' . Route::buildUrl('/' . parse_name(Request::controller()) . '/wechat') .

@@ -22,7 +22,7 @@ class Pay extends Base
                 return $this->failed('此订单无法支付！');
             }
             $productOne = (new model\Product())->one($orderOne['product_id']);
-            View::assign(['Pay' => in_array(device(), ['android', 'iphone', 'windows', 'mac']) ?
+            View::assign(['Pay' => in_array(device(), ['harmony', 'android', 'iphone', 'windows', 'mac']) ?
                 (new Alipay($this->alipayConfig()))->pay(
                     [
                         'body' => '',
@@ -59,7 +59,7 @@ class Pay extends Base
             'app_id' => Config::get('system.alipay_app_id'),
             'merchant_private_key' => Config::get('system.alipay_merchant_private_key'),
             'public_key' => Config::get('system.alipay_public_key'),
-            'method' => in_array(device(), ['android', 'iphone']) ? 'wap' : 'page'
+            'method' => in_array(device(), ['harmony', 'android', 'iphone']) ? 'wap' : 'page'
         ];
     }
 
