@@ -17,7 +17,7 @@
   let l = 'trigger';
   let z = 'label';
   let o = 'cursor';
-  let n = /ipad|iphone|ipod|android|blackberry|windows phone|opera mini|silk/i.test(navigator.userAgent);
+  let n = /OpenHarmony|ipad|iphone|ipod|android|blackberry|windows phone|opera mini|silk/i.test(navigator.userAgent);
   c.fn[g] = function (N, E) {
     let J = 'input[type=' + q + '],input[type=' + a + ']';
     let L = c();
