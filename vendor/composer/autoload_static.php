@@ -4,12 +4,11 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8382525fd1ce050e6889e76a5fa8be89
+class ComposerStaticInitcb7e648eaa5241fd870442b447ffb9a2
 {
     public static $files = array (
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
         '35fab96057f1bf5e7aba31a8a6d5fdde' => __DIR__ . '/..' . '/topthink/think-orm/stubs/load_stubs.php',
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
@@ -121,10 +120,10 @@ class ComposerStaticInit8382525fd1ce050e6889e76a5fa8be89
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8382525fd1ce050e6889e76a5fa8be89::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8382525fd1ce050e6889e76a5fa8be89::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit8382525fd1ce050e6889e76a5fa8be89::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit8382525fd1ce050e6889e76a5fa8be89::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcb7e648eaa5241fd870442b447ffb9a2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcb7e648eaa5241fd870442b447ffb9a2::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInitcb7e648eaa5241fd870442b447ffb9a2::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInitcb7e648eaa5241fd870442b447ffb9a2::$classMap;
 
         }, null, ClassLoader::class);
     }

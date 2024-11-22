@@ -1,5 +1,4 @@
 <?php
-
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
@@ -11,44 +10,13 @@
 // +----------------------------------------------------------------------
 declare(strict_types=1);
 
-namespace think\db;
-
-use Stringable;
+namespace think\contract;
 
 /**
- * SQL Raw.
+ * 枚举类接口
  */
-class Raw
+interface Enumable
 {
-    /**
-     * 创建一个查询表达式.
-     *
-     * @param string|Stringable $value
-     * @param array  $bind
-     *
-     * @return void
-     */
-    public function __construct(protected string|Stringable $value, protected array $bind = [])
-    {
-    }
-
-    /**
-     * 获取表达式.
-     *
-     * @return string
-     */
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    /**
-     * 获取参数绑定.
-     *
-     * @return array
-     */
-    public function getBind(): array
-    {
-        return $this->bind;
-    }
+	// 返回枚举类的清单
+    public static function values(): array;
 }
