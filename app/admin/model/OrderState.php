@@ -65,7 +65,7 @@ class OrderState extends Model
             }
             return $this->insertGetId($data);
         } else {
-            return $validate->getError();
+            return implode($validate->getError());
         }
     }
 
@@ -83,7 +83,7 @@ class OrderState extends Model
             }
             return $this->where(['id' => Request::post('id')])->update($data);
         } else {
-            return $validate->getError();
+            return implode($validate->getError());
         }
     }
 

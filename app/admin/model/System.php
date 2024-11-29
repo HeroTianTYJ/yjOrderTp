@@ -47,7 +47,7 @@ class System extends Model
             }
             return 1;
         } else {
-            return $validate->getError();
+            return implode($validate->getError());
         }
     }
 }

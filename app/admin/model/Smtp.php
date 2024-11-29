@@ -79,7 +79,7 @@ class Smtp extends Model
         if ($validate->check($data)) {
             return $this->insertGetId($data);
         } else {
-            return $validate->getError();
+            return implode($validate->getError());
         }
     }
 
@@ -99,7 +99,7 @@ class Smtp extends Model
         if ($validate->remove('pass', ['require'])->check($data)) {
             return $this->where(['id' => Request::post('id')])->update($data);
         } else {
-            return $validate->getError();
+            return implode($validate->getError());
         }
     }
 

@@ -24,7 +24,7 @@ class Install extends Model
         if ($validate->scene('step2')->check($data)) {
             return $data;
         } else {
-            return $validate->getError();
+            return implode($validate->getError());
         }
     }
 
@@ -48,7 +48,7 @@ class Install extends Model
             }
             return 1;
         } else {
-            return $validate->getError();
+            return implode($validate->getError());
         }
     }
 }
