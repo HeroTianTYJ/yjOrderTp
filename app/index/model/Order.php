@@ -49,15 +49,4 @@ class Order extends Model
             return [];
         }
     }
-
-    //修改支付状态
-    public function modify($orderId, $pay, $payId = 0, $payScene = '', $payDate = '')
-    {
-        return $this->where(['order_id' => $orderId])->update([
-            'payment_id' => $pay,
-            'pay_id' => $payId,
-            'pay_scene' => $payScene,
-            'pay_date' => $payDate
-        ]);
-    }
 }
