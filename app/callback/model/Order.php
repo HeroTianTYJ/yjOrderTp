@@ -7,7 +7,7 @@ use think\Model;
 class Order extends Model
 {
     //修改支付状态
-    public function modify($orderId, $paymentId, $payId = 0, $payScene = '', $payDate = '')
+    public function modify($orderId = 0, $paymentId = 0, $payId = 0, $payScene = '', $payDate = '')
     {
         return $this->where(['order_id' => $orderId])->update([
             'payment_id' => $paymentId,
