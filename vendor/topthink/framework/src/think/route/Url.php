@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2023 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2025 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -216,7 +216,7 @@ class Url
             $path       = explode('/', $url);
             $action     = array_pop($path);
             $controller = empty($path) ? $controller : array_pop($path);
-            $url        = str_replace('.', '/', $controller) . '/' . $action;
+            $url        = $controller . '/' . $action;
             $auto       = $this->route->getName('__think_auto_route__');
             if (!empty($auto) && !strpos($controller,'.')) {
                 $module = empty($path) ? $request->layer() : array_pop($path);
