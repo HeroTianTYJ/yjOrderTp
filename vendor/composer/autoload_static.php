@@ -41,12 +41,11 @@ class ComposerStaticInit118552ef2b3077b276422e248ece3c62
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
-            'Psr\\Cache\\' => 10,
         ),
         'L' => 
         array (
             'League\\MimeTypeDetection\\' => 25,
-            'League\\Flysystem\\Cached\\' => 24,
+            'League\\Flysystem\\Local\\' => 23,
             'League\\Flysystem\\' => 17,
         ),
     );
@@ -76,11 +75,11 @@ class ComposerStaticInit118552ef2b3077b276422e248ece3c62
         array (
             0 => __DIR__ . '/..' . '/topthink/framework/src/think',
             1 => __DIR__ . '/..' . '/topthink/think-container/src',
-            2 => __DIR__ . '/..' . '/topthink/think-filesystem/src',
-            3 => __DIR__ . '/..' . '/topthink/think-helper/src',
-            4 => __DIR__ . '/..' . '/topthink/think-orm/src',
-            5 => __DIR__ . '/..' . '/topthink/think-template/src',
-            6 => __DIR__ . '/..' . '/topthink/think-validate/src',
+            2 => __DIR__ . '/..' . '/topthink/think-helper/src',
+            3 => __DIR__ . '/..' . '/topthink/think-orm/src',
+            4 => __DIR__ . '/..' . '/topthink/think-template/src',
+            5 => __DIR__ . '/..' . '/topthink/think-validate/src',
+            6 => __DIR__ . '/..' . '/topthink/think-filesystem/src',
         ),
         'app\\' => 
         array (
@@ -110,17 +109,13 @@ class ComposerStaticInit118552ef2b3077b276422e248ece3c62
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'Psr\\Cache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/cache/src',
-        ),
         'League\\MimeTypeDetection\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/mime-type-detection/src',
         ),
-        'League\\Flysystem\\Cached\\' => 
+        'League\\Flysystem\\Local\\' => 
         array (
-            0 => __DIR__ . '/..' . '/league/flysystem-cached-adapter/src',
+            0 => __DIR__ . '/..' . '/league/flysystem-local',
         ),
         'League\\Flysystem\\' => 
         array (
