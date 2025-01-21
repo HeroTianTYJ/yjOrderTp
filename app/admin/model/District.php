@@ -62,7 +62,7 @@ class District extends Model
             }
             return $this->insertGetId($data);
         } else {
-            return implode($validate->getError());
+            return $validate->getError();
         }
     }
 
@@ -81,7 +81,7 @@ class District extends Model
                 }
                 $this->insertGetId($data);
             } else {
-                return implode($validate->getError());
+                return $validate->getError();
             }
         }
         return 1;
@@ -100,7 +100,7 @@ class District extends Model
             }
             return $this->where(['id' => Request::post('id')])->update($data);
         } else {
-            return implode($validate->getError());
+            return $validate->getError();
         }
     }
 
