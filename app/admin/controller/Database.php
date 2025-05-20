@@ -21,14 +21,18 @@ class Database extends Base
                 $dataFree += $value['Data_free'];
             }
             $tableTotal = count($commonInfo);
-            $commonInfo[$tableTotal]['Name'] = $tableTotal . ' 个表';
-            $commonInfo[$tableTotal]['Rows'] = $rows;
-            $commonInfo[$tableTotal]['Auto_increment'] = '-';
-            $commonInfo[$tableTotal]['Size'] = $size < 1024 ?
-                $size . ' KB' :
-                number_format($size / 1024, 1, '.', '') . ' MB';
-            $commonInfo[$tableTotal]['Data_free'] = $dataFree;
-            return $commonInfo ? json_encode($commonInfo) : '';
+            if ($tableTotal) {
+                $commonInfo[$tableTotal]['Name'] = $tableTotal . ' 个表';
+                $commonInfo[$tableTotal]['Rows'] = $rows;
+                $commonInfo[$tableTotal]['Auto_increment'] = '-';
+                $commonInfo[$tableTotal]['Size'] = $size < 1024 ?
+                    $size . ' KB' :
+                    number_format($size / 1024, 1, '.', '') . ' MB';
+                $commonInfo[$tableTotal]['Data_free'] = $dataFree;
+                return $commonInfo ? json_encode($commonInfo) : '';
+            } else {
+                return '';
+            }
         }
         View::assign(['Total' => count($commonInfo)]);
         return $this->view();
