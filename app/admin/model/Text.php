@@ -22,8 +22,11 @@ class Text extends Model
     //查询内容
     public function content($id = 0)
     {
-        $one = $this->one($id);
-        return $one ? $one['content'] : '';
+        if ($id) {
+            $one = $this->one($id);
+            return $one ? $one['content'] : '';
+        }
+        return '';
     }
 
     //添加
