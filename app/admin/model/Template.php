@@ -68,9 +68,9 @@ class Template extends Model
             'is_show_search' => Request::post('is_show_search'),
             'is_show_send' => Request::post('is_show_send'),
             'is_captcha' => Request::post('is_captcha'),
-            'success' => Request::post('success', '', 'htmlspecialchars_decode'),
-            'success2' => Request::post('success2', '', 'htmlspecialchars_decode'),
-            'often' => Request::post('often', '', 'htmlspecialchars_decode'),
+            'success' => Request::post('success', '', null),
+            'success2' => Request::post('success2', '', null),
+            'often' => Request::post('often', '', null),
             'date' => time()
         ];
         if ($data['product_type'] == 0) {
@@ -134,9 +134,9 @@ class Template extends Model
             'is_show_search' => Request::post('is_show_search'),
             'is_show_send' => Request::post('is_show_send'),
             'is_captcha' => Request::post('is_captcha'),
-            'success' => Request::post('success', '', 'htmlspecialchars_decode'),
-            'success2' => Request::post('success2', '', 'htmlspecialchars_decode'),
-            'often' => Request::post('often', '', 'htmlspecialchars_decode')
+            'success' => Request::post('success', '', null),
+            'success2' => Request::post('success2', '', null),
+            'often' => Request::post('often', '', null)
         ];
         if ($data['product_type'] == 0) {
             if (!Request::post('product_ids1')) {

@@ -36,7 +36,7 @@ class Visit extends Model
     {
         try {
             return $this->field('id')
-                ->where(['ip' => getUserIp(), 'url' => strip_tags(Request::post('url', '', 'htmlspecialchars_decode'))])
+                ->where(['ip' => getUserIp(), 'url' => strip_tags(Request::post('url', '', null))])
                 ->where('date1', '>=', strtotime(date('Y-m-d') . ' 00:00:00'))
                 ->where('date2', '<=', strtotime(date('Y-m-d') . ' 23:59:59'))
                 ->find();
@@ -51,7 +51,7 @@ class Visit extends Model
     {
         $data = [
             'ip' => getUserIp(),
-            'url' => strip_tags(Request::post('url', '', 'htmlspecialchars_decode')),
+            'url' => strip_tags(Request::post('url', '', null)),
             'count' => 1,
             'date1' => time(),
             'date2' => time()

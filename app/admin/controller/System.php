@@ -34,7 +34,7 @@ return [
     'https' => '" . str_replace("'", "\'", Request::post('https', 0)) . "',  //是否强制https
     'manager_enter' => '" . str_replace("'", "\'", Request::post('manager_enter')) . "',  //后台入口
     'index_php' => '" . (Request::post('index_php') == 0 ? 'index.php/' : '') . "',  //隐藏index.php
-    'copyright_backend' => '" . str_replace("'", "\'", Request::post('copyright_backend', '', 'htmlspecialchars_decode')) .
+    'copyright_backend' => '" . str_replace("'", "\'", Request::post('copyright_backend', '', null)) .
                     "',  //登录页版权
     'order_time' => '" . str_replace("'", "\'", Request::post('order_time')) . "',  //防刷单间隔
     'order_search' => '" . str_replace("'", "\'", Request::post('order_search')) . "',  //订单查询
@@ -60,13 +60,13 @@ return [
     'wechat_open_app_secret' => '" . str_replace("'", "\'", Request::post('wechat_open_app_secret')) .
                     "',  //微信开放平台AppSecret
     'mail_order_subject' => '" . str_replace("'", "\'", Request::post('mail_order_subject')) . "',  //订单提醒邮件标题
-    'mail_order_content' => '" . str_replace("'", "\'", Request::post('mail_order_content', '', 'htmlspecialchars_decode')) .
+    'mail_order_content' => '" . str_replace("'", "\'", Request::post('mail_order_content', '', null)) .
                     "',  //订单提醒邮件内容
     'mail_pay_subject' => '" . str_replace("'", "\'", Request::post('mail_pay_subject')) . "',  //支付提醒邮件标题
-    'mail_pay_content' => '" . str_replace("'", "\'", Request::post('mail_pay_content', '', 'htmlspecialchars_decode')) .
+    'mail_pay_content' => '" . str_replace("'", "\'", Request::post('mail_pay_content', '', null)) .
                     "',  //支付提醒邮件内容
     'mail_send_subject' => '" . str_replace("'", "\'", Request::post('mail_send_subject')) . "',  //发货提醒邮件标题
-    'mail_send_content' => '" . str_replace("'", "\'", Request::post('mail_send_content', '', 'htmlspecialchars_decode')) .
+    'mail_send_content' => '" . str_replace("'", "\'", Request::post('mail_send_content', '', null)) .
                     "',  //发货提醒邮件内容
 ];
 ";
