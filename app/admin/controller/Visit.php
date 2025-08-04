@@ -17,7 +17,7 @@ class Visit extends Base
             foreach ($visitAll as $key => $value) {
                 $visitAll[$key] = $this->listItem($value);
             }
-            return $visitAll->items() ? json_encode($visitAll->items()) : '';
+            return $visitAll->items() ? apiResponse('', 1, $visitAll->items()) : '';
         }
         View::assign(['Total' => $visitAll->total()]);
         return $this->view();

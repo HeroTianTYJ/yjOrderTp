@@ -21,7 +21,7 @@ class Order extends Base
             foreach ($orderAll as $key => $value) {
                 $orderAll[$key] = $this->listItem($value);
             }
-            return $orderAll->items() ? json_encode($orderAll->items()) : '';
+            return $orderAll->items() ? apiResponse('', 1, $orderAll->items()) : '';
         }
         View::assign(['Total' => $orderAll->total()]);
         Html::product(Request::get('product_id'), 0, true);

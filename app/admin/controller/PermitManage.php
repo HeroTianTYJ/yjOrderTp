@@ -22,7 +22,7 @@ class PermitManage extends Base
                 }
                 $permitManageAll[$key]['child'] = $child;
             }
-            return $permitManageAll->items() ? json_encode($permitManageAll->items()) : '';
+            return $permitManageAll->items() ? apiResponse('', 1, $permitManageAll->items()) : '';
         }
         View::assign(['Total' => $permitManageAll->total()]);
         return $this->view();

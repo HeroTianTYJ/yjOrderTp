@@ -20,7 +20,7 @@ class Template extends Base
             foreach ($templateAll as $key => $value) {
                 $templateAll[$key] = $this->listItem($value);
             }
-            return $templateAll->items() ? json_encode($templateAll->items()) : '';
+            return $templateAll->items() ? apiResponse('', 1, $templateAll->items()) : '';
         }
         View::assign(['Total' => $templateAll->total()]);
         return $this->view();

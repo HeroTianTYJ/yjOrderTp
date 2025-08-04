@@ -29,7 +29,7 @@ class Database extends Base
                     $size . ' KB' :
                     number_format($size / 1024, 1, '.', '') . ' MB';
                 $commonInfo[$tableTotal]['Data_free'] = $dataFree;
-                return $commonInfo ? json_encode($commonInfo) : '';
+                return $commonInfo ? apiResponse('', 1, $commonInfo) : '';
             } else {
                 return '';
             }

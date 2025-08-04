@@ -16,7 +16,7 @@ class Smtp extends Base
             foreach ($smtpAll as $key => $value) {
                 $smtpAll[$key] = $this->listItem($value);
             }
-            return $smtpAll->items() ? json_encode($smtpAll->items()) : '';
+            return $smtpAll->items() ? apiResponse('', 1, $smtpAll->items()) : '';
         }
         View::assign(['Total' => $smtpAll->total()]);
         return $this->view();
@@ -103,7 +103,7 @@ class Smtp extends Base
                     $smtpAll[$key]['current'] = $value == date('H');
                 }
             }
-            return $smtpAll ? json_encode($smtpAll) : '';
+            return $smtpAll ? apiResponse('', 1, $smtpAll) : '';
         }
         View::assign(['Total' => $Smtp->count() == 0 ? 0 : 24]);
         return $this->view();

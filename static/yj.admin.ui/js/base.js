@@ -183,21 +183,26 @@ function list (moduleName) {
       }
     }).then(function (data) {
       if (data) {
-        let html = '';
-        $.each(JSON.parse(data), function (index, value) {
-          html += listItem(value);
-        });
-        $list.find('.items').html(html);
-        $list.animate({scrollTop: 0, scrollLeft: 0});
+        let json = JSON.parse(data);
+        if (json['status'] === 1) {
+          let html = '';
+          $.each(json['data'], function (index, value) {
+            html += listItem(value).replace(/null/g, '');
+          });
+          $list.find('.items').html(html);
+          $list.animate({scrollTop: 0, scrollLeft: 0});
 
-        boxShadow();
-        iCheck();
+          boxShadow();
+          iCheck();
 
-        let width = 0;
-        $.each($list.find('th'), function (index, element) {
-          if ($(element).attr('style')) width += ($(element).attr('style').match(/\d+/)[0] * 1);
-        });
-        $list.find('table').width(width + 2);
+          let width = 0;
+          $.each($list.find('th'), function (index, element) {
+            if ($(element).attr('style')) width += ($(element).attr('style').match(/\d+/)[0] * 1);
+          });
+          $list.find('table').width(width + 2);
+        } else {
+          showTip(json['message'], json['status']);
+        }
       } else {
         $list.find('p.nothing').html((window.location.toString().indexOf('?') > 0 ? '没有找到您搜索的' : '暂无') + moduleName);
       }

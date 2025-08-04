@@ -37,7 +37,7 @@ class Profile extends Base
                 $loginRecordManagerAll[$key] = $this->listItem($value);
             }
             return $loginRecordManagerAll->items() ?
-                json_encode($loginRecordManagerAll->items()) : '';
+                apiResponse('', 1, $loginRecordManagerAll->items()) : '';
         }
         View::assign(['Total' => $loginRecordManagerAll->total()]);
         return $this->view();

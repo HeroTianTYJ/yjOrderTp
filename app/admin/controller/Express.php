@@ -15,7 +15,7 @@ class Express extends Base
             foreach ($expressAll as $key => $value) {
                 $expressAll[$key] = $this->listItem($value);
             }
-            return $expressAll->items() ? json_encode($expressAll->items()) : '';
+            return $expressAll->items() ? apiResponse('', 1, $expressAll->items()) : '';
         }
         View::assign(['Total' => $expressAll->total()]);
         return $this->view();

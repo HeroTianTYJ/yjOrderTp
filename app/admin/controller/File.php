@@ -33,7 +33,8 @@ class File extends Base
             $nowPage = intval(Request::post('page', 1));
             $nowPage = $nowPage > 0 ? $nowPage : 1;
             $firstRow = Config::get('app.page_size') * ($nowPage - 1);
-            return $outputAll ? json_encode(array_slice($outputAll, $firstRow, Config::get('app.page_size'))) : '';
+            return $outputAll ?
+                apiResponse('', 1, array_slice($outputAll, $firstRow, Config::get('app.page_size'))) : '';
         }
         View::assign(['Total' => count($outputAll)]);
         Html::typeSelect($this->type, Request::get('type'));

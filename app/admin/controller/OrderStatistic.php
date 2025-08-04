@@ -60,7 +60,7 @@ class OrderStatistic extends Base
                 date('Y-m-d', $orderNewer ? $orderNewer['date'] : 0) . '）';
             $data[8]['data'] = $this->diyTime($Order->diyTime());
 
-            return $data ? json_encode($data) : '';
+            return $data ? apiResponse('', 1, $data) : '';
         }
         View::assign(['Total' => 9]);
         Html::product(Request::get('product_id'), 0, true);
@@ -190,7 +190,7 @@ class OrderStatistic extends Base
             $data[$orderDayMonthYearTotal]['sum7'] = number_format($sum1 + $sum2 + $sum3 + $sum4 + $sum5 +
                 $sum6, 2, '.', '');
             $data[$orderDayMonthYearTotal]['sum8'] = number_format($sum1 + $sum2 + $sum3 + $sum4 + $sum5, 2, '.', '');
-            return $data ? json_encode($data) : '';
+            return $data ? apiResponse('', 1, $data) : '';
         }
         $param = '?';
         foreach (Request::get() as $key => $value) {

@@ -24,7 +24,7 @@ class District extends Base
             foreach ($districtAll as $key => $value) {
                 $districtAll[$key] = $this->listItem($value);
             }
-            return $districtAll->items() ? json_encode($districtAll->items()) : '';
+            return $districtAll->items() ? apiResponse('', 1, $districtAll->items()) : '';
         }
         View::assign([
             'Total' => $districtAll->total(),

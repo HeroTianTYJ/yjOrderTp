@@ -23,7 +23,7 @@ class Manager extends Base
             foreach ($managerAll as $key => $value) {
                 $managerAll[$key] = $this->listItem($value);
             }
-            return $managerAll->items() ? json_encode($managerAll->items()) : '';
+            return $managerAll->items() ? apiResponse('', 1, $managerAll->items()) : '';
         }
         View::assign(['Total' => $managerAll->total()]);
         Html::permitGroup(Request::get('permit_group_id'));
