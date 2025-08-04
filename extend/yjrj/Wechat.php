@@ -43,10 +43,11 @@ class Wechat
     public function oauthRedirect($redirectUrl, $state = '', $scope = 'userinfo')
     {
         header('Location:' . ($this->bridge ? $this->bridge . (strstr($this->bridge, '?') ? '&' : '?') . 'callback=' .
-                urlencode($redirectUrl) : self::OPEN_URL_PREFIX . ($this->isMp ? '/oauth2/authorize?appid=' .
-                    $this->appId . '&redirect_uri=' . urlencode($redirectUrl) . '&response_type=code&scope=snsapi_' .
-                    $scope : '/qrconnect?appid=' . $this->appId . '&redirect_uri=' . urlencode($redirectUrl) .
-                    '&response_type=code&scope=snsapi_login') . '&state=' . $state . '#wechat_redirect'));
+                urlencode($redirectUrl) . '&scope=' . $scope : self::OPEN_URL_PREFIX . ($this->isMp ?
+                    '/oauth2/authorize?appid=' . $this->appId . '&redirect_uri=' . urlencode($redirectUrl) .
+                    '&response_type=code&scope=snsapi_' . $scope : '/qrconnect?appid=' . $this->appId .
+                    '&redirect_uri=' . urlencode($redirectUrl) . '&response_type=code&scope=snsapi_login') . '&state=' .
+                $state . '#wechat_redirect'));
         exit;
     }
 
