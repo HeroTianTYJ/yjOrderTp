@@ -15,7 +15,7 @@ class System extends Base
     {
         if (Request::isPost()) {
             if (Config::get('app.demo')) {
-                return showTip('演示站，系统设置无法修改！', 0);
+                return apiResponse('演示站，系统设置无法修改！', 0);
             }
             $System = new model\System();
             $systemForm = $System->form();
@@ -94,17 +94,17 @@ return [
                             rename(
                                 ROOT_DIR . '/' . Config::get('system.manager_enter'),
                                 ROOT_DIR . '/' . Request::post('manager_enter')
-                            ) ? showTip(['msg' => '管理员后台入口修改成功，即将跳转到新入口！',
-                                         'url' => Config::get('url.web1') . Request::post('manager_enter')]) :
-                                showTip('管理员后台入口修改失败，请检查系统根目录权限！', 0);
+                            ) ? apiResponse('管理员后台入口修改成功，即将跳转到新入口！', [
+                                'url' => Config::get('url.web1') . Request::post('manager_enter')
+                            ]) : apiResponse('管理员后台入口修改失败，请检查系统根目录权限！', 0);
                     } else {
-                        return showTip('系统设置修改成功！');
+                        return apiResponse('系统设置修改成功！');
                     }
                 } else {
-                    return showTip('系统设置修改失败，请检查config目录权限！', 0);
+                    return apiResponse('系统设置修改失败，请检查config目录权限！', 0);
                 }
             } else {
-                return showTip($systemForm, 0);
+                return apiResponse($systemForm, 0);
             }
         }
         View::assign(['IpVersion' => QQWry::getVersion()]);

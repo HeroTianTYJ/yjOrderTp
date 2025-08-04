@@ -28,16 +28,16 @@ class PermitGroup extends Base
             if (Request::get('action') == 'do') {
                 $permitGroupAdd = (new model\PermitGroup())->add();
                 if (is_numeric($permitGroupAdd)) {
-                    return $permitGroupAdd > 0 ? showTip('权限组添加成功！') : showTip('权限组添加失败！', 0);
+                    return $permitGroupAdd > 0 ? apiResponse('权限组添加成功！') : apiResponse('权限组添加失败！', 0);
                 } else {
-                    return showTip($permitGroupAdd, 0);
+                    return apiResponse($permitGroupAdd, 0);
                 }
             }
             Html::permitManage();
             Html::permitData();
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -47,20 +47,20 @@ class PermitGroup extends Base
             $PermitGroup = new model\PermitGroup();
             $permitGroupOne = $PermitGroup->one();
             if (!$permitGroupOne) {
-                return showTip('不存在此权限组！', 0);
+                return apiResponse('不存在此权限组！', 0);
             }
             if (Request::get('action') == 'do') {
                 $permitGroupModify = $PermitGroup->modify($permitGroupOne['text_id_permit_manage_ids']);
                 return is_numeric($permitGroupModify) ?
-                    showTip(['msg' => '权限组修改成功！', 'data' => $this->listItem($PermitGroup->one())]) :
-                    showTip($permitGroupModify, 0);
+                    apiResponse('权限组修改成功！', 1, $this->listItem($PermitGroup->one())) :
+                    apiResponse($permitGroupModify, 0);
             }
             Html::permitManage((new model\Text())->content($permitGroupOne['text_id_permit_manage_ids']));
             Html::permitData($permitGroupOne['permit_data_ids']);
             View::assign(['One' => $permitGroupOne]);
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -69,11 +69,11 @@ class PermitGroup extends Base
         if (Request::isAjax() && Request::post('id')) {
             $PermitGroup = new model\PermitGroup();
             if (!$PermitGroup->one()) {
-                return showTip('不存在此权限组！', 0);
+                return apiResponse('不存在此权限组！', 0);
             }
-            return $PermitGroup->isDefault() ? showTip('设置默认权限组成功！') : showTip('设置默认权限组失败！', 0);
+            return $PermitGroup->isDefault() ? apiResponse('设置默认权限组成功！') : apiResponse('设置默认权限组失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -85,26 +85,26 @@ class PermitGroup extends Base
             if (Request::post('id')) {
                 $permitGroupOne = $PermitGroup->one();
                 if (!$permitGroupOne) {
-                    return showTip('不存在此权限组！', 0);
+                    return apiResponse('不存在此权限组！', 0);
                 }
                 $textId[] = $permitGroupOne['text_id_permit_manage_ids'];
             } elseif (Request::post('ids')) {
                 foreach (explode(',', Request::post('ids')) as $value) {
                     $permitGroupOne = $PermitGroup->one($value);
                     if (!$permitGroupOne) {
-                        return showTip('不存在您勾选的权限组！', 0);
+                        return apiResponse('不存在您勾选的权限组！', 0);
                     }
                     $textId[] = $permitGroupOne['text_id_permit_manage_ids'];
                 }
             }
             if ($PermitGroup->remove()) {
                 (new model\Text())->remove($textId);
-                return showTip('权限组删除成功！');
+                return apiResponse('权限组删除成功！');
             } else {
-                return showTip('权限组删除失败！', 0);
+                return apiResponse('权限组删除失败！', 0);
             }
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

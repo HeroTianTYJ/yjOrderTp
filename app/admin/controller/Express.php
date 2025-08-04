@@ -27,14 +27,14 @@ class Express extends Base
             if (Request::get('action') == 'do') {
                 $expressAdd = (new model\Express())->add();
                 if (is_numeric($expressAdd)) {
-                    return $expressAdd > 0 ? showTip('快递公司添加成功！') : showTip('快递公司添加失败！', 0);
+                    return $expressAdd > 0 ? apiResponse('快递公司添加成功！') : apiResponse('快递公司添加失败！', 0);
                 } else {
-                    return showTip($expressAdd, 0);
+                    return apiResponse($expressAdd, 0);
                 }
             }
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -44,18 +44,18 @@ class Express extends Base
             $Express = new model\Express();
             $expressOne = $Express->one();
             if (!$expressOne) {
-                return showTip('不存在此快递公司！', 0);
+                return apiResponse('不存在此快递公司！', 0);
             }
             if (Request::get('action') == 'do') {
                 $expressModify = $Express->modify();
                 return is_numeric($expressModify) ?
-                    showTip(['msg' => '快递公司修改成功！', 'data' => $this->listItem($Express->one())]) :
-                    showTip($expressModify, 0);
+                    apiResponse('快递公司修改成功！', 1, $this->listItem($Express->one())) :
+                    apiResponse($expressModify, 0);
             }
             View::assign(['One' => $expressOne]);
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -65,18 +65,18 @@ class Express extends Base
             $Express = new model\Express();
             if (Request::post('id')) {
                 if (!$Express->one()) {
-                    return showTip('不存在此快递公司！', 0);
+                    return apiResponse('不存在此快递公司！', 0);
                 }
             } elseif (Request::post('ids')) {
                 foreach (explode(',', Request::post('ids')) as $value) {
                     if (!$Express->one($value)) {
-                        return showTip('不存在您勾选的快递公司！', 0);
+                        return apiResponse('不存在您勾选的快递公司！', 0);
                     }
                 }
             }
-            return $Express->remove() ? showTip('快递公司删除成功！') : showTip('快递公司删除失败！', 0);
+            return $Express->remove() ? apiResponse('快递公司删除成功！') : apiResponse('快递公司删除失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

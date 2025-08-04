@@ -32,9 +32,9 @@ class Template extends Base
             if (Request::get('action') == 'do') {
                 $templateAdd = (new model\Template())->add();
                 if (is_numeric($templateAdd)) {
-                    return $templateAdd > 0 ? showTip('模板添加成功！') : showTip('模板添加失败！', 0);
+                    return $templateAdd > 0 ? apiResponse('模板添加成功！') : apiResponse('模板添加失败！', 0);
                 } else {
-                    return showTip($templateAdd, 0);
+                    return apiResponse($templateAdd, 0);
                 }
             }
             Html::template($this->template);
@@ -45,7 +45,7 @@ class Template extends Base
             Html::payment();
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -55,16 +55,16 @@ class Template extends Base
             $Template = new model\Template();
             $templateOne = $Template->one();
             if (!$templateOne) {
-                return showTip('不存在此模板！', 0);
+                return apiResponse('不存在此模板！', 0);
             }
             if (Request::get('action') == 'do') {
                 if (Config::get('app.demo') && Request::post('id') <= 5) {
-                    return showTip('演示站，id<=5的模板无法修改！', 0);
+                    return apiResponse('演示站，id<=5的模板无法修改！', 0);
                 }
                 $templateModify = $Template->modify();
                 return is_numeric($templateModify) ?
-                    showTip(['msg' => '模板修改成功！', 'data' => $this->listItem($Template->one())]) :
-                    showTip($templateModify, 0);
+                    apiResponse('模板修改成功！', 1, $this->listItem($Template->one())) :
+                    apiResponse($templateModify, 0);
             }
             Html::template($this->template, $templateOne['template']);
             Html::manager($templateOne['manager_id']);
@@ -75,7 +75,7 @@ class Template extends Base
             View::assign(['One' => $templateOne]);
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -84,12 +84,12 @@ class Template extends Base
         if (Request::isAjax() && Request::post('id')) {
             $templateOne = (new model\Template())->one();
             if (!$templateOne) {
-                return showTip('不存在此模板！', 0);
+                return apiResponse('不存在此模板！', 0);
             }
             View::assign(['One' => $templateOne]);
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -102,23 +102,23 @@ class Template extends Base
     {
         if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
             if (Config::get('app.demo')) {
-                return showTip('演示站，模板无法删除！', 0);
+                return apiResponse('演示站，模板无法删除！', 0);
             }
             $Template = new model\Template();
             if (Request::post('id')) {
                 if (!$Template->one()) {
-                    return showTip('不存在此模板！', 0);
+                    return apiResponse('不存在此模板！', 0);
                 }
             } elseif (Request::post('ids')) {
                 foreach (explode(',', Request::post('ids')) as $value) {
                     if (!$Template->one($value)) {
-                        return showTip('不存在您勾选的模板！', 0);
+                        return apiResponse('不存在您勾选的模板！', 0);
                     }
                 }
             }
-            return $Template->remove() ? showTip('模板删除成功！') : showTip('模板删除失败！', 0);
+            return $Template->remove() ? apiResponse('模板删除成功！') : apiResponse('模板删除失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -127,7 +127,7 @@ class Template extends Base
         if (Request::isAjax()) {
             return Json::product(Request::post('product_ids1'), Request::post('product_sort_id'));
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -136,7 +136,7 @@ class Template extends Base
         if (Request::isAjax()) {
             return Json::product2(Request::post('product_ids2'));
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -145,11 +145,11 @@ class Template extends Base
         if (Request::isAjax() && Request::post('id')) {
             $Template = new model\Template();
             if (!$Template->one()) {
-                return showTip('不存在此模板！', 0);
+                return apiResponse('不存在此模板！', 0);
             }
-            return $Template->isDefault() ? showTip('设置默认模板成功！') : showTip('设置默认模板失败！', 0);
+            return $Template->isDefault() ? apiResponse('设置默认模板成功！') : apiResponse('设置默认模板失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

@@ -11,7 +11,7 @@ $(function () {
       {},
       '<h3><span>？</span>确定要将访问统计导出到文件并清空当前访问数据吗？</h3><p>导出成功后，可到<a href="' + CONFIG['FILE_CONTROLLER'] + '">文件管理</a>模块中进行下载。</p>',
       function (json, layerIndex) {
-        if (json['state'] === 1) {
+        if (json['status'] === 1) {
           layer.close(layerIndex);
           setTimeout(function () {
             window.location.reload(true);

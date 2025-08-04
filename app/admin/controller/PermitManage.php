@@ -34,15 +34,15 @@ class PermitManage extends Base
             $PermitManage = new model\PermitManage();
             $permitManageOne = $PermitManage->one();
             if (!$permitManageOne) {
-                return showTip('不存在此管理权限！', 0);
+                return apiResponse('不存在此管理权限！', 0);
             }
             if ($permitManageOne['is_default'] == 0) {
-                return $PermitManage->isDefault(1) ? showTip('设置默认管理权限成功！') : showTip('设置默认管理权限失败！', 0);
+                return $PermitManage->isDefault(1) ? apiResponse('设置默认管理权限成功！') : apiResponse('设置默认管理权限失败！', 0);
             } else {
-                return $PermitManage->isDefault(0) ? showTip('取消默认管理权限成功！') : showTip('取消默认管理权限失败！', 0);
+                return $PermitManage->isDefault(0) ? apiResponse('取消默认管理权限成功！') : apiResponse('取消默认管理权限失败！', 0);
             }
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

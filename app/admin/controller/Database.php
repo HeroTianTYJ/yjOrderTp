@@ -45,9 +45,9 @@ class Database extends Base
             foreach ($Common->info() as $value) {
                 $Common->optimizeTable($value['Name']);
             }
-            return showTip('数据表优化成功！');
+            return apiResponse('数据表优化成功！');
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -60,18 +60,18 @@ class Database extends Base
                     $Common->repairAutoIncrement($value['Name']);
                 }
             }
-            return showTip('AutoIncrement修复成功！');
+            return apiResponse('AutoIncrement修复成功！');
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
     public function schema()
     {
         if (Request::isAjax()) {
-            return databaseSchema() ? showTip('数据表缓存更新成功！') : showTip('数据表缓存更新失败！', 0);
+            return databaseSchema() ? apiResponse('数据表缓存更新成功！') : apiResponse('数据表缓存更新失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

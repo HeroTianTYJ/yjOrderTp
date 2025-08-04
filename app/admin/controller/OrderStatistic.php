@@ -119,7 +119,7 @@ class OrderStatistic extends Base
                 'file' => $output
             ]);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

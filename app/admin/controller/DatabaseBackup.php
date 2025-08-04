@@ -18,7 +18,7 @@ class DatabaseBackup extends Base
         $commonInfo = (new model\Common())->info();
         if (Request::isPost()) {
             if (Config::get('app.demo')) {
-                return showTip('演示站，数据库无法备份！', 0);
+                return apiResponse('演示站，数据库无法备份！', 0);
             }
             if (Request::post('table_name')) {
                 $table = [];
@@ -26,7 +26,7 @@ class DatabaseBackup extends Base
                     $table[] = $value['Name'];
                 }
                 if (array_diff(Request::post('table_name'), $table)) {
-                    return showTip('您勾选的数据表不存在！', 0);
+                    return apiResponse('您勾选的数据表不存在！', 0);
                 }
             }
             if (
@@ -37,7 +37,7 @@ class DatabaseBackup extends Base
                     Request::post('table_name') ? Request::post('table_name') : []
                 )
             ) {
-                return showTip('数据库已成功备份到服务器，可联系客服人员下载！');
+                return apiResponse('数据库已成功备份到服务器，可联系客服人员下载！');
             }
         }
         $remainder = count($commonInfo) % 4;
@@ -55,7 +55,7 @@ class DatabaseBackup extends Base
         if (!!$this->sqlId = mysqli_query($this->linkId, $sql)) {
             return mysqli_query($this->linkId, $sql);
         } else {
-            return showTip('SQL语句：' . $sql . '<br>错误信息：' . mysqli_error($this->linkId), 0);
+            return apiResponse('SQL语句：' . $sql . '<br>错误信息：' . mysqli_error($this->linkId), 0);
         }
     }
 
@@ -105,13 +105,13 @@ class DatabaseBackup extends Base
     private function write($sql, $filename)
     {
         if (!$fp = fopen($filename, 'w+')) {
-            return showTip('文件打开失败！', 0);
+            return apiResponse('文件打开失败！', 0);
         }
         if (!fwrite($fp, $sql)) {
-            return showTip('文件写入失败！', 0);
+            return apiResponse('文件写入失败！', 0);
         }
         if (!fclose($fp)) {
-            return showTip('文件关闭失败！', 0);
+            return apiResponse('文件关闭失败！', 0);
         }
         return true;
     }
@@ -124,7 +124,7 @@ class DatabaseBackup extends Base
             Config::get('database.connections.mysql.database') . "` LIKE '" .
             Config::get('database.connections.mysql.prefix') . "%'")
         ) {
-            return showTip('读数据库结构错误！', 0);
+            return apiResponse('读数据库结构错误！', 0);
         }
         $sql = '';
         while ($this->nextRecord($tablesInfo)) {
@@ -150,7 +150,7 @@ class DatabaseBackup extends Base
             Config::get('database.connections.mysql.database') . "` LIKE '" .
             Config::get('database.connections.mysql.prefix') . "%'")
         ) {
-            return showTip('读数据库结构错误！', 0);
+            return apiResponse('读数据库结构错误！', 0);
         }
         $p = 1;
         $sql = '';
@@ -229,19 +229,19 @@ class DatabaseBackup extends Base
     public function backup($path = '', $filename = '', $fileSize = 2000, $tables = [], $tableStatus = true)
     {
         if ($path == '') {
-            return showTip('请设置保存数据库文件的目录！', 0);
+            return apiResponse('请设置保存数据库文件的目录！', 0);
         }
         if (!is_dir($path)) {
-            return showTip($path . '目录不存在，请手工创建！', 0);
+            return apiResponse($path . '目录不存在，请手工创建！', 0);
         }
         if ($filename == '') {
-            return showTip('请设置数据库文件名！', 0);
+            return apiResponse('请设置数据库文件名！', 0);
         }
         if (!is_numeric($fileSize)) {
-            return showTip('分卷大小必须是数字！', 0);
+            return apiResponse('分卷大小必须是数字！', 0);
         }
         if (!is_array($tables)) {
-            return showTip('数据表必须是数组！', 0);
+            return apiResponse('数据表必须是数组！', 0);
         }
         if (
             !$this->linkId = mysqli_connect(
@@ -252,13 +252,13 @@ class DatabaseBackup extends Base
                 Config::get('database.connections.mysql.password')
             )
         ) {
-            return showTip('连接服务器失败', 0);
+            return apiResponse('连接服务器失败', 0);
         }
         if (!mysqli_select_db($this->linkId, Config::get('database.connections.mysql.database'))) {
-            return showTip('无法打开数据库：' . mysqli_error($this->linkId), 0);
+            return apiResponse('无法打开数据库：' . mysqli_error($this->linkId), 0);
         }
         if (!mysqli_query($this->linkId, 'SET NAMES ' . Config::get('database.connections.mysql.charset'))) {
-            return showTip('字符集设置错误', 0);
+            return apiResponse('字符集设置错误', 0);
         }
 
         set_time_limit(0);

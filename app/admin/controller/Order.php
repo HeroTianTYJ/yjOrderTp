@@ -45,12 +45,12 @@ class Order extends Base
         if (Request::isAjax()) {
             if (Request::get('action') == 'do') {
                 $orderModify = (new model\Order())->modify2();
-                return is_numeric($orderModify) ? showTip('订单状态修改成功！') : showTip($orderModify, 0);
+                return is_numeric($orderModify) ? apiResponse('订单状态修改成功！') : apiResponse($orderModify, 0);
             }
             Html::orderStateRadio();
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -60,7 +60,7 @@ class Order extends Base
             $Order = new model\Order();
             if (Request::get('action') == 'do') {
                 $orderModify = $Order->modify3();
-                return is_numeric($orderModify) ? showTip('快递单号修改成功！') : showTip($orderModify, 0);
+                return is_numeric($orderModify) ? apiResponse('快递单号修改成功！') : apiResponse($orderModify, 0);
             }
             $orderIds = '';
             foreach ($Order->all4() as $value) {
@@ -71,7 +71,7 @@ class Order extends Base
             Html::express();
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -81,7 +81,7 @@ class Order extends Base
             $Order = new model\Order();
             $orderOne = $Order->one();
             if (!$orderOne) {
-                return showTip('不存在此订单！', 0);
+                return apiResponse('不存在此订单！', 0);
             }
             if (Request::get('action') == 'do') {
                 $orderModify = $Order->modify();
@@ -107,9 +107,9 @@ class Order extends Base
                             strip_tags($this->mail(Config::get('system.sms_backend_content')))
                         );
                     }
-                    return showTip(['msg' => '订单修改成功！', 'data' => $this->listItem($Order->one())]);
+                    return apiResponse('订单修改成功！', 1, $this->listItem($Order->one()));
                 } else {
-                    return showTip($orderModify, 0);
+                    return apiResponse($orderModify, 0);
                 }
             }
             Html::template2($orderOne['template_id']);
@@ -121,7 +121,7 @@ class Order extends Base
             View::assign(['One' => $orderOne]);
             return $this->view('order/update');
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -131,7 +131,7 @@ class Order extends Base
             $Order = new model\Order();
             $orderOne = $Order->one();
             if (!$orderOne) {
-                return showTip('不存在此订单！', 0);
+                return apiResponse('不存在此订单！', 0);
             }
 
             if ($orderOne['manager_id']) {
@@ -170,7 +170,7 @@ class Order extends Base
             View::assign(['One' => $orderOne]);
             return $this->view('order/detail');
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -178,23 +178,23 @@ class Order extends Base
     {
         if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
             if (Config::get('app.demo')) {
-                return showTip('演示站，订单无法删除！', 0);
+                return apiResponse('演示站，订单无法删除！', 0);
             }
             $Order = new model\Order();
             if (Request::post('id')) {
                 if (!$Order->one()) {
-                    return showTip('不存在此订单！', 0);
+                    return apiResponse('不存在此订单！', 0);
                 }
             } elseif (Request::post('ids')) {
                 foreach (explode(',', Request::post('ids')) as $value) {
                     if (!$Order->one($value)) {
-                        return showTip('不存在您勾选的订单！', 0);
+                        return apiResponse('不存在您勾选的订单！', 0);
                     }
                 }
             }
-            return $Order->recycle() ? showTip('订单已被移入回收站！') : showTip('订单移入回收站失败！', 0);
+            return $Order->recycle() ? apiResponse('订单已被移入回收站！') : apiResponse('订单移入回收站失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -208,7 +208,7 @@ class Order extends Base
                 return $this->outputDo($Order->all3(), Request::post('siwu', 0));
             }
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

@@ -19,17 +19,17 @@ class Login extends Base
             $managerLogin = (new model\Manager())->login();
             if (is_object($managerLogin)) {
                 if (passEncode(Request::post('pass')) != $managerLogin['pass']) {
-                    return showTip('账号或密码不正确！', 0);
+                    return apiResponse('账号或密码不正确！', 0);
                 }
                 $loginDo = $this->loginDo($managerLogin);
                 if ($loginDo != '1') {
                     return $loginDo;
                 }
-                return showTip('登录成功，跳转中。。。');
+                return apiResponse('登录成功，跳转中。。。');
             } elseif (is_string($managerLogin)) {
-                return showTip($managerLogin, 0);
+                return apiResponse($managerLogin, 0);
             } else {
-                return showTip('账号或密码不正确！', 0);
+                return apiResponse('账号或密码不正确！', 0);
             }
         }
         return $this->view();

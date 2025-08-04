@@ -44,7 +44,7 @@ class File extends Base
     {
         if (Request::isAjax()) {
             if (strstr(Request::post('ids'), '.zip')) {
-                return showTip('zip压缩包不能被再次打包！', 0);
+                return apiResponse('zip压缩包不能被再次打包！', 0);
             }
             $dirOutput = ROOT_DIR . '/' . Config::get('dir.output');
             $ZipArchive = new ZipArchive();
@@ -67,9 +67,9 @@ class File extends Base
                 }
                 $ZipArchive->close();
             }
-            return showTip('文件打包成功！');
+            return apiResponse('文件打包成功！');
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -98,7 +98,7 @@ class File extends Base
     {
         if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
             if (Config::get('app.demo')) {
-                return showTip('演示站，文件无法删除！', 0);
+                return apiResponse('演示站，文件无法删除！', 0);
             }
             $succeedFile = $failedFile = $noExistsFile = 0;
             foreach (explode(',', Request::post('id') ?: Request::post('ids')) as $value) {
@@ -106,7 +106,7 @@ class File extends Base
                     substr($value, 0, 1) == '.' || strstr($value, '/') || strstr($value, '\\') ||
                     strstr($value, '%5C') || strstr($value, '%2F')
                 ) {
-                    return showTip('非法操作！', 0);
+                    return apiResponse('非法操作！', 0);
                 }
                 $file = ROOT_DIR . '/' . Config::get('dir.output') . '/' . $value;
                 if (file_exists($file)) {
@@ -126,13 +126,13 @@ class File extends Base
                 if ($noExistsFile) {
                     $tip[] = $noExistsFile . '个文件不存在';
                 }
-                return showTip(implode('，', $tip) . '！');
+                return apiResponse(implode('，', $tip) . '！');
             } else {
                 return $noExistsFile == 0 ? $succeedFile == 1 ?
-                    showTip('文件删除成功！') : showTip('文件删除失败！', 0) : showTip('不存在此文件！', 0);
+                    apiResponse('文件删除成功！') : apiResponse('文件删除失败！', 0) : apiResponse('不存在此文件！', 0);
             }
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

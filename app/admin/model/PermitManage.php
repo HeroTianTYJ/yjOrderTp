@@ -22,7 +22,7 @@ class PermitManage extends Model
                         ->select()
                         ->toArray();
                     if ($all) {
-                        $query->whereOr('id', 'IN', arrToStr($all, 'parent_id'));
+                        $query->whereOr('id', 'IN', arrayFieldToString($all, 'parent_id'));
                     }
                 });
             }

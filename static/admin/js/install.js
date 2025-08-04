@@ -6,8 +6,8 @@ $(function () {
       url: CONFIG['OPENID'],
       success: function (data) {
         let json = JSON.parse(data);
-        if (json['state'] === 1 && json['content']) {
-          $openid.val(json['content']);
+        if (json['status'] === 1 && json['message']) {
+          $openid.val(json['message']);
           clearInterval(timer);
         }
       }

@@ -15,8 +15,8 @@ $(function () {
       }
     }).then(function (data) {
       let json = JSON.parse(data);
-      showTip(json['content'], json['state']);
-      if (json['state'] === 1) {
+      showTip(json['message'], json['status']);
+      if (json['status'] === 1) {
         let isDefault1 = '<span class="red">是</span> | <a href="javascript:" class="is_default">取消默认</a>';
         let isDefault2 = '<span class="green">否</span> | <a href="javascript:" class="is_default">设置默认</a>';
         $(that).parent().html($(that).parent().html() === isDefault1 ? isDefault2 : isDefault1);

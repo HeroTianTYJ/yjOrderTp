@@ -125,7 +125,7 @@ class Pay extends Base
         if (Request::isAjax()) {
             return (new model\Order())->one(Request::post('order_id'))['order_state_id'];
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

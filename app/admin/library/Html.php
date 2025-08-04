@@ -29,7 +29,7 @@ class Html extends \app\common\library\Html
     public static function permitManage($ids = [])
     {
         $PermitManage = new model\PermitManage();
-        $isDefault = arrToStr($PermitManage->all5(), 'id');
+        $isDefault = arrayFieldToString($PermitManage->all5(), 'id');
         $ids = is_array($ids) ? $isDefault : $ids;
         $html = '';
         $permitManageAll = $PermitManage->all2();
@@ -56,7 +56,7 @@ class Html extends \app\common\library\Html
     public static function permitData($ids = [])
     {
         $PermitData = new model\PermitData();
-        $isDefault = arrToStr($PermitData->all5(), 'id');
+        $isDefault = arrayFieldToString($PermitData->all5(), 'id');
         $ids = is_array($ids) ? $isDefault : $ids;
         $html = '';
         $permitDataAll = $PermitData->all2();
@@ -232,7 +232,7 @@ class Html extends \app\common\library\Html
     {
         $html = '';
         $Field = new model\Field();
-        $isDefault = arrToStr($Field->all3(), 'id');
+        $isDefault = arrayFieldToString($Field->all3(), 'id');
         $ids = is_array($ids) ? $isDefault : $ids;
         foreach ($Field->all2() as $value) {
             $html .= '<div class="check-box"><label' . (in_array($value['id'], explode(',', $isDefault)) ?

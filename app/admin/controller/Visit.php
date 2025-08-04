@@ -38,12 +38,12 @@ class Visit extends Base
             $file = Config::get('dir.output') . 'visit_' . date('YmdHis') . '.csv';
             if (file_put_contents(ROOT_DIR . '/' . $file, $output)) {
                 $Visit->truncate();
-                return showTip('访问统计导出成功！');
+                return apiResponse('访问统计导出成功！');
             } else {
-                return showTip('访问统计导出失败，请检查' . Config::get('dir.output') . '目录权限！', 0);
+                return apiResponse('访问统计导出失败，请检查' . Config::get('dir.output') . '目录权限！', 0);
             }
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -58,9 +58,9 @@ class Visit extends Base
                     'url: \'' . Config::get('url.web2') . Config::get('system.index_php') . 'common/visit.html\',',
                     file_get_contents($js)
                 )
-            ) ? showTip('文件更新成功！') : showTip('文件更新失败，请检查static/index/js目录权限！', 0);
+            ) ? apiResponse('文件更新成功！') : apiResponse('文件更新失败，请检查static/index/js目录权限！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

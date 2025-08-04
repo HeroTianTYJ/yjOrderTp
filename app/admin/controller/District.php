@@ -38,22 +38,22 @@ class District extends Base
         if (Request::isAjax()) {
             $District = new model\District();
             if (Request::get('parent_id') && !$District->one(Request::get('parent_id'))) {
-                return showTip('不存在此行政区划！', 0);
+                return apiResponse('不存在此行政区划！', 0);
             }
             if ($this->whole(Request::get('parent_id'))['level'] > 4) {
-                return showTip('仅支持4级行政区划！', 0);
+                return apiResponse('仅支持4级行政区划！', 0);
             }
             if (Request::get('action') == 'do') {
                 $districtAdd = $District->add();
                 if (is_numeric($districtAdd)) {
-                    return $districtAdd > 0 ? showTip('行政区划添加成功！') : showTip('行政区划添加失败！', 0);
+                    return $districtAdd > 0 ? apiResponse('行政区划添加成功！') : apiResponse('行政区划添加失败！', 0);
                 } else {
-                    return showTip($districtAdd, 0);
+                    return apiResponse($districtAdd, 0);
                 }
             }
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -62,22 +62,22 @@ class District extends Base
         if (Request::isAjax()) {
             $District = new model\District();
             if (Request::get('parent_id') && !$District->one(Request::get('parent_id'))) {
-                return showTip('不存在此行政区划！', 0);
+                return apiResponse('不存在此行政区划！', 0);
             }
             if ($this->whole(Request::get('parent_id'))['level'] > 4) {
-                return showTip('仅支持4级行政区划！', 0);
+                return apiResponse('仅支持4级行政区划！', 0);
             }
             if (Request::get('action') == 'do') {
                 $districtMulti = $District->multi();
                 if (is_numeric($districtMulti)) {
-                    return $districtMulti > 0 ? showTip('行政区划批量添加成功！') : showTip('行政区划批量添加失败！', 0);
+                    return $districtMulti > 0 ? apiResponse('行政区划批量添加成功！') : apiResponse('行政区划批量添加失败！', 0);
                 } else {
-                    return showTip($districtMulti, 0);
+                    return apiResponse($districtMulti, 0);
                 }
             }
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -87,18 +87,18 @@ class District extends Base
             $District = new model\District();
             $districtOne = $District->one();
             if (!$districtOne) {
-                return showTip('不存在此行政区划！', 0);
+                return apiResponse('不存在此行政区划！', 0);
             }
             if (Request::get('action') == 'do') {
                 $districtModify = $District->modify($districtOne['parent_id']);
                 return is_numeric($districtModify) ?
-                    showTip(['msg' => '行政区划修改成功！', 'data' => $this->listItem($District->one())]) :
-                    showTip($districtModify, 0);
+                    apiResponse('行政区划修改成功！', 1, $this->listItem($District->one())) :
+                    apiResponse($districtModify, 0);
             }
             View::assign(['One' => $districtOne]);
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -108,24 +108,24 @@ class District extends Base
             $District = new model\District();
             if (Request::post('id')) {
                 if (!$District->one()) {
-                    return showTip('不存在此行政区划！', 0);
+                    return apiResponse('不存在此行政区划！', 0);
                 }
                 if ($District->one2(Request::post('id'))) {
-                    return showTip('此行政区划下有子行政区划，无法删除！', 0);
+                    return apiResponse('此行政区划下有子行政区划，无法删除！', 0);
                 }
             } elseif (Request::post('ids')) {
                 foreach (explode(',', Request::post('ids')) as $value) {
                     if (!$District->one($value)) {
-                        return showTip('不存在您勾选的行政区划！', 0);
+                        return apiResponse('不存在您勾选的行政区划！', 0);
                     }
                     if ($District->one2($value)) {
-                        return showTip('您勾选的行政区划下有子行政区划，无法删除！', 0);
+                        return apiResponse('您勾选的行政区划下有子行政区划，无法删除！', 0);
                     }
                 }
             }
-            return $District->remove() ? showTip('行政区划删除成功！') : showTip('行政区划删除失败！', 0);
+            return $District->remove() ? apiResponse('行政区划删除成功！') : apiResponse('行政区划删除失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

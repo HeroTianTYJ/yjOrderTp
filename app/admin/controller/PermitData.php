@@ -34,15 +34,15 @@ class PermitData extends Base
             $PermitData = new model\PermitData();
             $permitDataOne = $PermitData->one();
             if (!$permitDataOne) {
-                return showTip('不存在此数据权限！', 0);
+                return apiResponse('不存在此数据权限！', 0);
             }
             if ($permitDataOne['is_default'] == 0) {
-                return $PermitData->isDefault(1) ? showTip('设置默认数据权限成功！') : showTip('设置默认数据权限失败！', 0);
+                return $PermitData->isDefault(1) ? apiResponse('设置默认数据权限成功！') : apiResponse('设置默认数据权限失败！', 0);
             } else {
-                return $PermitData->isDefault(0) ? showTip('取消默认数据权限成功！') : showTip('取消默认数据权限失败！', 0);
+                return $PermitData->isDefault(0) ? apiResponse('取消默认数据权限成功！') : apiResponse('取消默认数据权限失败！', 0);
             }
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

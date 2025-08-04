@@ -27,18 +27,18 @@ class Smtp extends Base
         if (Request::isAjax()) {
             if (Request::get('action') == 'do') {
                 if (Config::get('app.demo')) {
-                    return showTip('演示站，SMTP服务器无法添加！', 0);
+                    return apiResponse('演示站，SMTP服务器无法添加！', 0);
                 }
                 $smtpAdd = (new model\Smtp())->add();
                 if (is_numeric($smtpAdd)) {
-                    return $smtpAdd > 0 ? showTip('SMTP服务器添加成功！') : showTip('SMTP服务器添加失败！', 0);
+                    return $smtpAdd > 0 ? apiResponse('SMTP服务器添加成功！') : apiResponse('SMTP服务器添加失败！', 0);
                 } else {
-                    return showTip($smtpAdd, 0);
+                    return apiResponse($smtpAdd, 0);
                 }
             }
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -48,21 +48,21 @@ class Smtp extends Base
             $Smtp = new model\Smtp();
             $smtpOne = $Smtp->one();
             if (!$smtpOne) {
-                return showTip('不存在此SMTP服务器！', 0);
+                return apiResponse('不存在此SMTP服务器！', 0);
             }
             if (Request::get('action') == 'do') {
                 if (Config::get('app.demo')) {
-                    return showTip('演示站，SMTP服务器无法修改！', 0);
+                    return apiResponse('演示站，SMTP服务器无法修改！', 0);
                 }
                 $smtpModify = $Smtp->modify();
                 return is_numeric($smtpModify) ?
-                    showTip(['msg' => 'SMTP服务器修改成功！', 'data' => $this->listItem($Smtp->one())]) :
-                    showTip($smtpModify, 0);
+                    apiResponse('SMTP服务器修改成功！', 1, $this->listItem($Smtp->one())) :
+                    apiResponse($smtpModify, 0);
             }
             View::assign(['One' => $smtpOne]);
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -70,23 +70,23 @@ class Smtp extends Base
     {
         if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
             if (Config::get('app.demo')) {
-                return showTip('演示站，SMTP服务器无法删除！', 0);
+                return apiResponse('演示站，SMTP服务器无法删除！', 0);
             }
             $Smtp = new model\Smtp();
             if (Request::post('id')) {
                 if (!$Smtp->one()) {
-                    return showTip('不存在此SMTP服务器！', 0);
+                    return apiResponse('不存在此SMTP服务器！', 0);
                 }
             } elseif (Request::post('ids')) {
                 foreach (explode(',', Request::post('ids')) as $value) {
                     if (!$Smtp->one($value)) {
-                        return showTip('不存在您勾选的SMTP服务器！', 0);
+                        return apiResponse('不存在您勾选的SMTP服务器！', 0);
                     }
                 }
             }
-            return $Smtp->remove() ? showTip('SMTP服务器删除成功！') : showTip('SMTP服务器删除失败！', 0);
+            return $Smtp->remove() ? apiResponse('SMTP服务器删除成功！') : apiResponse('SMTP服务器删除失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

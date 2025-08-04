@@ -40,12 +40,12 @@ return [
                         unlink(ROOT_DIR . '/' . Config::get('validate_file.name') .
                             $this->extension[Config::get('validate_file.extension')]);
                     }
-                    return showTip('验证文件生成成功！');
+                    return apiResponse('验证文件生成成功！');
                 } else {
-                    return showTip('验证文件生成失败，请检查app/admin/config目录权限以及根目录权限！', 0);
+                    return apiResponse('验证文件生成失败，请检查app/admin/config目录权限以及根目录权限！', 0);
                 }
             } else {
-                return showTip($validateFileForm, 0);
+                return apiResponse($validateFileForm, 0);
             }
         }
         Html::validateFileExtension($this->extension, Config::get('validate_file.extension'));

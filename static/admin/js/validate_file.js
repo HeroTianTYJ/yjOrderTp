@@ -7,7 +7,7 @@ $(function () {
       data: $(this).serialize(),
       success: function (data) {
         let json = JSON.parse(data);
-        showTip(json['content'], json['state']);
+        showTip(json['message'], json['status']);
         e.preventDefault();
       }
     });

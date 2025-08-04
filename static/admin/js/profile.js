@@ -9,8 +9,8 @@ $(function () {
         data: $(this).serialize(),
         success: function (data) {
           let json = JSON.parse(data);
-          showTip(json['content'], json['state']);
-          if (json['state'] === 1) {
+          showTip(json['message'], json['status']);
+          if (json['status'] === 1) {
             if ($('input[name=wechat_open_id]:checked').val() === '1') {
               $form.find('.wechat_yes').hide();
               $form.find('.wechat_no').show();

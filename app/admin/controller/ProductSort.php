@@ -28,14 +28,14 @@ class ProductSort extends Base
             if (Request::get('action') == 'do') {
                 $productSortAdd = (new model\ProductSort())->add();
                 if (is_numeric($productSortAdd)) {
-                    return $productSortAdd > 0 ? showTip('商品分类添加成功！') : showTip('商品分类添加失败！', 0);
+                    return $productSortAdd > 0 ? apiResponse('商品分类添加成功！') : apiResponse('商品分类添加失败！', 0);
                 } else {
-                    return showTip($productSortAdd, 0);
+                    return apiResponse($productSortAdd, 0);
                 }
             }
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -45,21 +45,21 @@ class ProductSort extends Base
             $ProductSort = new model\ProductSort();
             $productSortOne = $ProductSort->one();
             if (!$productSortOne) {
-                return showTip('不存在此商品分类！', 0);
+                return apiResponse('不存在此商品分类！', 0);
             }
             if (Request::get('action') == 'do') {
                 if (Config::get('app.demo') && Request::post('id') <= 2) {
-                    return showTip('演示站，id<=2的商品分类无法修改！', 0);
+                    return apiResponse('演示站，id<=2的商品分类无法修改！', 0);
                 }
                 $productSortModify = $ProductSort->modify();
                 return is_numeric($productSortModify) ?
-                    showTip(['msg' => '商品分类修改成功！', 'data' => $this->listItem($ProductSort->one())]) :
-                    showTip($productSortModify, 0);
+                    apiResponse('商品分类修改成功！', 1, $this->listItem($ProductSort->one())) :
+                    apiResponse($productSortModify, 0);
             }
             View::assign(['One' => $productSortOne]);
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -67,23 +67,23 @@ class ProductSort extends Base
     {
         if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
             if (Config::get('app.demo')) {
-                return showTip('演示站，商品分类无法删除！', 0);
+                return apiResponse('演示站，商品分类无法删除！', 0);
             }
             $ProductSort = new model\ProductSort();
             if (Request::post('id')) {
                 if (!$ProductSort->one()) {
-                    return showTip('不存在此商品分类！', 0);
+                    return apiResponse('不存在此商品分类！', 0);
                 }
             } elseif (Request::post('ids')) {
                 foreach (explode(',', Request::post('ids')) as $value) {
                     if (!$ProductSort->one($value)) {
-                        return showTip('不存在您勾选的商品分类！', 0);
+                        return apiResponse('不存在您勾选的商品分类！', 0);
                     }
                 }
             }
-            return $ProductSort->remove() ? showTip('商品分类删除成功！') : showTip('商品分类删除失败！', 0);
+            return $ProductSort->remove() ? apiResponse('商品分类删除成功！') : apiResponse('商品分类删除失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -96,9 +96,9 @@ class ProductSort extends Base
                     $ProductSort->sort($key, $value);
                 }
             }
-            return showTip('商品分类排序成功！');
+            return apiResponse('商品分类排序成功！');
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

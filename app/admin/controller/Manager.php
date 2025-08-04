@@ -41,10 +41,9 @@ class Manager extends Base
             if (Request::get('action') == 'do') {
                 $managerAdd = (new model\Manager())->add();
                 if (is_numeric($managerAdd)) {
-                    $level = $this->level[Request::post('level')][1];
-                    return $managerAdd > 0 ? showTip($level . '添加成功！') : showTip($level . '添加失败！', 0);
+                    return $managerAdd > 0 ? apiResponse('管理员添加成功！') : apiResponse('管理员添加失败！', 0);
                 } else {
-                    return showTip($managerAdd, 0);
+                    return apiResponse($managerAdd, 0);
                 }
             }
             Html::permitGroup(0, 1);
@@ -53,7 +52,7 @@ class Manager extends Base
             Html::managerOrderPermitRadio($this->orderPermit, 1);
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -63,21 +62,16 @@ class Manager extends Base
             $Manager = new model\Manager();
             $managerOne = $Manager->one();
             if (!$managerOne) {
-                return showTip('不存在此管理员！', 0);
+                return apiResponse('不存在此管理员！', 0);
             }
             if (Request::get('action') == 'do') {
                 if (Config::get('app.demo') && Request::post('id') == 1) {
-                    return showTip('演示站，无法修改创始人！', 0);
+                    return apiResponse('演示站，无法修改创始人！', 0);
                 }
                 $managerModify = $Manager->modify();
-                if (is_numeric($managerModify)) {
-                    return showTip([
-                        'msg' => $this->level[Request::post('level', 1)][1] . '修改成功！',
-                        'data' => $this->listItem($Manager->one())
-                    ]);
-                } else {
-                    return showTip($managerModify, 0);
-                }
+                return is_numeric($managerModify) ?
+                    apiResponse('管理员修改成功！', 1, $this->listItem($Manager->one())) :
+                    apiResponse($managerModify, 0);
             }
             Html::permitGroup($managerOne['permit_group_id'], 1);
             Html::managerLevelRadio($this->level, $managerOne['level']);
@@ -86,7 +80,7 @@ class Manager extends Base
             View::assign(['One' => $managerOne]);
             return $this->view();
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -94,33 +88,30 @@ class Manager extends Base
     {
         if (Request::isAjax() && (Request::post('id') || Request::post('ids'))) {
             if (Config::get('app.demo')) {
-                return showTip('演示站，管理员无法删除！', 0);
+                return apiResponse('演示站，管理员无法删除！', 0);
             }
             $Manager = new model\Manager();
-            $level = '';
             if (Request::post('id')) {
                 $managerOne = $Manager->one();
                 if (!$managerOne) {
-                    return showTip('不存在此管理员！', 0);
+                    return apiResponse('不存在此管理员！', 0);
                 }
                 if (Request::post('id') == 1) {
-                    return showTip('无法删除创始人！', 0);
+                    return apiResponse('无法删除创始人！', 0);
                 }
-                $level = $this->level[$managerOne['level']][1];
             } elseif (Request::post('ids')) {
                 foreach (explode(',', Request::post('ids')) as $value) {
                     if (!$Manager->one($value)) {
-                        return showTip('不存在您勾选的管理员！', 0);
+                        return apiResponse('不存在您勾选的管理员！', 0);
                     }
                     if ($value == 1) {
-                        return showTip('无法删除创始人！', 0);
+                        return apiResponse('无法删除创始人！', 0);
                     }
                 }
-                $level = '管理员';
             }
-            return $Manager->remove() ? showTip($level . '删除成功！') : showTip($level . '删除失败！', 0);
+            return $Manager->remove() ? apiResponse('管理员删除成功！') : apiResponse('管理员删除失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -130,19 +121,18 @@ class Manager extends Base
             $Manager = new model\Manager();
             $managerOne = $Manager->one();
             if (!$managerOne) {
-                return showTip('不存在此管理员！', 0);
+                return apiResponse('不存在此管理员！', 0);
             }
             if (Request::post('id') == 1) {
-                return showTip('无法激活创始人！', 0);
+                return apiResponse('无法激活创始人！', 0);
             }
-            $level = $this->level[$managerOne['level']][1];
             if ($managerOne['is_activation'] == 0) {
-                return $Manager->isActivation(1) ? showTip($level . '激活成功！') : showTip($level . '激活失败！', 0);
+                return $Manager->isActivation(1) ? apiResponse('管理员激活成功！') : apiResponse('管理员激活失败！', 0);
             } else {
-                return $Manager->isActivation(0) ? showTip($level . '取消激活成功！') : showTip($level . '取消激活失败！', 0);
+                return $Manager->isActivation(0) ? apiResponse('管理员取消激活成功！') : apiResponse('管理员取消激活失败！', 0);
             }
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -152,12 +142,11 @@ class Manager extends Base
             $Manager = new model\Manager();
             $managerOne = $Manager->one();
             if (!$managerOne) {
-                return showTip('不存在此管理员！', 0);
+                return apiResponse('不存在此管理员！', 0);
             }
-            $level = $this->level[$managerOne['level']][1];
-            return $Manager->wechatOpenId() ? showTip($level . '微信解绑成功！') : showTip($level . '微信解绑失败！', 0);
+            return $Manager->wechatOpenId() ? apiResponse('管理员微信解绑成功！') : apiResponse('管理员微信解绑失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
@@ -167,12 +156,11 @@ class Manager extends Base
             $Manager = new model\Manager();
             $managerOne = $Manager->one();
             if (!$managerOne) {
-                return showTip('不存在此管理员！', 0);
+                return apiResponse('不存在此管理员！', 0);
             }
-            $level = $this->level[$managerOne['level']][1];
-            return $Manager->qqOpenId() ? showTip($level . 'QQ解绑成功！') : showTip($level . 'QQ解绑失败！', 0);
+            return $Manager->qqOpenId() ? apiResponse('管理员QQ解绑成功！') : apiResponse('管理员QQ解绑失败！', 0);
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

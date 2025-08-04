@@ -15,7 +15,7 @@ class Common extends Base
     {
         if (Request::isPost()) {
             if (Config::get('app.demo')) {
-                return showTip('演示站，无法上传！', 0);
+                return apiResponse('演示站，无法上传！', 0);
             }
             $Validate = Validate::rule(['file' => 'fileSize:20480000|fileExt:dat'])
                 ->message(['file.fileSize' => '文件不得大于20MB！', 'file.fileExt' => '文件类型必须是dat！']);
@@ -27,12 +27,12 @@ class Common extends Base
                         return date('dHis') . rand(1000, 9999);
                     }
                 ), ROOT_DIR . '/data/qqwry.dat');
-                return showTip(QQWry::getVersion());
+                return apiResponse(QQWry::getVersion());
             } else {
-                return showTip($Validate->getError(), 0);
+                return apiResponse($Validate->getError(), 0);
             }
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 }

@@ -65,7 +65,7 @@ class Base extends \app\common\controller\Base
             $currentPermitManageId = Config::get('permit_manage.' . $controller . '.' . strtolower($action), 0);
             if ($currentPermitManageId && !in_array($currentPermitManageId, $session['permit_manage'])) {
                 if (Request::isAjax()) {
-                    exit(showTip('权限不足！', 0));
+                    exit(apiResponse('权限不足！', 0));
                 } else {
                     strtolower($action) == 'index' ? $this->error('权限不足！', 0) : $this->error('权限不足！');
                 }

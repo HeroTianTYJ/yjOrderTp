@@ -18,10 +18,10 @@ class Profile extends Base
         $Manager = new model\Manager();
         if (Request::isAjax()) {
             if (Config::get('app.demo')) {
-                return showTip('演示站，个人资料无法修改！', 0);
+                return apiResponse('演示站，个人资料无法修改！', 0);
             }
             $managerModify = $Manager->modify2();
-            return is_numeric($managerModify) ? showTip('个人资料修改成功！') : showTip($managerModify, 0);
+            return is_numeric($managerModify) ? apiResponse('个人资料修改成功！') : apiResponse($managerModify, 0);
         }
         View::assign([
             'One' => $Manager->one(Session::get(Config::get('system.session_key_admin') . '.manage_info.id'))

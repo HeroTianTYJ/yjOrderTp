@@ -27,15 +27,15 @@ class Field extends Base
             $Field = new model\Field();
             $fieldOne = $Field->one();
             if (!$fieldOne) {
-                return showTip('不存在此字段！', 0);
+                return apiResponse('不存在此字段！', 0);
             }
             if ($fieldOne['is_default'] == 0) {
-                return $Field->isDefault(1) ? showTip('设置默认字段成功！') : showTip('设置默认字段失败！', 0);
+                return $Field->isDefault(1) ? apiResponse('设置默认字段成功！') : apiResponse('设置默认字段失败！', 0);
             } else {
-                return $Field->isDefault(0) ? showTip('取消默认字段成功！') : showTip('取消默认字段失败！', 0);
+                return $Field->isDefault(0) ? apiResponse('取消默认字段成功！') : apiResponse('取消默认字段失败！', 0);
             }
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 

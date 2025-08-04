@@ -80,8 +80,8 @@ function add (title, width = 800, succeed = function () {}) {
         data: $('form.add').serialize()
       }).then(function (data) {
         let json = JSON.parse(data);
-        showTip(json['content'], json['state']);
-        if (json['state'] === 1) {
+        showTip(json['message'], json['status']);
+        if (json['status'] === 1) {
           layer.close(index);
           setTimeout(function () {
             window.location.reload(true);
@@ -110,8 +110,8 @@ function multi (element, title, url) {
         data: $('form' + element).serialize()
       }).then(function (data) {
         let json = JSON.parse(data);
-        showTip(json['content'], json['state']);
-        if (json['state'] === 1) {
+        showTip(json['message'], json['status']);
+        if (json['status'] === 1) {
           layer.close(index);
           setTimeout(function () {
             window.location.reload(true);
@@ -140,15 +140,13 @@ function update (title, width = 800, succeed = function () {}) {
         data: $('form.update').serialize() + '&id=' + id
       }).then(function (data) {
         let json = JSON.parse(data);
-        if (json['state'] === 0) {
-          showTip(json['content'], 0);
-        } else if (json['state'] === 1) {
-          showTip(json['content']['msg']);
+        showTip(json['message'], json['status']);
+        if (json['status'] === 1) {
           layer.close(index);
-          $list.find('.item' + id).html(listItem(json['content']['data']).replace(/<tr class="[\w ]+">/, '').replace('</tr>', '').replace(/<li class="[\w ]+">/, '').replace('</li>', ''));
+          $list.find('.item' + id).html(listItem(json['data']).replace(/null/g, '').replace(/<tr class="[\w ]+">/, '').replace('</tr>', '').replace(/<li class="[\w ]+">/, '').replace('</li>', ''));
           boxShadow();
           iCheck();
-          if (json['content']['reload']) {
+          if (json['data']['reload']) {
             setTimeout(function () {
               window.location.reload();
             }, 3000);
@@ -282,8 +280,8 @@ function sort () {
       }
     }).then(function (data) {
       let json = JSON.parse(data);
-      showTip(json['content'], json['state']);
-      if (json['state'] === 1) {
+      showTip(json['message'], json['status']);
+      if (json['status'] === 1) {
         let html = '';
         $.each(obj, function (index, value) {
           html += '<tr>' + value + '</tr>';
@@ -346,7 +344,7 @@ function remove (moduleName, recycle = false) {
       },
       '<h3><span>？</span>确认要删除此' + moduleName + '吗？</h3><p>删除此' + moduleName + '之后，' + (recycle ? '可在' + moduleName + '回收站进行恢复' : '无法进行恢复，可以重新添加') + '。</p>',
       function (json, index) {
-        if (json['state'] === 1) {
+        if (json['status'] === 1) {
           $(that).parent().parent().remove();
           layer.close(index);
           setTimeout(function () {
@@ -371,7 +369,7 @@ function multiRemove (moduleName, recycle = false) {
       },
       '<h3><span>？</span>确认要删除这' + $checked.length + '个' + moduleName + '吗？</h3><p>删除这' + $checked.length + '个' + moduleName + '之后，' + (recycle ? '可在' + moduleName + '回收站进行恢复' : '无法进行恢复，可以重新添加') + '。</p>',
       function (json, index) {
-        if (json['state'] === 1) {
+        if (json['status'] === 1) {
           $checked.remove();
           layer.close(index);
           setTimeout(function () {

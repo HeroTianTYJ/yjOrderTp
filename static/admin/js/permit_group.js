@@ -22,8 +22,8 @@ $(function () {
       }
     }).then(function (data) {
       let json = JSON.parse(data);
-      showTip(json['content'], json['state']);
-      if (json['state'] === 1) {
+      showTip(json['message'], json['status']);
+      if (json['status'] === 1) {
         let $parent = $(that).parent();
         $list.find('td.is_default').html('<a href="javascript:" class="is_default">设为默认</a>');
         $parent.html('<span class="red">是</span>');

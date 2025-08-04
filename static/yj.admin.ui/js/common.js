@@ -15,25 +15,25 @@ function iCheck () {
 }
 
 // 信息提示
-function showTip (content, state = 1) {
-  if (state === 0) {
-    state = 'failed';
-  } else if (state === 1) {
-    state = 'succeed';
-  } else if (state === 3) {
-    state = 'info';
-  } else if (state === 4) {
-    state = 'warning';
+function showTip (content, status = 1) {
+  if (status === 0) {
+    status = 'failed';
+  } else if (status === 1) {
+    status = 'succeed';
+  } else if (status === 3) {
+    status = 'info';
+  } else if (status === 4) {
+    status = 'warning';
   }
   let $tip = $('body > div.tip');
   $tip.show();
   $tip.find('div').css({display: 'inline'});
-  $tip.find('span.iconfont').addClass('icon-tip-' + state);
+  $tip.find('span.iconfont').addClass('icon-tip-' + status);
   $tip.find('span.content').html(content);
   setTimeout(function () {
     $tip.hide();
     $tip.find('div').hide();
-    $tip.find('span.iconfont').removeClass('icon-tip-' + state);
+    $tip.find('span.iconfont').removeClass('icon-tip-' + status);
     $tip.find('span.content').html('');
   }, 3000);
 }
@@ -96,8 +96,8 @@ function commonAjax (url, data = {}, reload = true) {
     data: data
   }).then(function (data) {
     let json = JSON.parse(data);
-    showTip(json['content'], json['state']);
-    if (json['state'] === 1 && reload) {
+    showTip(json['message'], json['status']);
+    if (json['status'] === 1 && reload) {
       setTimeout(function () {
         window.location.reload(true);
       }, 3000);
@@ -122,7 +122,7 @@ function confirmLayer (url, data = {}, message = '', callback = function () {}) 
         data: data
       }).then(function (data) {
         let json = JSON.parse(data);
-        showTip(json['content'], json['state']);
+        showTip(json['message'], json['status']);
         callback(json, index);
       });
     }
@@ -138,7 +138,7 @@ function ajaxMessageLayer (url, title = '', data = {}, callback = function () {}
   }).then(function (data) {
     if (isJSON(data)) {
       let json = JSON.parse(data);
-      showTip(json['content'], json['state']);
+      showTip(json['message'], json['status']);
     } else {
       layer.confirm(
         data,

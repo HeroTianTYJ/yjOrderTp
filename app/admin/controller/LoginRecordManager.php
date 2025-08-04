@@ -45,12 +45,12 @@ class LoginRecordManager extends Base
             $file = Config::get('dir.output') . 'login_manager_' . date('YmdHis') . '.csv';
             if (file_put_contents(ROOT_DIR . '/' . $file, $output)) {
                 $LoginRecordManager->truncate();
-                return showTip('登录记录导出成功！');
+                return apiResponse('登录记录导出成功！');
             } else {
-                return showTip('登录记录导出失败，请检查' . Config::get('dir.output') . '目录权限！', 0);
+                return apiResponse('登录记录导出失败，请检查' . Config::get('dir.output') . '目录权限！', 0);
             }
         } else {
-            return showTip('非法操作！', 0);
+            return apiResponse('非法操作！', 0);
         }
     }
 
