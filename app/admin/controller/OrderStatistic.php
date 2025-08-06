@@ -93,7 +93,8 @@ class OrderStatistic extends Base
     public function output()
     {
         if (Request::isAjax()) {
-            $output = '"时间","未发货数","已发货数","已取消数","已签收数","未发货金额","已发货金额","已取消金额","已签收金额","订单数","成交数","订单金额","成交金额",';
+            $output = '"时间","待支付数","待发货数","已发货数","已签收数","售后中数","交易关闭数","待支付金额","待发货金额","已发货金额","已签收金额","售后中金额",' .
+                '"交易关闭金额","订单数","成交数","订单金额","成交金额",';
             switch (Request::post('type')) {
                 case 'month':
                     $time = '%Y年%m月';
@@ -108,11 +109,12 @@ class OrderStatistic extends Base
                 $output .= "\r\n" . '"' . $value['time'] . '","' . $value['count1'] . '","' . $value['count2'] . '","' .
                     $value['count3'] . '","' . $value['count4'] . '","' . $value['count5'] . '","' . $value['count6'] .
                     '","' . $value['sum1'] . '","' . $value['sum2'] . '","' . $value['sum3'] . '","' . $value['sum4'] .
-                    '","' . ($value['count1'] + $value['count2'] + $value['count3'] + $value['count4'] +
-                        $value['count5'] + $value['count6']) . '","' . ($value['count1'] + $value['count2'] +
-                        $value['count3'] + $value['count4'] + $value['count5']) . '","' . ($value['sum1'] +
-                        $value['sum2'] + $value['sum3'] + $value['sum4'] + $value['sum5'] + $value['sum6']) . '","' .
-                    ($value['sum1'] + $value['sum2'] + $value['sum3'] + $value['sum4'] + $value['sum5']) . '",';
+                    '","' . $value['sum5'] . '","' . $value['sum6'] . '","' . ($value['count1'] + $value['count2'] +
+                        $value['count3'] + $value['count4'] + $value['count5'] + $value['count6']) . '","' .
+                    ($value['count1'] + $value['count2'] + $value['count3'] + $value['count4'] + $value['count5']) .
+                    '","' . ($value['sum1'] + $value['sum2'] + $value['sum3'] + $value['sum4'] + $value['sum5'] +
+                        $value['sum6']) . '","' . ($value['sum1'] + $value['sum2'] + $value['sum3'] + $value['sum4'] +
+                        $value['sum5']) . '",';
             }
             return json_encode([
                 'extension' => 'csv',
