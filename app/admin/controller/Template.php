@@ -66,12 +66,12 @@ class Template extends Base
                     apiResponse('模板修改成功！', 1, $this->listItem($Template->one())) :
                     apiResponse($templateModify, 0);
             }
-            Html::template($this->template, $templateOne['template']);
+            Html::template($this->template, $templateOne['template_id']);
             Html::manager($templateOne['manager_id']);
             Html::templateStyle($templateOne['template_style_id']);
             Html::productSort($templateOne['product_sort_ids']);
             Html::field($templateOne['field_ids']);
-            Html::payment($templateOne['payment_ids'], $templateOne['payment_default']);
+            Html::payment($templateOne['payment_ids'], $templateOne['payment_default_id']);
             View::assign(['One' => $templateOne]);
             return $this->view();
         } else {
@@ -162,11 +162,11 @@ class Template extends Base
         } else {
             $item['manager'] = '-';
         }
-        $item['template'] = $this->template[$item['template']];
+        $item['template'] = $this->template[$item['template_id']];
         $item['is_show_search'] = $item['is_show_search'] ? '开启' : '关闭';
         $item['is_show_send'] = $item['is_show_send'] ? '开启' : '关闭';
         $item['is_captcha'] = $item['is_captcha'] ? '开启' : '关闭';
-        $item['date'] = dateFormat($item['date']);
+        $item['create_time'] = timeFormat($item['create_time']);
         $item['url'] = Config::get('url.web1') . Config::get('system.index_php') . 'id/' . $item['id'] . '.html';
         return $item;
     }

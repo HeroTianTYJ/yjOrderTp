@@ -121,7 +121,7 @@ class OrderState extends Base
     private function listItem($item)
     {
         $item['name'] = keyword($item['name']);
-        $item['date'] = dateFormat($item['date']);
+        $item['create_time'] = timeFormat($item['create_time']);
         return $item;
     }
 }

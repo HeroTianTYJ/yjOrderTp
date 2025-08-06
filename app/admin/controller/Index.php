@@ -18,16 +18,16 @@ class Index extends Base
         if (isDataPermission('system', 'version_code')) {
             $data['系统信息'][] = ['版本号', 'V' . explode('|', Config::get('app.version'))[0]];
         }
-        if (isDataPermission('system', 'version_date')) {
+        if (isDataPermission('system', 'update_time')) {
             $data['系统信息'][] = ['更新时间', explode('|', Config::get('app.version'))[1]];
         }
         if (isDataPermission('profile', 'level')) {
             $level = '';
             if ($session['id'] == 1) {
                 $level = '创始人';
-            } elseif ($session['level'] == 1) {
+            } elseif ($session['level_id'] == 1) {
                 $level = '超级管理员';
-            } elseif ($session['level'] == 2) {
+            } elseif ($session['level_id'] == 2) {
                 $level = '普通管理员';
             }
             $data['个人信息'][] = ['身份', $level];
@@ -35,16 +35,16 @@ class Index extends Base
         if (isDataPermission('profile', 'permit_group')) {
             $data['个人信息'][] = ['权限组', $session['permit_group']];
         }
-        if (permitDataIntersect([['profile', 'login_count'], ['profile', 'login_date'], ['profile', 'login_ip']])) {
+        if (permitDataIntersect([['profile', 'login_count'], ['profile', 'login_time'], ['profile', 'login_ip']])) {
             $LoginRecordManager = new model\LoginRecordManager();
             $loginRecordManagerTotalCount = $LoginRecordManager->totalCount();
             if (isDataPermission('profile', 'login_count')) {
                 $data['个人信息'][] = ['登录次数', $loginRecordManagerTotalCount];
             }
-            if (isDataPermission('profile', 'login_date')) {
+            if (isDataPermission('profile', 'login_time')) {
                 $data['个人信息'][] = [
                     '上次登录时间',
-                    $loginRecordManagerTotalCount > 1 ? dateFormat($LoginRecordManager->one()['date']) : '首次登录'
+                    $loginRecordManagerTotalCount > 1 ? timeFormat($LoginRecordManager->one()['create_time']) : '首次登录'
                 ];
             }
             if (isDataPermission('profile', 'login_ip')) {

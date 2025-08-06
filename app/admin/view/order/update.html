@@ -4,9 +4,9 @@
   <input type="hidden" name="order_id" value="{$One['order_id']}">
   <input type="hidden" name="ip" value="{$One['ip']}">
   <input type="hidden" name="pay_id" value="{$One['pay_id']}">
-  <input type="hidden" name="pay_scene" value="{$One['pay_scene']}">
-  <input type="hidden" name="pay_date" value="{$One['pay_date']}">
-  <input type="hidden" name="date" value="{$One['date']}">
+  <input type="hidden" name="pay_scene_id" value="{$One['pay_scene_id']}">
+  <input type="hidden" name="pay_time" value="{$One['pay_time']|timeFormat}">
+  <input type="hidden" name="create_time" value="{$One['create_time']|timeFormat}">
   <table>
     <tr><td>下单模板：</td><td><select name="template_id" lay-search>{$Template}</select></td></tr>
     <tr><td>订购商品：</td><td><select name="product_id" class="product_id" lay-filter="product_id" lay-search>{$Product}</select></td></tr>

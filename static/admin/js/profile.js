@@ -36,5 +36,5 @@ $(function () {
 });
 
 function listItem (item) {
-  return '<tr class="item' + item['id'] + '"><td>' + item['ip'] + '</td><td>' + item['date'] + '</td></tr>';
+  return '<tr class="item' + item['id'] + '"><td>' + item['ip'] + '</td><td>' + item['create_time'] + '</td></tr>';
 }

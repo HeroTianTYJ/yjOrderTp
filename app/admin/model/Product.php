@@ -37,7 +37,7 @@ class Product extends Model
                 $map['where'] .= ' AND `product_sort_id`=:product_sort_id';
                 $map['value']['product_sort_id'] = Request::get('product_sort_id');
             }
-            return $this->field('id,name,product_sort_id,price,color,sort,is_view,is_default,date')
+            return $this->field('id,name,product_sort_id,price,color,sort,is_view,is_default,create_time')
                 ->where($map['where'], $map['value'])
                 ->order(['sort' => 'ASC'])
                 ->paginate(Config::get('app.page_size'));
@@ -66,7 +66,7 @@ class Product extends Model
     public function one($id = 0)
     {
         try {
-            return $this->field('id,name,product_sort_id,price,color,sort,is_view,is_default,date')
+            return $this->field('id,name,product_sort_id,price,color,sort,is_view,is_default,create_time')
                 ->where(['id' => $id ?: Request::post('id')])
                 ->find();
         } catch (Exception $e) {
@@ -84,7 +84,7 @@ class Product extends Model
             'price' => Request::post('price'),
             'color' => Request::post('color'),
             'sort' => $this->nextId(),
-            'date' => time()
+            'create_time' => now()
         ];
         $validate = new validate();
         if ($validate->check($data)) {

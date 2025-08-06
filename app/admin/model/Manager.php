@@ -17,7 +17,7 @@ class Manager extends Model
     {
         $map = [];
         if (in_array($type, [1, 2])) {
-            $map['level'] = $type;
+            $map['level_id'] = $type;
         } elseif ($type == 3) {
             $map['is_activation'] = 0;
         }
@@ -31,9 +31,9 @@ class Manager extends Model
         try {
             $map['where'] = '`name` LIKE :name';
             $map['value']['name'] = '%' . Request::get('keyword') . '%';
-            if (Request::get('level')) {
-                $map['where'] .= ' AND `level`=:level';
-                $map['value']['level'] = Request::get('level');
+            if (Request::get('level_id')) {
+                $map['where'] .= ' AND `level_id`=:level_id';
+                $map['value']['level_id'] = Request::get('level_id');
             }
             if (Request::get('is_activation', -1) != -1) {
                 $map['where'] .= ' AND `is_activation`=:is_activation';
@@ -43,9 +43,9 @@ class Manager extends Model
                 $map['where'] .= ' AND `permit_group_id`=:permit_group_id';
                 $map['value']['permit_group_id'] = Request::get('permit_group_id');
             }
-            if (Request::get('order_permit')) {
-                $map['where'] .= ' AND `order_permit`=:order_permit';
-                $map['value']['order_permit'] = Request::get('order_permit');
+            if (Request::get('order_permit_id')) {
+                $map['where'] .= ' AND `order_permit_id`=:order_permit_id';
+                $map['value']['order_permit_id'] = Request::get('order_permit_id');
             }
             if (Request::get('wechat', -1) == 0) {
                 $map['where'] .= ' AND `wechat_open_id`=\'\' AND `wechat_union_id`=\'\'';
@@ -57,18 +57,18 @@ class Manager extends Model
             } elseif (Request::get('qq') == 1) {
                 $map['where'] .= ' AND `qq_open_id`<>\'\'';
             }
-            if (Request::get('date1')) {
-                $map['where'] .= ' AND `date`>=:date1';
-                $map['value']['date1'] = strtotime(Request::get('date1') . ' 00:00:00');
+            if (Request::get('create_time1')) {
+                $map['where'] .= ' AND `create_time`>=:create_time1';
+                $map['value']['create_time1'] = Request::get('create_time1') . ' 00:00:00';
             }
-            if (Request::get('date2')) {
-                $map['where'] .= ' AND `date`<=:date2';
-                $map['value']['date2'] = strtotime(Request::get('date2') . ' 23:59:59');
+            if (Request::get('create_time2')) {
+                $map['where'] .= ' AND `create_time`<=:create_time2';
+                $map['value']['create_time2'] = Request::get('create_time2') . ' 23:59:59';
             }
-            return $this->field('id,name,level,is_activation,permit_group_id,order_permit,wechat_open_id,' .
-                'wechat_union_id,qq_open_id,date')
+            return $this->field('id,name,level_id,is_activation,permit_group_id,order_permit_id,wechat_open_id,' .
+                'wechat_union_id,qq_open_id,create_time')
                 ->where($map['where'], $map['value'])
-                ->order(['date' => 'DESC'])
+                ->order(['create_time' => 'DESC'])
                 ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -80,7 +80,7 @@ class Manager extends Model
     public function all2()
     {
         try {
-            return $this->field('id,name')->order(['date' => 'DESC'])->select()->toArray();
+            return $this->field('id,name')->order(['create_time' => 'DESC'])->select()->toArray();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -97,7 +97,7 @@ class Manager extends Model
             ];
             $validate = new validate();
             if ($validate->only(['name', 'pass'])->check($data)) {
-                return $this->field('id,name,pass,level,is_activation,permit_group_id,order_permit,wechat_open_id,' .
+                return $this->field('id,name,pass,level_id,is_activation,permit_group_id,order_permit_id,wechat_open_id,' .
                     'wechat_union_id,qq_open_id')
                     ->where(['name' => Request::post('name')])
                     ->find();
@@ -114,8 +114,8 @@ class Manager extends Model
     public function one($id = 0)
     {
         try {
-            return $this->field('id,name,pass,level,is_activation,permit_group_id,order_permit,wechat_open_id,' .
-                'wechat_union_id,qq_open_id,date')
+            return $this->field('id,name,pass,level_id,is_activation,permit_group_id,order_permit_id,wechat_open_id,' .
+                'wechat_union_id,qq_open_id,create_time')
                 ->where(['id' => $id ?: Request::post('id')])
                 ->find();
         } catch (Exception $e) {
@@ -131,13 +131,13 @@ class Manager extends Model
             'name' => Request::post('name'),
             'pass' => Request::post('pass'),
             'repass' => Request::post('repass'),
-            'level' => Request::post('level'),
+            'level_id' => Request::post('level_id'),
             'is_activation' => Request::post('is_activation'),
-            'date' => time()
+            'create_time' => now()
         ];
-        if (Request::post('level') == 1) {
-            $data['permit_group_id'] = $data['order_permit'] = 0;
-        } elseif (Request::post('level') == 2) {
+        if (Request::post('level_id') == 1) {
+            $data['permit_group_id'] = $data['order_permit_id'] = 0;
+        } elseif (Request::post('level_id') == 2) {
             if (!Request::post('permit_group_id')) {
                 return '请先在权限组模块中添加一个权限组！';
             }
@@ -145,7 +145,7 @@ class Manager extends Model
                 return '您选择的权限组不存在！';
             }
             $data['permit_group_id'] = Request::post('permit_group_id');
-            $data['order_permit'] = Request::post('order_permit');
+            $data['order_permit_id'] = Request::post('order_permit_id');
         }
         $validate = new validate();
         if ($validate->remove('admin_mail', true)->check($data)) {
@@ -168,12 +168,12 @@ class Manager extends Model
             'pass' => Request::post('admin_pass'),
             'repass' => Request::post('admin_repass'),
             'admin_mail' => Request::post('admin_mail'),
-            'level' => 1,
+            'level_id' => 1,
             'is_activation' => 1,
-            'date' => time()
+            'create_time' => now()
         ];
         $validate = new validate();
-        if ($validate->only(['name', 'pass', 'repass', 'admin_mail', 'level', 'is_activation'])->check($data)) {
+        if ($validate->only(['name', 'pass', 'repass', 'admin_mail', 'level_id', 'is_activation'])->check($data)) {
             $data['pass'] = passEncode(Request::post('admin_pass'), $passKey);
             unset($data['repass'], $data['admin_mail']);
             return $this->insertGetId($data);
@@ -190,13 +190,13 @@ class Manager extends Model
         ];
         $scene = ['name'];
         if (Request::post('id') != 1) {
-            $data['level'] = Request::post('level');
+            $data['level_id'] = Request::post('level_id');
             $data['is_activation'] = Request::post('is_activation');
-            $scene[] = 'level';
+            $scene[] = 'level_id';
             $scene[] = 'is_activation';
-            if (Request::post('level') == 1) {
-                $data['permit_group_id'] = $data['order_permit'] = 0;
-            } elseif (Request::post('level') == 2) {
+            if (Request::post('level_id') == 1) {
+                $data['permit_group_id'] = $data['order_permit_id'] = 0;
+            } elseif (Request::post('level_id') == 2) {
                 if (!Request::post('permit_group_id')) {
                     return '请先在权限组模块中添加一个权限组！';
                 }
@@ -204,8 +204,8 @@ class Manager extends Model
                     return '您选择的权限组不存在！';
                 }
                 $data['permit_group_id'] = Request::post('permit_group_id');
-                $data['order_permit'] = Request::post('order_permit');
-                $scene[] = 'order_permit';
+                $data['order_permit_id'] = Request::post('order_permit_id');
+                $scene[] = 'order_permit_id';
             }
         }
         if (Request::post('pass')) {

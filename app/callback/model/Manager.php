@@ -11,7 +11,7 @@ class Manager extends Model
     public function wechatLogin($wechatUnionId = '')
     {
         try {
-            return $this->field('id,name,level,is_activation,permit_group_id,order_permit,distributor_code')
+            return $this->field('id,name,level_id,is_activation,permit_group_id,order_permit_id,distributor_code')
                 ->where(['wechat_union_id' => $wechatUnionId])
                 ->find();
         } catch (Exception $e) {
@@ -22,7 +22,7 @@ class Manager extends Model
     public function wechatLogin2($wechatOpenId = '')
     {
         try {
-            return $this->field('id,name,level,is_activation,permit_group_id,order_permit,distributor_code')
+            return $this->field('id,name,level_id,is_activation,permit_group_id,order_permit_id,distributor_code')
                 ->where(['wechat_open_id' => $wechatOpenId])
                 ->find();
         } catch (Exception $e) {
@@ -35,7 +35,7 @@ class Manager extends Model
     public function qqLogin($qqOpenId)
     {
         try {
-            return $this->field('id,name,level,is_activation,permit_group_id,order_permit,distributor_code')
+            return $this->field('id,name,level_id,is_activation,permit_group_id,order_permit_id,distributor_code')
                 ->where(['qq_open_id' => $qqOpenId])
                 ->find();
         } catch (Exception $e) {

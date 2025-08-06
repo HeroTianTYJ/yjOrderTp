@@ -15,9 +15,9 @@ class PermitGroup extends Model
     public function all()
     {
         try {
-            return $this->field('id,name,text_id_permit_manage_ids,permit_data_ids,is_default,date')
+            return $this->field('id,name,text_id_permit_manage_ids,permit_data_ids,is_default,create_time')
                 ->where('name', 'LIKE', '%' . Request::get('keyword') . '%')
-                ->order(['date' => 'DESC'])
+                ->order(['create_time' => 'DESC'])
                 ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -29,7 +29,7 @@ class PermitGroup extends Model
     public function all2()
     {
         try {
-            return $this->field('id,name,is_default')->order(['date' => 'DESC'])->select()->toArray();
+            return $this->field('id,name,is_default')->order(['create_time' => 'DESC'])->select()->toArray();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -40,7 +40,7 @@ class PermitGroup extends Model
     public function one($id = 0)
     {
         try {
-            return $this->field('id,name,text_id_permit_manage_ids,permit_data_ids,is_default,date')
+            return $this->field('id,name,text_id_permit_manage_ids,permit_data_ids,is_default,create_time')
                 ->where(['id' => $id ?: Request::post('id')])
                 ->find();
         } catch (Exception $e) {
@@ -54,7 +54,7 @@ class PermitGroup extends Model
     {
         $data = [
             'name' => Request::post('name'),
-            'date' => time()
+            'create_time' => now()
         ];
         $validate = new validate();
         if ($validate->check($data)) {

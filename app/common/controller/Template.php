@@ -12,7 +12,7 @@ class Template
         if ($demo) {
             $templateOne = [
                 'name' => '填写订单',
-                'template' => $id,
+                'template_id' => $id,
                 'template_style_id' => 1,
                 'product_type' => 1,
                 'product_sort_ids' => '',
@@ -21,7 +21,7 @@ class Template
                 'product_view_type' => 0,
                 'field_ids' => '1,2,3,4,5,6,7,8',
                 'payment_ids' => '1,2,3',
-                'payment_default' => 1,
+                'payment_default_id' => 1,
                 'is_show_search' => 1,
                 'is_show_send' => 1,
                 'is_captcha' => 1
@@ -98,13 +98,13 @@ class Template
         foreach (Config::get('payment') as $key => $value) {
             if (in_array($key, explode(',', $templateOne['payment_ids']))) {
                 $payHtml .= '<label><input type="radio" name="payment_id" value="' . $key . '" ' .
-                    ($key == $templateOne['payment_default'] ? 'checked' : '') . '>' . $value . '</label> ';
+                    ($key == $templateOne['payment_default_id'] ? 'checked' : '') . '>' . $value . '</label> ';
             }
         }
 
         $fieldTemp = explode(',', $templateOne['field_ids']);
         $district = '';
-        if (in_array($templateOne['template'], [0, 1, 2, 3])) {
+        if (in_array($templateOne['template_id'], [0, 1, 2, 3])) {
             $districtArr = [
                 '<div class="district1"><input type="hidden" name="province"><input type="hidden" name="city">' .
                 '<input type="hidden" name="county"><input type="hidden" name="town"><dd><span class="left">省　　份：' .
@@ -154,7 +154,7 @@ class Template
 <script type="text/javascript" src="static/index/js/order.js?' . staticCache() . '"></script>
 <link rel="stylesheet" type="text/css" href="static/library/lay_ui/css/lay_ui.css?' . staticCache() . '">
 <link rel="stylesheet" type="text/css" href="static/index/css/template' .
-                (in_array($templateOne['template'], [0, 1]) ? 1 : $templateOne['template']) . '.css?' . staticCache() .
+                (in_array($templateOne['template_id'], [0, 1]) ? 1 : $templateOne['template_id']) . '.css?' . staticCache() .
                 '">
 <script type="text/javascript">let CONFIG={"DISTRICT":"' . Config::get('url.web1') . Config::get('system.index_php') .
                 'common/district"};</script>
@@ -165,7 +165,7 @@ class Template
                 $templateStyleOne['select_current_bg_color'] . ' !important;}</style>
 
 <div class="order">
-  ' . ($templateOne['template'] != 1 ? '<div class="buy"></div>' : '<div class="buy2">在线快速订购</div>') . '
+  ' . ($templateOne['template_id'] != 1 ? '<div class="buy"></div>' : '<div class="buy2">在线快速订购</div>') . '
   
   <form method="post" action="' . Config::get('url.web1') . Config::get('system.index_php') .
                 'sub_order.html" target="_parent" class="form layui-form">
@@ -188,7 +188,7 @@ class Template
                     '<span class="right"><input type="text" name="email" placeholder="选填，可接收发货信息" class="text">' .
                     '</span></dd>' : '') . ($payHtml ? '<dd class="pay"><span class="left">支付方式：</span>' .
                     '<span class="right">' . $payHtml . '</span></dd>' :
-                    '<input type="hidden" name="payment_id" value="' . $templateOne['payment_default'] . '">') .
+                    '<input type="hidden" name="payment_id" value="' . $templateOne['payment_default_id'] . '">') .
                 ($templateOne['is_captcha'] ? '<dd><span class="left">验 证 码：</span><span class="right">' .
                     '<input type="text" name="captcha" class="text2"></span></dd><dd class="captcha">' .
                     '<span class="left"></span><span class="right"><img src="' . Config::get('url.web1') .
@@ -293,7 +293,7 @@ class Template
                     '</textarea></dd>' : '') . (in_array(8, $fieldTemp) ? '<dd>电子邮箱：' .
                     '<input type="text" name="email" placeholder="选填，可接收发货信息" class="text"></dd>' : '') .
                 ($payHtml ? '<dd>支付方式：' . $payHtml . '</dd>' : '<input type="hidden" name="payment_id" value="' .
-                    $templateOne['payment_default'] . '">') . ($templateOne['is_captcha'] ? '<dd class="captcha">' .
+                    $templateOne['payment_default_id'] . '">') . ($templateOne['is_captcha'] ? '<dd class="captcha">' .
                     '<span>验 证 码：<input type="text" name="captcha" class="text2"></span> <img src="' .
                     Config::get('url.web1') . Config::get('system.index_php') .
                     'common/captcha" alt="验证码" onClick="this.src=\'' . Config::get('url.web1') .

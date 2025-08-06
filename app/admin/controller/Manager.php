@@ -27,9 +27,9 @@ class Manager extends Base
         }
         View::assign(['Total' => $managerAll->total()]);
         Html::permitGroup(Request::get('permit_group_id'));
-        Html::managerLevelSelect($this->level, Request::get('level'));
+        Html::managerLevelSelect($this->level, Request::get('level_id'));
         Html::managerIsActivationSelect($this->isActivation, Request::get('is_activation', -1));
-        Html::managerOrderPermitSelect($this->orderPermit, Request::get('order_permit'));
+        Html::managerOrderPermitSelect($this->orderPermit, Request::get('order_permit_id'));
         Html::wechat($this->wechat, Request::get('wechat', -1));
         Html::qq($this->qq, Request::get('qq', -1));
         return $this->view();
@@ -74,9 +74,9 @@ class Manager extends Base
                     apiResponse($managerModify, 0);
             }
             Html::permitGroup($managerOne['permit_group_id'], 1);
-            Html::managerLevelRadio($this->level, $managerOne['level']);
+            Html::managerLevelRadio($this->level, $managerOne['level_id']);
             Html::managerIsActivationRadio($this->isActivation, $managerOne['is_activation']);
-            Html::managerOrderPermitRadio($this->orderPermit, $managerOne['order_permit'] ?: 1);
+            Html::managerOrderPermitRadio($this->orderPermit, $managerOne['order_permit_id'] ?: 1);
             View::assign(['One' => $managerOne]);
             return $this->view();
         } else {
@@ -167,20 +167,20 @@ class Manager extends Base
     private function listItem($item)
     {
         $item['name'] = keyword($item['name']);
-        $item['level_name'] = $item['id'] == 1 ?
+        $item['level'] = $item['id'] == 1 ?
             '<span class="red">创始人</span>' :
-            '<span class="' . $this->level[$item['level']][0] . '">' . $this->level[$item['level']][1] . '</span>';
-        $item['order_permit'] = $item['level'] == 1 ?
+            '<span class="' . $this->level[$item['level_id']][0] . '">' . $this->level[$item['level_id']][1] . '</span>';
+        $item['order_permit'] = $item['level_id'] == 1 ?
             '-' :
-            '<span class="' . $this->orderPermit[$item['order_permit']][0] . '">' .
-            $this->orderPermit[$item['order_permit']][1] . '</span>';
-        if ($item['level'] == 2) {
+            '<span class="' . $this->orderPermit[$item['order_permit_id']][0] . '">' .
+            $this->orderPermit[$item['order_permit_id']][1] . '</span>';
+        if ($item['level_id'] == 2) {
             $permitGroupOne = (new model\PermitGroup())->one($item['permit_group_id']);
             $item['permit_group'] = $permitGroupOne ? $permitGroupOne['name'] : '此权限组已被删除';
         } else {
             $item['permit_group'] = '-';
         }
-        $item['date'] = dateFormat($item['date']);
+        $item['create_time'] = timeFormat($item['create_time']);
         return $item;
     }
 }

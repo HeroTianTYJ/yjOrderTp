@@ -27,10 +27,10 @@ class Order extends Model
     {
         try {
             return $this->field('id,order_id,manager_id,template_id,product_id,price,count,name,tel,province,city,' .
-                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene,pay_date,order_state_id,' .
-                'express_id,express_number,date')
+                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene_id,pay_time,order_state_id,' .
+                'express_id,express_number,create_time')
                 ->where($this->map()['where'], $this->map()['value'])
-                ->order(['date' => 'DESC'])
+                ->order(['create_time' => 'DESC'])
                 ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -43,10 +43,10 @@ class Order extends Model
     {
         try {
             return $this->field('id,order_id,manager_id,template_id,product_id,price,count,name,tel,province,city,' .
-                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene,pay_date,order_state_id,' .
-                'express_id,express_number,date')
+                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene_id,pay_time,order_state_id,' .
+                'express_id,express_number,create_time')
                 ->where($this->map()['where'], $this->map()['value'])
-                ->order(['date' => 'DESC'])
+                ->order(['create_time' => 'DESC'])
                 ->select()
                 ->toArray();
         } catch (Exception $e) {
@@ -60,12 +60,12 @@ class Order extends Model
     {
         try {
             return $this->field('id,order_id,manager_id,template_id,product_id,price,count,name,tel,province,city,' .
-                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene,pay_date,order_state_id,' .
-                'express_id,express_number,date')
+                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene_id,pay_time,order_state_id,' .
+                'express_id,express_number,create_time')
                 ->where('id', 'IN', Request::post('ids'))
                 ->where('is_recycle', Request::controller() == 'OrderRecycle' ? 1 : 0)
                 ->where($this->managerId())
-                ->order(['date' => 'DESC'])
+                ->order(['create_time' => 'DESC'])
                 ->select()
                 ->toArray();
         } catch (Exception $e) {
@@ -80,7 +80,7 @@ class Order extends Model
                 ->where('id', 'IN', Request::post('ids'))
                 ->where('is_recycle', Request::controller() == 'OrderRecycle' ? 1 : 0)
                 ->where($this->managerId())
-                ->order(['date' => 'DESC'])
+                ->order(['create_time' => 'DESC'])
                 ->select()
                 ->toArray();
         } catch (Exception $e) {
@@ -95,9 +95,9 @@ class Order extends Model
         try {
             $map = $this->map();
             if ($time1 && $time2) {
-                $map['where'] .= ' AND `date`>=:date3 AND `date`<=:date4';
-                $map['value']['date3'] = strtotime($time1 . ' 00:00:00') . '';
-                $map['value']['date4'] = strtotime($time2 . ' 23:59:59') . '';
+                $map['where'] .= ' AND `create_time`>=:create_time3 AND `create_time`<=:create_time4';
+                $map['value']['create_time3'] = $time1 . ' 00:00:00';
+                $map['value']['create_time4'] = $time2 . ' 23:59:59';
             }
             return $this->field('COUNT(CASE WHEN `order_state_id`=1 THEN `id` END) `count1`,' .
                 'SUM(CASE WHEN `order_state_id`=1 THEN `price`*`count` ELSE 0 END) `sum1`,' .
@@ -176,8 +176,8 @@ class Order extends Model
                 'SUM(CASE WHEN `order_state_id`=5 THEN `price`*`count` ELSE 0 END) `sum5`,' .
                 'COUNT(CASE WHEN `order_state_id`=6 THEN `id` END) `count6`,' .
                 'SUM(CASE WHEN `order_state_id`=6 THEN `price`*`count` ELSE 0 END) `sum6`,' .
-                'FROM_UNIXTIME(`date`,\'' . $time . '\') `time`')
-                ->group('FROM_UNIXTIME(`date`,\'' . $time . '\')')
+                'FROM_UNIXTIME(`create_time`,\'' . $time . '\') `time`')
+                ->group('FROM_UNIXTIME(`create_time`,\'' . $time . '\')')
                 ->where($this->map()['where'], $this->map()['value'])
                 ->order([$order => 'DESC']);
             return $paginate ? $all->paginate(Config::get('app.page_size')) : $all->select()->toArray();
@@ -192,8 +192,8 @@ class Order extends Model
     {
         try {
             return $this->field('id,order_id,manager_id,template_id,product_id,price,count,name,tel,province,city,' .
-                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene,pay_date,order_state_id,' .
-                'express_id,express_number,date')
+                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene_id,pay_time,order_state_id,' .
+                'express_id,express_number,create_time')
                 ->where([
                     'id' => $id ?: Request::post('id'),
                     'is_recycle' => Request::controller() == 'OrderRecycle' ? 1 : 0
@@ -210,10 +210,10 @@ class Order extends Model
     public function older()
     {
         try {
-            return $this->field('date')
+            return $this->field('create_time')
                 ->where(['is_recycle' => 0])
                 ->where($this->managerId())
-                ->order(['date' => 'ASC'])
+                ->order(['create_time' => 'ASC'])
                 ->find();
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -225,10 +225,10 @@ class Order extends Model
     public function newer()
     {
         try {
-            return $this->field('date')
+            return $this->field('create_time')
                 ->where(['is_recycle' => 0])
                 ->where($this->managerId())
-                ->order(['date' => 'DESC'])
+                ->order(['create_time' => 'DESC'])
                 ->find();
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -404,12 +404,12 @@ class Order extends Model
             $map['value']['payment_id'] = Request::get('payment_id');
             if (Request::get('payment_id') == 2) {
                 if (Request::get('alipay_scene')) {
-                    $map['where'] .= ' AND `pay_scene`=:alipay_scene';
+                    $map['where'] .= ' AND `pay_scene_id`=:alipay_scene';
                     $map['value']['alipay_scene'] = Request::get('alipay_scene');
                 }
             } elseif (Request::get('payment_id') == 3) {
                 if (Request::get('wechat_pay_scene')) {
-                    $map['where'] .= ' AND `pay_scene`=:wechat_pay_scene';
+                    $map['where'] .= ' AND `pay_scene_id`=:wechat_pay_scene';
                     $map['value']['wechat_pay_scene'] = Request::get('wechat_pay_scene');
                 }
             }
@@ -446,21 +446,21 @@ class Order extends Model
             $map['where'] .= ' AND `price`*`count`<=:total2';
             $map['value']['total2'] = Request::get('total2');
         }
-        if (Request::get('date1')) {
-            $map['where'] .= ' AND `date`>=:date1';
-            $map['value']['date1'] = strtotime(Request::get('date1') . ' 00:00:00');
+        if (Request::get('create_time1')) {
+            $map['where'] .= ' AND `create_time`>=:create_time1';
+            $map['value']['create_time1'] = Request::get('create_time1') . ' 00:00:00';
         }
-        if (Request::get('date2')) {
-            $map['where'] .= ' AND `date`<=:date2';
-            $map['value']['date2'] = strtotime(Request::get('date2') . ' 23:59:59');
+        if (Request::get('create_time2')) {
+            $map['where'] .= ' AND `create_time`<=:create_time2';
+            $map['value']['create_time2'] = Request::get('create_time2') . ' 23:59:59';
         }
-        if (Request::get('pay_date1')) {
-            $map['where'] .= ' AND `pay_date`>=:pay_date1';
-            $map['value']['pay_date1'] = strtotime(Request::get('pay_date1') . ' 00:00:00');
+        if (Request::get('pay_time1')) {
+            $map['where'] .= ' AND `pay_time`>=:pay_time1';
+            $map['value']['pay_time1'] = Request::get('pay_time1') . ' 00:00:00';
         }
-        if (Request::get('pay_date2')) {
-            $map['where'] .= ' AND `pay_date`<=:pay_date2';
-            $map['value']['pay_date2'] = strtotime(Request::get('pay_date2') . ' 23:59:59');
+        if (Request::get('pay_time2')) {
+            $map['where'] .= ' AND `pay_time`<=:pay_time2';
+            $map['value']['pay_time2'] = Request::get('pay_time2') . ' 23:59:59';
         }
         if (Request::get('is_commission', -1) != -1) {
             $map['where'] .= ' AND `is_commission`=:is_commission';
@@ -480,6 +480,6 @@ class Order extends Model
             2 => '`manager_id` IN (' . $session['id'] . ',0)',
             3 => '1=1'
         ];
-        return $session['level'] != 1 ? $sqlWhere[$session['order_permit']] : $sqlWhere[3];
+        return $session['level_id'] != 1 ? $sqlWhere[$session['order_permit_id']] : $sqlWhere[3];
     }
 }

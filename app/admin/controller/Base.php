@@ -36,11 +36,11 @@ class Base extends \app\common\controller\Base
         if (Session::has($manageInfo)) {
             $session = Session::get($manageInfo);
             if (
-                isset($session['id'], $session['name'], $session['level'], $session['permit_group']) &&
-                isset($session['permit_manage'], $session['permit_data'], $session['order_permit']) &&
-                is_numeric($session['id']) && $session['name'] && is_numeric($session['level']) &&
+                isset($session['id'], $session['name'], $session['level_id'], $session['permit_group']) &&
+                isset($session['permit_manage'], $session['permit_data'], $session['order_permit_id']) &&
+                is_numeric($session['id']) && $session['name'] && is_numeric($session['level_id']) &&
                 $session['permit_group'] && is_array($session['permit_manage']) && is_array($session['permit_data']) &&
-                is_numeric($session['order_permit'])
+                is_numeric($session['order_permit_id'])
             ) {
                 if (Request::controller() == 'Login' && Request::action() != 'logout') {
                     $this->succeed(Route::buildUrl('/index/index'));
@@ -61,7 +61,7 @@ class Base extends \app\common\controller\Base
     private function checkPermit($controller, $action)
     {
         $session = Session::get(Config::get('system.session_key_admin') . '.manage_info');
-        if ($session && $session['level'] != 1) {
+        if ($session && $session['level_id'] != 1) {
             $currentPermitManageId = Config::get('permit_manage.' . $controller . '.' . strtolower($action), 0);
             if ($currentPermitManageId && !in_array($currentPermitManageId, $session['permit_manage'])) {
                 if (Request::isAjax()) {

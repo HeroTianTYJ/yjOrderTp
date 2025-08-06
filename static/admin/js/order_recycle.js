@@ -30,16 +30,16 @@ $(function () {
   layui.use(['form', 'date'], function () {
     // 时间
     layui.date.render({
-      elem: 'input[name=date1]'
+      elem: 'input[name=create_time1]'
     });
     layui.date.render({
-      elem: 'input[name=date2]'
+      elem: 'input[name=create_time2]'
     });
     layui.date.render({
-      elem: 'input[name=pay_date1]'
+      elem: 'input[name=pay_time1]'
     });
     layui.date.render({
-      elem: 'input[name=pay_date2]'
+      elem: 'input[name=pay_time2]'
     });
     // 支付方式
     layui.form.on('select(payment_id)', function (data) {
@@ -97,5 +97,5 @@ function listItem (item) {
   if (isPermission('update')) control.push('<a href="javascript:" class="update">修改</a>');
   if (CONFIG['CONTROLLER'] === 'OrderRecycle' && isPermission('recover')) control.push('<a href="javascript:" class="recover">还原</a>');
   if (isPermission('delete')) control.push('<a href="javascript:" class="delete">删除</a>');
-  return '<tr class="item' + item['id'] + '"><td' + (isPermission('delete') ? '' : ' class="none"') + '><div class="check-box"><label><input type="checkbox" name="id" value="' + item['id'] + '"></label></div></td><td>' + item['order_id'] + '</td><td>' + item['manager'] + '</td><td>' + item['template'] + '</td><td>' + item['name'] + '</td><td>' + item['product'] + '</td><td>' + item['price'] + '元</td><td>' + item['count'] + '</td><td>' + item['total'] + '元</td><td>' + item['tel'] + '</td><td title="' + item['address'] + '">' + item['address_truncate'] + '</td><td>' + item['email'] + '</td><td>' + item['ip'] + '</td><td><a href="' + item['referrer'] + '" target="_blank" title="' + item['referrer'] + '">访问</a></td><td>' + item['date'] + '</td><td>' + item['payment'] + '</td><td>' + item['pay_id'] + '</td><td>' + item['pay_scene'] + '</td><td>' + item['pay_date'] + '</td><td>' + item['order_state'] + '</td><td>' + item['express'] + '</td>' + (control.length ? '<td>' + control.join('/') + '</td>' : '') + '</tr>';
+  return '<tr class="item' + item['id'] + '"><td' + (isPermission('delete') ? '' : ' class="none"') + '><div class="check-box"><label><input type="checkbox" name="id" value="' + item['id'] + '"></label></div></td><td>' + item['order_id'] + '</td><td>' + item['manager'] + '</td><td>' + item['template'] + '</td><td>' + item['name'] + '</td><td>' + item['product'] + '</td><td>' + item['price'] + '元</td><td>' + item['count'] + '</td><td>' + item['total'] + '元</td><td>' + item['tel'] + '</td><td title="' + item['address'] + '">' + item['address_truncate'] + '</td><td>' + item['email'] + '</td><td>' + item['ip'] + '</td><td><a href="' + item['referrer'] + '" target="_blank" title="' + item['referrer'] + '">访问</a></td><td>' + item['create_time'] + '</td><td>' + item['payment'] + '</td><td>' + item['pay_id'] + '</td><td>' + item['pay_scene'] + '</td><td>' + item['pay_time'] + '</td><td>' + item['order_state'] + '</td><td>' + item['express'] + '</td>' + (control.length ? '<td>' + control.join('/') + '</td>' : '') + '</tr>';
 }

@@ -1,9 +1,9 @@
 $(function () {
   // 模板切换
   let $viewUrl = $('.view_url');
-  template($('select[name=template]'));
+  template($('select[name=template_id]'));
   layui.use(['form'], function () {
-    layui.form.on('select(template)', function (data) {
+    layui.form.on('select(template_id)', function (data) {
       template($(data.elem));
     });
   });

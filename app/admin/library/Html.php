@@ -20,7 +20,7 @@ class Html extends \app\common\library\Html
     {
         $html = '';
         $session = Session::get(Config::get('system.session_key_admin') . '.manage_info');
-        if ($session['level'] == 1 || ($session['level'] == 2 && $session['order_permit'] != 1)) {
+        if ($session['level_id'] == 1 || ($session['level_id'] == 2 && $session['order_permit_id'] != 1)) {
             $html .= '<option value="0" ' . ($id == 0 ? 'selected' : '') . '>终端客户</option>';
         }
         self::selectDataset((new model\Manager())->all2(), 'Manager', $id, $html);
@@ -92,7 +92,7 @@ class Html extends \app\common\library\Html
 
     public static function managerLevelRadio($level = [], $id = 0)
     {
-        self::radioArray($level, 'level', 'Level', $id);
+        self::radioArray($level, 'level_id', 'Level', $id);
     }
 
     public static function managerIsActivationSelect($isActivation = [], $id = 0)
@@ -112,7 +112,7 @@ class Html extends \app\common\library\Html
 
     public static function managerOrderPermitRadio($orderPermit = [], $id = 0)
     {
-        self::radioArray($orderPermit, 'order_permit', 'OrderPermit', $id);
+        self::radioArray($orderPermit, 'order_permit_id', 'OrderPermit', $id);
     }
 
     public static function qq($qq = [], $id = 0)

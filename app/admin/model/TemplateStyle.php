@@ -15,13 +15,13 @@ class TemplateStyle extends Model
     public function all()
     {
         try {
-            return $this->field('id,bg_color,border_color,button_color,select_current_bg_color,date')
+            return $this->field('id,bg_color,border_color,button_color,select_current_bg_color,create_time')
                 ->where(
                     'bg_color|border_color|button_color|select_current_bg_color',
                     'LIKE',
                     '%' . Request::get('keyword') . '%'
                 )
-                ->order(['id' => 'DESC', 'date' => 'DESC'])
+                ->order(['id' => 'DESC', 'create_time' => 'DESC'])
                 ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -44,7 +44,7 @@ class TemplateStyle extends Model
     public function one($id = 0)
     {
         try {
-            return $this->field('id,bg_color,border_color,button_color,select_current_bg_color,date')
+            return $this->field('id,bg_color,border_color,button_color,select_current_bg_color,create_time')
                 ->where(['id' => $id ?: Request::post('id')])
                 ->find();
         } catch (Exception $e) {
@@ -61,7 +61,7 @@ class TemplateStyle extends Model
             'border_color' => Request::post('border_color'),
             'button_color' => Request::post('button_color'),
             'select_current_bg_color' => Request::post('select_current_bg_color'),
-            'date' => time()
+            'create_time' => now()
         ];
         $validate = new validate();
         if ($validate->check($data)) {

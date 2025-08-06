@@ -5,7 +5,7 @@
   <span>订购数量：<div name="count1" value="{:input('get.count1')}" class="number"></div> ～ <div name="count2" value="{:input('get.count2')}" class="number"></div></span>
   <span>成交总价：<div name="total1" value="{:input('get.total1')}" class="number"></div> ～ <div name="total2" value="{:input('get.total2')}" class="number"></div></span>
   <span>管 理 员：<select name="manager_id" lay-search><option value="-1">不限</option>{$Manager}</select></span>
-  <span>下单时间：<input type="text" name="date1" value="{:input('get.date1')}" class="text date"> ～ <input type="text" name="date2" value="{:input('get.date2')}" class="text date"></span>
+  <span>下单时间：<input type="text" name="create_time1" value="{:input('get.create_time1')}" class="text date"> ～ <input type="text" name="create_time2" value="{:input('get.create_time2')}" class="text date"></span>
   <span>支付方式：<select name="payment_id" lay-filter="payment_id" lay-search><option value="0">不限</option>{$Payment}</select></span>
   <span class="alipay_scene">支付场景：<select name="alipay_scene" lay-search><option value="0">不限</option>{$AlipayScene}</select></span>
   <span class="wechat_pay_scene">支付场景：<select name="wechat_pay_scene" lay-search><option value="0">不限</option>{$WxpayScene}</select></span>

@@ -3,13 +3,13 @@
 return [
     'system' => [
         'version_code' => 2,
-        'version_date' => 3
+        'update_time' => 3
     ],
     'profile' => [
         'level' => 5,
         'permit_group' => 6,
         'login_count' => 7,
-        'login_date' => 8,
+        'login_time' => 8,
         'login_ip' => 9
     ],
     'order' => [

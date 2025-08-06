@@ -148,9 +148,9 @@ class Order extends Base
             $payScene = '';
             if ($orderOne['order_state_id'] != 1) {
                 if ($orderOne['payment_id'] == 2) {
-                    $payScene = Config::get('pay_scene.alipay.' . $orderOne['pay_scene'], '');
+                    $payScene = Config::get('pay_scene.alipay.' . $orderOne['pay_scene_id'], '');
                 } elseif ($orderOne['payment_id'] == 3) {
-                    $payScene = Config::get('pay_scene.wechat_pay.' . $orderOne['pay_scene'], '');
+                    $payScene = Config::get('pay_scene.wechat_pay.' . $orderOne['pay_scene_id'], '');
                 }
             }
             $orderOne['pay_scene'] = $payScene;
@@ -247,9 +247,9 @@ class Order extends Base
                     $payScene = '';
                     if ($value['order_state_id'] != 1) {
                         if ($value['payment_id'] == 2) {
-                            $payScene = Config::get('pay_scene.alipay.' . $value['pay_scene'], '');
+                            $payScene = Config::get('pay_scene.alipay.' . $value['pay_scene_id'], '');
                         } elseif ($value['payment_id'] == 3) {
-                            $payScene = Config::get('pay_scene.wechat_pay.' . $value['pay_scene'], '');
+                            $payScene = Config::get('pay_scene.wechat_pay.' . $value['pay_scene_id'], '');
                         }
                     }
                     $output .= "\r\n" . '"\'' . $value['order_id'] . '","' . $managerName . '","' .
@@ -261,10 +261,11 @@ class Order extends Base
                         $value['address'] . '","' . $value['note'] . '","' .
                         $value['email'] . '","' . ($value['ip'] ? $value['ip'] . ' -- ' .
                             QQWry::getAddress($value['ip']) : '') . '","' . htmlspecialchars_decode($value['referrer'])
-                        . '","' . dateFormat($value['date']) . '","' . Config::get('payment.' . $value['payment_id']) .
-                        '","\'' . $value['pay_id'] . '","' . $payScene . '","' . ($value['pay_date'] ?
-                            dateFormat($value['pay_date']) : '') . '","' . ($orderStateOne ? $orderStateOne['name'] :
-                            '此状态已被删除') . '","' . $expressName . '","' . $value['express_number'] . '",';
+                        . '","' . timeFormat($value['create_time']) . '","' .
+                        Config::get('payment.' . $value['payment_id']) . '","\'' . $value['pay_id'] . '","' .
+                        $payScene . '","' . timeFormat($value['pay_time']) . '","' . ($orderStateOne ?
+                            $orderStateOne['name'] : '此状态已被删除') . '","' . $expressName . '","' .
+                        $value['express_number'] . '",';
                 } else {
                     $output .= "\r\n" . '"","","","' . $value['town'] . ' ' . $value['address'] . '","","' .
                         $value['name'] . '","","\'' . $value['tel'] . '","","' . $value['province'] . '","' .
@@ -297,19 +298,19 @@ class Order extends Base
         $item['address_truncate'] = keyword(truncate($item['address'], 0, 25));
         $item['email'] = keyword($item['email']);
         $item['ip'] = '<span title="' . QQWry::getAddress($item['ip']) . '">' . keyword($item['ip']) . '</span>';
-        $item['date'] = dateFormat($item['date']);
+        $item['create_time'] = timeFormat($item['create_time']);
         $item['payment'] = Config::get('payment.' . $item['payment_id']);
         $item['pay_id'] = keyword($item['pay_id']);
         $payScene = '';
         if ($item['order_state_id'] != 1) {
             if ($item['payment_id'] == 2) {
-                $payScene = Config::get('pay_scene.alipay.' . $item['pay_scene'], '');
+                $payScene = Config::get('pay_scene.alipay.' . $item['pay_scene_id'], '');
             } elseif ($item['payment_id'] == 3) {
-                $payScene = Config::get('pay_scene.wechat_pay.' . $item['pay_scene'], '');
+                $payScene = Config::get('pay_scene.wechat_pay.' . $item['pay_scene_id'], '');
             }
         }
         $item['pay_scene'] = $payScene;
-        $item['pay_date'] = $item['pay_date'] ? dateFormat($item['pay_date']) : '';
+        $item['pay_time'] = timeFormat($item['pay_time']);
         $orderStateOne = (new model\OrderState())->one($item['order_state_id']);
         $item['order_state'] = $orderStateOne ?
             '<span style="color:' . $orderStateOne['color'] . ';">' . $orderStateOne['name'] . '</span>' :
@@ -359,9 +360,9 @@ class Order extends Base
         $payScene = '';
         if (Request::post('order_state_id') != 1) {
             if (Request::post('payment_id') == 2) {
-                $payScene = Config::get('pay_scene.alipay.' . Request::post('pay_scene'), '');
+                $payScene = Config::get('pay_scene.alipay.' . Request::post('pay_scene_id'), '');
             } elseif (Request::post('payment_id') == 3) {
-                $payScene = Config::get('pay_scene.wechat_pay.' . Request::post('pay_scene'), '');
+                $payScene = Config::get('pay_scene.wechat_pay.' . Request::post('pay_scene_id'), '');
             }
         }
         $payUrl = $this->payUrl(Request::post('order_id'));
@@ -386,12 +387,12 @@ class Order extends Base
             '{payment}',
             '{pay_id}',
             '{pay_scene}',
-            '{pay_date}',
+            '{pay_time}',
             '{order_state}',
             '{express_name}',
             '{express_id}',
             '{express_url}',
-            '{date}'
+            '{create_time}'
         ], [
             Request::post('order_id'),
             $productOne ? $productOne['name'] : '',
@@ -412,14 +413,14 @@ class Order extends Base
             Config::get('payment.' . Request::post('payment_id')),
             Request::post('pay_id'),
             $payScene,
-            Request::post('pay_date') ? dateFormat(Request::post('pay_date')) : '',
+            Request::post('pay_time'),
             $orderStateOne ?
                 '<span style="color:' . $orderStateOne['color'] . ';">' . $orderStateOne['name'] . '</span>' : '',
             $expressOne ? $expressOne['name'] : '',
             Request::post('express_number'),
             'https://www.kuaidi100.com/chaxun?com=' . ($expressOne ? $expressOne['code'] : '') . '&nu=' .
                 Request::post('express_number'),
-            dateFormat(Request::post('date'))
+            Request::post('create_time')
         ], $content);
     }
 

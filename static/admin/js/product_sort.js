@@ -28,5 +28,5 @@ function listItem (item) {
   let control = [];
   if (isPermission('update')) control.push('<a href="javascript:" class="update">修改</a>');
   if (isPermission('delete')) control.push('<a href="javascript:" class="delete">删除</a>');
-  return '<tr class="item' + item['id'] + '"><td' + (isPermission('delete') ? '' : ' class="none"') + '><div class="check-box"><label><input type="checkbox" name="id" value="' + item['id'] + '"></label></div></td><td style="color:' + item['color'] + ';">' + item['name'] + '</td>' + (isPermission('sort') ? '<td><input type="text" name="sort" value="' + item['sort'] + '" class="text"></td>' : '') + '<td>' + item['count'] + '</td><td>' + item['date'] + '</td>' + (control.length ? '<td>' + control.join('/') + '</td>' : '') + '</tr>';
+  return '<tr class="item' + item['id'] + '"><td' + (isPermission('delete') ? '' : ' class="none"') + '><div class="check-box"><label><input type="checkbox" name="id" value="' + item['id'] + '"></label></div></td><td style="color:' + item['color'] + ';">' + item['name'] + '</td>' + (isPermission('sort') ? '<td><input type="text" name="sort" value="' + item['sort'] + '" class="text"></td>' : '') + '<td>' + item['count'] + '</td><td>' + item['create_time'] + '</td>' + (control.length ? '<td>' + control.join('/') + '</td>' : '') + '</tr>';
 }

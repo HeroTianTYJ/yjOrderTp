@@ -15,11 +15,11 @@
   <tr><td>支付方式：</td><td>{:config('payment.'.$One['payment_id'])}</td></tr>
   <tr><td>支付订单号：</td><td>{$One['pay_id']}</td></tr>
   <tr><td>支付场景：</td><td>{$One['pay_scene']}</td></tr>
-  <tr><td>支付时间：</td><td>{if condition="$One['pay_date']"}{$One['pay_date']|dateFormat}{/if}</td></tr>
+  <tr><td>支付时间：</td><td>{$One['pay_time']|timeFormat}</td></tr>
   <tr><td>支付链接：</td><td>支付宝 <a href="{$One['pay_url']['alipay']}" target="_blank">{$One['pay_url']['alipay']}</a><br>微信支付 <a href="{$One['pay_url']['wechat_pay']}" target="_blank">{$One['pay_url']['wechat_pay']}</a></td></tr>
   <tr><td>下单IP：</td><td>{$One['ip']}</td></tr>
   <tr><td>下单来路：</td><td>{if condition="$One['referrer']"}<a href="{$One['referrer']}" target="_blank">{$One['referrer']}</a>{else/}直接进入{/if}</td></tr>
-  <tr><td>下单时间：</td><td>{$One['date']|dateFormat}</td></tr>
+  <tr><td>下单时间：</td><td>{$One['create_time']|timeFormat}</td></tr>
   <tr><td>订单状态：</td><td>{$One['order_state']}</td></tr>
   <tr><td>快递公司：</td><td>{$One['express_name']}</td></tr>
   <tr><td>快递单号：</td><td>{$One['express_number']}{if condition="$One['express_name']&&$One['express_number']"}，<a href="https://www.kuaidi100.com/chaxun?com={$One['express_code']}&nu={$One['express_number']}" target="_blank">查询进度</a>{/if}</td></tr>

@@ -25,10 +25,10 @@ class Order extends Model
                 $map['tel'] = Request::get('keyword');
             }
             return $this->field('id,order_id,manager_id,template_id,product_id,price,count,name,tel,province,city,' .
-                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene,pay_date,order_state_id,' .
-                'express_id,express_number,date')
+                'county,town,address,note,email,ip,referrer,payment_id,pay_id,pay_scene_id,pay_time,order_state_id,' .
+                'express_id,express_number,create_time')
                 ->where($map)
-                ->order(['date' => 'DESC'])
+                ->order(['create_time' => 'DESC'])
                 ->select()
                 ->toArray();
         } catch (Exception $e) {

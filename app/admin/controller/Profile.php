@@ -72,7 +72,7 @@ class Profile extends Base
     private function listItem($item)
     {
         $item['ip'] = keyword($item['ip']) . '<br>' . QQWry::getAddress($item['ip']);
-        $item['date'] = dateFormat($item['date']);
+        $item['create_time'] = timeFormat($item['create_time']);
         return $item;
     }
 }

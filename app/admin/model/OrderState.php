@@ -15,7 +15,7 @@ class OrderState extends Model
     public function all()
     {
         try {
-            return $this->field('id,name,color,sort,is_default,date')
+            return $this->field('id,name,color,sort,is_default,create_time')
                 ->where('name', 'LIKE', '%' . Request::get('keyword') . '%')
                 ->order(['sort' => 'ASC'])
                 ->paginate(Config::get('app.page_size'));
@@ -40,7 +40,7 @@ class OrderState extends Model
     public function one($id = 0)
     {
         try {
-            return $this->field('id,name,color,sort,is_default,date')
+            return $this->field('id,name,color,sort,is_default,create_time')
                 ->where(['id' => $id ?: Request::post('id')])
                 ->find();
         } catch (Exception $e) {
@@ -56,7 +56,7 @@ class OrderState extends Model
             'name' => Request::post('name'),
             'color' => Request::post('color'),
             'sort' => $this->nextId(),
-            'date' => time()
+            'create_time' => now()
         ];
         $validate = new validate();
         if ($validate->check($data)) {

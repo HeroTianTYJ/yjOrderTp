@@ -13,19 +13,19 @@ class Visit extends Model
     //查询总记录
     public function totalCount()
     {
-        return $this->where('date1', '>', strtotime(date('Y-m-d') . ' 00:00:00'))->count();
+        return $this->where('create_time', '>', date('Y-m-d') . ' 00:00:00')->count();
     }
 
     //查询所有
     public function all()
     {
         try {
-            return $this->field('ip,url,count,date1,date2')
+            return $this->field('ip,url,count,create_time,last_visit_time')
                 ->where(
                     '`ip` LIKE :ip OR `url` LIKE :url',
                     ['ip' => '%' . Request::get('keyword') . '%', 'url' => '%' . Request::get('keyword') . '%']
                 )
-                ->order(['date2' => 'DESC'])
+                ->order(['last_visit_time' => 'DESC'])
                 ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -37,7 +37,7 @@ class Visit extends Model
     public function all2()
     {
         try {
-            return $this->field('ip,url,count,date1,date2')->order(['date2' => 'DESC'])->select()->toArray();
+            return $this->field('ip,url,count,create_time,last_visit_time')->order(['last_visit_time' => 'DESC'])->select()->toArray();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];

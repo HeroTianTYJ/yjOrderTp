@@ -14,17 +14,17 @@ $(function () {
   layui.use(['form', 'date'], function () {
     // 下单时间
     layui.date.render({
-      elem: 'input[name=date1]'
+      elem: 'input[name=create_time1]'
     });
     layui.date.render({
-      elem: 'input[name=date2]'
+      elem: 'input[name=create_time2]'
     });
     // 支付时间
     layui.date.render({
-      elem: 'input[name=pay_date1]'
+      elem: 'input[name=pay_time1]'
     });
     layui.date.render({
-      elem: 'input[name=pay_date2]'
+      elem: 'input[name=pay_time2]'
     });
     // 支付方式
     layui.form.on('select(payment_id)', function (data) {

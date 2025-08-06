@@ -56,8 +56,8 @@ class OrderStatistic extends Base
             //总计
             $orderOlder = $Order->older();
             $orderNewer = $Order->newer();
-            $data[8]['time'] = '总计（' . date('Y-m-d', $orderOlder ? $orderOlder['date'] : 0) . ' ～ ' .
-                date('Y-m-d', $orderNewer ? $orderNewer['date'] : 0) . '）';
+            $data[8]['time'] = '总计（' . date('Y-m-d', $orderOlder ? $orderOlder['create_time'] : 0) . ' ～ ' .
+                date('Y-m-d', $orderNewer ? $orderNewer['create_time'] : 0) . '）';
             $data[8]['data'] = $this->diyTime($Order->diyTime());
 
             return $data ? apiResponse('', 1, $data) : '';

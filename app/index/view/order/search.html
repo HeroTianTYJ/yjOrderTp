@@ -27,7 +27,7 @@
     <tr><td>支付方式：</td><td>{:config('payment.'.$value['payment_id'])}</td></tr>
     <tr><td>下单IP：</td><td>{$value['ip']}</td></tr>
     <tr><td>下单来路：</td><td>{if condition="$value['referrer']"}<a href="{$value['referrer']}" target="_blank">{$value['referrer']}</a>{else/}直接进入{/if}</td></tr>
-    <tr><td>下单时间：</td><td>{$value['date']|dateFormat}</td></tr>
+    <tr><td>下单时间：</td><td>{$value['create_time']|timeFormat}</td></tr>
     <tr><td>订单状态：</td><td>{$value['order_state']}</td></tr>
     <tr><td>快递公司：</td><td>{$value['express_name']}</td></tr>
     <tr><td>快递单号：</td><td>{$value['express_number']}{if condition="$value['express_name']&&$value['express_number']"}，<a href="http://www.kuaidi100.com/chaxun?com={$value['express_code']}&nu={$value['express_number']}" target="_blank">查询进度</a>{/if}</td></tr>

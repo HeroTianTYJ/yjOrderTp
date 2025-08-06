@@ -167,7 +167,7 @@ class PermitGroup extends Base
         }
         $item['permit_data'] = $permitDataStr;
 
-        $item['date'] = dateFormat($item['date']);
+        $item['create_time'] = timeFormat($item['create_time']);
         return $item;
     }
 }

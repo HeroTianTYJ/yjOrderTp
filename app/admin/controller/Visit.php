@@ -31,8 +31,8 @@ class Visit extends Base
             $visitAll = $Visit->all2();
             foreach ($visitAll as $value) {
                 $output .= "\r\n" . '"' . $value['ip'] . ' -- ' . QQWry::getAddress($value['ip']) . '","' .
-                    $value['url'] . '","' . $value['count'] . '","' . dateFormat($value['date1']) . '","' .
-                    dateFormat($value['date2']) . '",';
+                    $value['url'] . '","' . $value['count'] . '","' . timeFormat($value['create_time']) . '","' .
+                    timeFormat($value['last_visit_time']) . '",';
             }
             $output = mb_convert_encoding($output, 'GBK', 'UTF-8');
             $file = Config::get('dir.output') . 'visit_' . date('YmdHis') . '.csv';
@@ -68,8 +68,8 @@ class Visit extends Base
     {
         $item['truncate_url'] = keyword(truncate($item['url'], 0, 28));
         $item['ip'] = keyword($item['ip']) . '<br>' . QQWry::getAddress($item['ip']);
-        $item['date1'] = dateFormat($item['date1']);
-        $item['date2'] = dateFormat($item['date2']);
+        $item['create_time'] = timeFormat($item['create_time']);
+        $item['last_visit_time'] = timeFormat($item['last_visit_time']);
         return $item;
     }
 }

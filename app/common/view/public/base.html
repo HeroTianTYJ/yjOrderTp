@@ -23,7 +23,7 @@
 let CONFIG = {
   FOLD_MAIN_WIDTH: 'calc(100% - 258px)',
   EXPAND_MAIN_WIDTH: 'calc(100% - 458px)',
-  SESSION_LEVEL: {:session(config('system.session_key_admin').'.manage_info.level')},
+  SESSION_LEVEL_ID: {:session(config('system.session_key_admin').'.manage_info.level_id')},
   SESSION_PERMIT_MANAGE: {:str_replace('"','',json_encode(session(config('system.session_key_admin').'.manage_info.permit_manage')))},
   PERMIT_MANAGE: JSON.parse('{:json_encode(config("permit_manage"))}'),
   CONTROLLER: '{:request()->controller()}',

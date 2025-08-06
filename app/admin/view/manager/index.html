@@ -35,10 +35,10 @@ CONFIG['IS_ACTIVATION'] = '{:url("/".parse_name(request()->controller())."/isAct
 
   <form method="get" action="" class="search layui-form" onsubmit="return false;">
     <span>账　　号：<div class="search-text"><input type="text" name="keyword" value="{:input('get.keyword')}" class="text"><span class="iconfont icon-search"></span></div></span>
-    <span>身　　份：<select name="level" lay-filter="level" lay-search><option value="0">不限</option>{$Level}</select></span>
+    <span>身　　份：<select name="level_id" lay-filter="level_id" lay-search><option value="0">不限</option>{$Level}</select></span>
     <span>权 限 组：<select name="permit_group_id" lay-filter="permit_group_id" lay-search><option value="0">不限</option>{$PermitGroup}</select></span>
-    <span>订单权限：<select name="order_permit" lay-filter="order_permit" lay-search><option value="0">不限</option>{$OrderPermit}</select></span>
-    <span>注册时间：<input type="text" name="date1" value="{:input('get.date1')}" class="text date"> ～ <input type="text" name="date2" value="{:input('get.date2')}" class="text date"></span>
+    <span>订单权限：<select name="order_permit_id" lay-filter="order_permit_id" lay-search><option value="0">不限</option>{$OrderPermit}</select></span>
+    <span>注册时间：<input type="text" name="create_time1" value="{:input('get.create_time1')}" class="text date"> ～ <input type="text" name="create_time2" value="{:input('get.create_time2')}" class="text date"></span>
     <span>微信绑定：<select name="wechat" lay-filter="wechat" lay-search><option value="-1">不限</option>{$Wechat}</select></span>
     <span>QQ绑定：<select name="qq" lay-filter="qq" lay-search><option value="-1">不限</option>{$Qq}</select></span>
     <span>是否激活：<select name="is_activation" lay-filter="is_activation" lay-search><option value="-1">不限</option>{$IsActivation}</select></span>

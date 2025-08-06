@@ -160,7 +160,7 @@ function ajaxMessageLayer (url, title = '', data = {}, callback = function () {}
 
 // 验证权限
 function isPermission (action = '', controller = '') {
-  if (CONFIG['SESSION_LEVEL'] === 1) return true;
+  if (CONFIG['SESSION_LEVEL_ID'] === 1) return true;
   if (CONFIG['PERMIT_MANAGE'][controller || CONFIG['CONTROLLER']] === undefined) return false;
   return $.inArray(CONFIG['PERMIT_MANAGE'][controller || CONFIG['CONTROLLER']][action || CONFIG['ACTION']], CONFIG['SESSION_PERMIT_MANAGE']) >= 0;
 }

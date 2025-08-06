@@ -106,7 +106,7 @@ class ProductSort extends Base
     {
         $item['name'] = keyword($item['name']);
         $item['count'] = (new model\Product())->totalCount($item['id']);
-        $item['date'] = dateFormat($item['date']);
+        $item['create_time'] = timeFormat($item['create_time']);
         return $item;
     }
 }

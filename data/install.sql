@@ -10,7 +10,7 @@ CREATE TABLE `yjorder_field` (
   `name` char(20) NOT NULL DEFAULT '',
   `is_default` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 INSERT INTO `yjorder_field`(`id`,`name`,`is_default`) VALUES('1','订购数量','0');
 INSERT INTO `yjorder_field`(`id`,`name`,`is_default`) VALUES('2','姓名','0');
 INSERT INTO `yjorder_field`(`id`,`name`,`is_default`) VALUES('3','联系电话','0');
@@ -24,7 +24,7 @@ CREATE TABLE `yjorder_login_record_manager` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `manager_id` int(10) unsigned NOT NULL DEFAULT '0',
   `ip` char(15) NOT NULL DEFAULT '',
-  `date` int(10) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -32,14 +32,14 @@ CREATE TABLE `yjorder_manager` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(20) NOT NULL DEFAULT '',
   `pass` char(40) NOT NULL DEFAULT '',
-  `level` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `level_id` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_activation` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `permit_group_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `order_permit` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `order_permit_id` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `wechat_open_id` char(28) NOT NULL DEFAULT '',
   `wechat_union_id` char(28) NOT NULL DEFAULT '',
   `qq_open_id` char(32) NOT NULL DEFAULT '',
-  `date` int(10) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -64,13 +64,13 @@ CREATE TABLE `yjorder_order` (
   `referrer` char(255) NOT NULL DEFAULT '',
   `payment_id` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `pay_id` char(28) NOT NULL DEFAULT '',
-  `pay_scene` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `pay_date` int(10) unsigned NOT NULL DEFAULT '0',
+  `pay_scene_id` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `pay_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   `order_state_id` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `express_id` int(10) unsigned NOT NULL DEFAULT '0',
   `express_number` char(30) NOT NULL DEFAULT '',
   `is_recycle` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `date` int(10) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -80,15 +80,15 @@ CREATE TABLE `yjorder_order_state` (
   `color` char(20) NOT NULL DEFAULT '',
   `sort` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `is_default` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `date` int(10) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
-INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`date`) VALUES('1','待支付','#008000','1','1','1640137197');
-INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`date`) VALUES('2','待发货','#F00','2','0','1640137197');
-INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`date`) VALUES('3','已发货','#00F','3','0','1640137197');
-INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`date`) VALUES('4','已签收','#C60','4','0','1640137197');
-INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`date`) VALUES('5','售后中','#C06','5','0','1640137197');
-INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`date`) VALUES('6','交易关闭','#993','6','0','1640137197');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`create_time`) VALUES('1','待支付','#008000','1','1','2021-12-22 09:39:57');
+INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`create_time`) VALUES('2','待发货','#F00','2','0','2021-12-22 09:39:57');
+INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`create_time`) VALUES('3','已发货','#00F','3','0','2021-12-22 09:39:57');
+INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`create_time`) VALUES('4','已签收','#C60','4','0','2021-12-22 09:39:57');
+INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`create_time`) VALUES('5','售后中','#C06','5','0','2021-12-22 09:39:57');
+INSERT INTO `yjorder_order_state`(`id`,`name`,`color`,`sort`,`is_default`,`create_time`) VALUES('6','交易关闭','#993','6','0','2021-12-22 09:39:57');
 
 CREATE TABLE `yjorder_permit_data` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
@@ -97,15 +97,15 @@ CREATE TABLE `yjorder_permit_data` (
   `is_default` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `parent_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('1','系统信息','system','0','0');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('2','版本号','version_code','0','1');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('3','更新时间','version_date','0','1');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('3','更新时间','update_time','0','1');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('4','个人信息','profile','0','0');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('5','身份','level','0','4');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('6','权限组','permit_group','0','4');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('7','登录次数','login_count','0','4');
-INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('8','上次登录时间','login_date','0','4');
+INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('8','上次登录时间','login_time','0','4');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('9','上次登录IP','login_ip','0','4');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('10','订单','order','0','0');
 INSERT INTO `yjorder_permit_data`(`id`,`name`,`alias`,`is_default`,`parent_id`) VALUES('11','总数','total','0','10');
@@ -135,7 +135,7 @@ CREATE TABLE `yjorder_permit_group` (
   `text_id_permit_manage_ids` int(10) unsigned NOT NULL DEFAULT '0',
   `permit_data_ids` char(140) NOT NULL DEFAULT '',
   `is_default` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `date` int(10) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -147,7 +147,7 @@ CREATE TABLE `yjorder_permit_manage` (
   `is_default` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `parent_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 INSERT INTO `yjorder_permit_manage`(`id`,`name`,`controller`,`action`,`is_default`,`parent_id`) VALUES('1','订单管理','Order','index','0','0');
 INSERT INTO `yjorder_permit_manage`(`id`,`name`,`controller`,`action`,`is_default`,`parent_id`) VALUES('2','添加','','add','0','1');
 INSERT INTO `yjorder_permit_manage`(`id`,`name`,`controller`,`action`,`is_default`,`parent_id`) VALUES('3','修改','','update','0','1');
@@ -252,7 +252,7 @@ CREATE TABLE `yjorder_product` (
   `sort` int(10) unsigned NOT NULL DEFAULT '0',
   `is_view` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `is_default` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `date` int(10) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -261,7 +261,7 @@ CREATE TABLE `yjorder_product_sort` (
   `name` char(20) NOT NULL DEFAULT '',
   `color` char(20) NOT NULL DEFAULT '',
   `sort` int(10) unsigned NOT NULL DEFAULT '0',
-  `date` int(10) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -279,7 +279,7 @@ CREATE TABLE `yjorder_template` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(20) NOT NULL DEFAULT '',
   `manager_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `template` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `template_id` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `template_style_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `product_type` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `product_sort_ids` char(255) NOT NULL DEFAULT '',
@@ -288,7 +288,7 @@ CREATE TABLE `yjorder_template` (
   `product_view_type` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `field_ids` char(15) NOT NULL DEFAULT '',
   `payment_ids` char(5) NOT NULL DEFAULT '',
-  `payment_default` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `payment_default_id` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_show_search` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_show_send` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_captcha` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -296,7 +296,7 @@ CREATE TABLE `yjorder_template` (
   `success2` char(255) NOT NULL DEFAULT '',
   `often` char(255) NOT NULL DEFAULT '',
   `is_default` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `date` int(10) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -306,21 +306,21 @@ CREATE TABLE `yjorder_template_style` (
   `border_color` char(20) NOT NULL DEFAULT '',
   `button_color` char(20) NOT NULL DEFAULT '',
   `select_current_bg_color` char(20) NOT NULL DEFAULT '',
-  `date` int(10) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('1','#EBFFEF','#0F3','#0C3','#0C3','1441424358');
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('2','#EBF7FF','#B8E3FF','#09F','#09F','1441424358');
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('3','#FFF0F0','#FFD9D9','#F66','#F66','1441424358');
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('4','#FFF7EB','#FFE3B8','#F90','#F90','1441424358');
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('5','#EBFFFF','#A6FFFF','#099','#099','1441424358');
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('6','#F2FFF9','#B2FFD9','#0C6','#0C6','1441424358');
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('7','#E6FAFF','#B2F0FF','#0CF','#0CF','1441424358');
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('8','#FFEBF0','#FFCCD9','#F36','#F36','1441424358');
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('9','#FFF4ED','#FFD9BF','#F60','#F60','1441424358');
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('10','#F2FFFF','#BFFFFF','#3CC','#3CC','1441424358');
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('11','#FFF','#FC4400','#F63','#F63','1487560660');
-INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`date`) VALUES('12','#FFF','#FFF','#BE0F22','#BE0F22','1576467626');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('1','#EBFFEF','#0F3','#0C3','#0C3','2015-09-05 11:39:18');
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('2','#EBF7FF','#B8E3FF','#09F','#09F','2015-09-05 11:39:18');
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('3','#FFF0F0','#FFD9D9','#F66','#F66','2015-09-05 11:39:18');
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('4','#FFF7EB','#FFE3B8','#F90','#F90','2015-09-05 11:39:18');
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('5','#EBFFFF','#A6FFFF','#099','#099','2015-09-05 11:39:18');
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('6','#F2FFF9','#B2FFD9','#0C6','#0C6','2015-09-05 11:39:18');
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('7','#E6FAFF','#B2F0FF','#0CF','#0CF','2015-09-05 11:39:18');
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('8','#FFEBF0','#FFCCD9','#F36','#F36','2015-09-05 11:39:18');
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('9','#FFF4ED','#FFD9BF','#F60','#F60','2015-09-05 11:39:18');
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('10','#F2FFFF','#BFFFFF','#3CC','#3CC','2015-09-05 11:39:18');
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('11','#FFF','#FC4400','#F63','#F63','2017-02-20 11:17:40');
+INSERT INTO `yjorder_template_style`(`id`,`bg_color`,`border_color`,`button_color`,`select_current_bg_color`,`create_time`) VALUES('12','#FFF','#FFF','#BE0F22','#BE0F22','2019-12-16 11:40:26');
 
 CREATE TABLE `yjorder_text` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -333,7 +333,7 @@ CREATE TABLE `yjorder_visit` (
   `ip` char(15) NOT NULL DEFAULT '',
   `url` char(255) NOT NULL DEFAULT '',
   `count` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `date1` int(10) unsigned NOT NULL DEFAULT '0',
-  `date2` int(10) unsigned NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
+  `last_visit_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;

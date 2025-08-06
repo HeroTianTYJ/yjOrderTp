@@ -13,7 +13,7 @@ class Visit extends Model
     public function all()
     {
         try {
-            return $this->field('ip,url,count,date1,date2')->order(['date2' => 'DESC'])->select()->toArray();
+            return $this->field('ip,url,count,create_time,last_visit_time')->order(['last_visit_time' => 'DESC'])->select()->toArray();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -24,7 +24,7 @@ class Visit extends Model
     public function yesterday()
     {
         try {
-            return $this->field('id')->where('date1', '<', strtotime(date('Y-m-d') . ' 00:00:00'))->find();
+            return $this->field('id')->where('create_time', '<', date('Y-m-d') . ' 00:00:00')->find();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -37,8 +37,8 @@ class Visit extends Model
         try {
             return $this->field('id')
                 ->where(['ip' => getUserIp(), 'url' => strip_tags(Request::post('url', '', null))])
-                ->where('date1', '>=', strtotime(date('Y-m-d') . ' 00:00:00'))
-                ->where('date2', '<=', strtotime(date('Y-m-d') . ' 23:59:59'))
+                ->where('create_time', '>=', date('Y-m-d') . ' 00:00:00')
+                ->where('last_visit_time', '<=', date('Y-m-d') . ' 23:59:59')
                 ->find();
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -53,8 +53,8 @@ class Visit extends Model
             'ip' => getUserIp(),
             'url' => strip_tags(Request::post('url', '', null)),
             'count' => 1,
-            'date1' => time(),
-            'date2' => time()
+            'create_time' => now(),
+            'last_visit_time' => now()
         ];
         return $this->insertGetId($data);
     }
@@ -63,7 +63,7 @@ class Visit extends Model
     public function modify($id)
     {
         $this->where(['id' => $id])->inc('count')->update();
-        return $this->where(['id' => $id])->update(['date2' => time()]);
+        return $this->where(['id' => $id])->update(['last_visit_time' => now()]);
     }
 
     //清空表

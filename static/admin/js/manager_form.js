@@ -1,8 +1,8 @@
 $(function () {
   // 身份切换
   let $permit = $('.permit');
-  level($('input[name=level]:checked').val());
-  $('input[name=level]').on('ifChecked', function () {
+  level($('input[name=level_id]:checked').val());
+  $('input[name=level_id]').on('ifChecked', function () {
     level($(this).val());
   });
   function level (val) {

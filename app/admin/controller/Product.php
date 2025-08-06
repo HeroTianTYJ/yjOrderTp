@@ -147,7 +147,7 @@ class Product extends Base
         $item['product_sort'] = $productSortOne ?
             '<span style="color:' . $productSortOne['color'] . ';">' . $productSortOne['name'] . '</span>' :
             '此分类已被删除';
-        $item['date'] = dateFormat($item['date']);
+        $item['create_time'] = timeFormat($item['create_time']);
         return $item;
     }
 }

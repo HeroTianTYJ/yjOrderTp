@@ -15,10 +15,10 @@ class Template extends Model
     public function all()
     {
         try {
-            return $this->field('id,name,manager_id,template,template_style_id,is_show_search,is_show_send,' .
-                'is_captcha,is_default,date')
+            return $this->field('id,name,manager_id,template_id,template_style_id,is_show_search,is_show_send,' .
+                'is_captcha,is_default,create_time')
                 ->where('name', 'LIKE', '%' . Request::get('keyword') . '%')
-                ->order(['date' => 'DESC'])
+                ->order(['create_time' => 'DESC'])
                 ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -30,7 +30,7 @@ class Template extends Model
     public function all2()
     {
         try {
-            return $this->field('id,name,is_default')->order(['date' => 'DESC'])->select()->toArray();
+            return $this->field('id,name,is_default')->order(['create_time' => 'DESC'])->select()->toArray();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -41,9 +41,9 @@ class Template extends Model
     public function one($id = 0)
     {
         try {
-            return $this->field('id,name,manager_id,template,template_style_id,product_type,product_sort_ids,' .
-                'product_ids,product_default,product_view_type,field_ids,payment_ids,payment_default,is_show_search,' .
-                'is_show_send,is_captcha,success,success2,often,is_default,date')
+            return $this->field('id,name,manager_id,template_id,template_style_id,product_type,product_sort_ids,' .
+                'product_ids,product_default,product_view_type,field_ids,payment_ids,payment_default_id,is_show_search,' .
+                'is_show_send,is_captcha,success,success2,often,is_default,create_time')
                 ->where(['id' => $id ?: Request::post('id')])
                 ->find();
         } catch (Exception $e) {
@@ -58,20 +58,20 @@ class Template extends Model
         $data = [
             'name' => Request::post('name'),
             'manager_id' => Request::post('manager_id'),
-            'template' => Request::post('template'),
+            'template_id' => Request::post('template_id'),
             'template_style_id' => Request::post('template_style_id'),
             'product_type' => Request::post('product_type'),
             'product_view_type' => Request::post('product_view_type'),
             'field_ids' => implode(',', Request::post('field_ids', [])),
             'payment_ids' => implode(',', Request::post('payment_ids', [])),
-            'payment_default' => Request::post('payment_default'),
+            'payment_default_id' => Request::post('payment_default_id'),
             'is_show_search' => Request::post('is_show_search'),
             'is_show_send' => Request::post('is_show_send'),
             'is_captcha' => Request::post('is_captcha'),
             'success' => Request::post('success', '', null),
             'success2' => Request::post('success2', '', null),
             'often' => Request::post('often', '', null),
-            'date' => time()
+            'create_time' => now()
         ];
         if ($data['product_type'] == 0) {
             if (!Request::post('product_ids1')) {
@@ -124,13 +124,13 @@ class Template extends Model
         $data = [
             'name' => Request::post('name'),
             'manager_id' => Request::post('manager_id'),
-            'template' => Request::post('template'),
+            'template_id' => Request::post('template_id'),
             'template_style_id' => Request::post('template_style_id'),
             'product_type' => Request::post('product_type'),
             'product_view_type' => Request::post('product_view_type'),
             'field_ids' => implode(',', Request::post('field_ids', [])),
             'payment_ids' => implode(',', Request::post('payment_ids', [])),
-            'payment_default' => Request::post('payment_default'),
+            'payment_default_id' => Request::post('payment_default_id'),
             'is_show_search' => Request::post('is_show_search'),
             'is_show_send' => Request::post('is_show_send'),
             'is_captcha' => Request::post('is_captcha'),

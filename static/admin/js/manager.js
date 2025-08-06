@@ -74,16 +74,16 @@ $(function () {
   searchKeyword();
   layui.use(['form', 'date'], function () {
     // 身份
-    layui.form.on('select(level)', function (data) {
-      window.location.href = searchUrl('level=' + data.value);
+    layui.form.on('select(level_id)', function (data) {
+      window.location.href = searchUrl('level_id=' + data.value);
     });
     // 权限组
     layui.form.on('select(permit_group_id)', function (data) {
       window.location.href = searchUrl('permit_group_id=' + data.value);
     });
     // 订单权限
-    layui.form.on('select(order_permit)', function (data) {
-      window.location.href = searchUrl('order_permit=' + data.value);
+    layui.form.on('select(order_permit_id)', function (data) {
+      window.location.href = searchUrl('order_permit_id=' + data.value);
     });
     // 微信绑定
     layui.form.on('select(wechat)', function (data) {
@@ -99,15 +99,15 @@ $(function () {
     });
     // 注册时间
     layui.date.render({
-      elem: 'input[name=date1]',
+      elem: 'input[name=create_time1]',
       done: function (value) {
-        window.location.href = searchUrl('date1=' + value);
+        window.location.href = searchUrl('create_time1=' + value);
       }
     });
     layui.date.render({
-      elem: 'input[name=date2]',
+      elem: 'input[name=create_time2]',
       done: function (value) {
-        window.location.href = searchUrl('date2=' + value);
+        window.location.href = searchUrl('create_time2=' + value);
       }
     });
   });
@@ -117,5 +117,5 @@ function listItem (item) {
   let control = [];
   if (isPermission('update')) control.push('<a href="javascript:" class="update">修改</a>');
   if (isPermission('delete')) control.push('<a href="javascript:" class="delete">删除</a>');
-  return '<tr class="item' + item['id'] + '"><td' + (isPermission('delete') ? '' : ' class="none"') + '><div class="check-box"><label><input type="checkbox" name="id" value="' + item['id'] + '"></label></div></td><td>' + item['name'] + '</td><td>' + item['level_name'] + '</td><td>' + item['permit_group'] + '</td><td>' + item['order_permit'] + '</td><td>' + item['date'] + '</td>' + (isPermission('wechatOpenId') ? '<td>' + (item['wechat_open_id'] || item['wechat_union_id'] ? '<span class="red">是</span> | <a href="javascript:" class="wechat_open_id">解绑</a>' : '<span class="green">否</span>') + '</td>' : '') + (isPermission('qqOpenId') ? '<td>' + (item['qq_open_id'] ? '<span class="red">是</span> | <a href="javascript:" class="qq_open_id">解绑</a>' : '<span class="green">否</span>') + '</td>' : '') + (isPermission('isActivation') ? '<td>' + (item['is_activation'] ? '<span class="red">是</span> | <a href="javascript:" class="is_activation">取消激活</a>' : '<span class="green">否</span> | <a href="javascript:" class="is_activation">帮他激活</a>') + '</td>' : '') + (control.length ? '<td>' + control.join('/') + '</td>' : '') + '</tr>';
+  return '<tr class="item' + item['id'] + '"><td' + (isPermission('delete') ? '' : ' class="none"') + '><div class="check-box"><label><input type="checkbox" name="id" value="' + item['id'] + '"></label></div></td><td>' + item['name'] + '</td><td>' + item['level'] + '</td><td>' + item['permit_group'] + '</td><td>' + item['order_permit'] + '</td><td>' + item['create_time'] + '</td>' + (isPermission('wechatOpenId') ? '<td>' + (item['wechat_open_id'] || item['wechat_union_id'] ? '<span class="red">是</span> | <a href="javascript:" class="wechat_open_id">解绑</a>' : '<span class="green">否</span>') + '</td>' : '') + (isPermission('qqOpenId') ? '<td>' + (item['qq_open_id'] ? '<span class="red">是</span> | <a href="javascript:" class="qq_open_id">解绑</a>' : '<span class="green">否</span>') + '</td>' : '') + (isPermission('isActivation') ? '<td>' + (item['is_activation'] ? '<span class="red">是</span> | <a href="javascript:" class="is_activation">取消激活</a>' : '<span class="green">否</span> | <a href="javascript:" class="is_activation">帮他激活</a>') + '</td>' : '') + (control.length ? '<td>' + control.join('/') + '</td>' : '') + '</tr>';
 }

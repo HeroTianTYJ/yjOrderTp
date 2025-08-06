@@ -93,7 +93,7 @@ class TemplateStyle extends Base
         $item['keyword_border_color'] = keyword($item['border_color']);
         $item['keyword_button_color'] = keyword($item['button_color']);
         $item['keyword_select_current_bg_color'] = keyword($item['select_current_bg_color']);
-        $item['date'] = dateFormat($item['date']);
+        $item['create_time'] = timeFormat($item['create_time']);
         return $item;
     }
 }

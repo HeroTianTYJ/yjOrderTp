@@ -20,8 +20,8 @@ class Common extends Base
                 $output = '"IP","访问页面","当日次数","第一次","最后一次",';
                 foreach ($Visit->all() as $value) {
                     $output .= "\r\n" . '"' . $value['ip'] . ' -- ' . QQWry::getAddress($value['ip']) . '","' .
-                        $value['url'] . '","' . $value['count'] . '","' . dateFormat($value['date1']) . '","' .
-                        dateFormat($value['date2']) . '",';
+                        $value['url'] . '","' . $value['count'] . '","' . timeFormat($value['create_time']) . '","' .
+                        timeFormat($value['last_visit_time']) . '",';
                 }
                 if (
                     file_put_contents(

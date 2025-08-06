@@ -37,7 +37,7 @@ class LoginRecordManager extends Base
                 foreach ($loginRecordManagerAll as $value) {
                     $managerOne = $Manager->one($value['manager_id']);
                     $output .= "\r\n" . '"' . ($managerOne ? $managerOne['name'] : '此管理员已被删除') . '","' .
-                        $value['ip'] . ' -- ' . QQWry::getAddress($value['ip']) . '","' . dateFormat($value['date']) .
+                        $value['ip'] . ' -- ' . QQWry::getAddress($value['ip']) . '","' . timeFormat($value['create_time']) .
                         '",';
                 }
             }
@@ -59,7 +59,7 @@ class LoginRecordManager extends Base
         $item['ip'] = keyword($item['ip']) . '<br>' . QQWry::getAddress($item['ip']);
         $managerOne = (new model\Manager())->one($item['manager_id']);
         $item['manager'] = $managerOne ? $managerOne['name'] : '此管理员已被删除';
-        $item['date'] = dateFormat($item['date']);
+        $item['create_time'] = timeFormat($item['create_time']);
         return $item;
     }
 }

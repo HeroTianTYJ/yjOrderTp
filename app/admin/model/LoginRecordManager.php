@@ -33,9 +33,9 @@ class LoginRecordManager extends Model
                     $map['value']['manager_id'] = Request::get('manager_id');
                 }
             }
-            return $this->field('id,manager_id,ip,date')
+            return $this->field('id,manager_id,ip,create_time')
                 ->where($map['where'], $map['value'])
-                ->order(['date' => 'DESC'])
+                ->order(['create_time' => 'DESC'])
                 ->paginate(Config::get('app.page_size'));
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -47,7 +47,7 @@ class LoginRecordManager extends Model
     public function all2()
     {
         try {
-            return $this->field('manager_id,ip,date')->order(['date' => 'DESC'])->select()->toArray();
+            return $this->field('manager_id,ip,create_time')->order(['create_time' => 'DESC'])->select()->toArray();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -58,9 +58,9 @@ class LoginRecordManager extends Model
     public function one()
     {
         try {
-            return $this->field('ip,date')
+            return $this->field('ip,create_time')
                    ->where(['manager_id' => Session::get(Config::get('system.session_key_admin') . '.manage_info.id')])
-                   ->order(['date' => 'DESC'])
+                   ->order(['create_time' => 'DESC'])
                    ->limit(1, 1)
                    ->select()[0];
         } catch (Exception $e) {
@@ -72,7 +72,7 @@ class LoginRecordManager extends Model
     //添加
     public function add($managerId)
     {
-        return $this->insertGetId(['manager_id' => $managerId, 'ip' => getUserIp(), 'date' => time()]);
+        return $this->insertGetId(['manager_id' => $managerId, 'ip' => getUserIp(), 'create_time' => now()]);
     }
 
     //清空表

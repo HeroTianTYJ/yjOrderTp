@@ -7,10 +7,36 @@ use think\facade\Request;
 use think\facade\Route;
 use think\facade\Session;
 
-//日期格式化
-function dateFormat($timestamp = 0, $format = 'Y-m-d H:i:s')
+//时间格式化
+function timeFormat($time = '')
 {
-    return date($format, $timestamp);
+    if ($time) {
+        return substr($time, 0, 10) == '1000-01-01' ? '' : $time;
+    } else {
+        return '';
+    }
+}
+
+//时间戳格式化
+function timestampFormat($timestamp = 0, $format = 'Y-m-d H:i:s')
+{
+    return $timestamp ? date($format, $timestamp) : '';
+}
+
+//判断时间格式，如果正确则返回此时间，否则返回当前时间
+function checkTime($time)
+{
+    if ($time) {
+        return strtotime($time) ? $time : now();
+    } else {
+        return '1000-01-01 00:00:00';
+    }
+}
+
+//当前时间
+function now()
+{
+    return date('Y-m-d H:i:s');
 }
 
 //密码加盐
@@ -259,7 +285,7 @@ function keyToArray($array)
 function isPermission($action = '', $controller = '')
 {
     $session = Session::get(Config::get('system.session_key_admin') . '.manage_info');
-    return $session['level'] == 1 || in_array(
+    return $session['level_id'] == 1 || in_array(
         permitId($controller ?: Request::controller(), $action ?: Request::action()),
         $session['permit_manage']
     );
@@ -275,7 +301,7 @@ function permitId($controller = '', $action = 'index')
 function permitIntersect($permit = [])
 {
     $session = Session::get(Config::get('system.session_key_admin') . '.manage_info');
-    if ($session['level'] == 1) {
+    if ($session['level_id'] == 1) {
         return true;
     }
     $permitId = [];
@@ -289,7 +315,7 @@ function permitIntersect($permit = [])
 function isDataPermission($parentName = '', $name = '')
 {
     $session = Session::get(Config::get('system.session_key_admin') . '.manage_info');
-    return $session['level'] == 1 || in_array(permitDataId($parentName, $name), $session['permit_data']);
+    return $session['level_id'] == 1 || in_array(permitDataId($parentName, $name), $session['permit_data']);
 }
 
 //数据权限id
@@ -302,7 +328,7 @@ function permitDataId($parentName = '', $name = '')
 function permitDataIntersect($permitData = [])
 {
     $session = Session::get(Config::get('system.session_key_admin') . '.manage_info');
-    if ($session['level'] == 1) {
+    if ($session['level_id'] == 1) {
         return true;
     }
     $permitDataId = [];

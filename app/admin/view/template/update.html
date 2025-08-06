@@ -9,7 +9,7 @@ CONFIG['AJAX2'] = '{:url("/".parse_name(request()->controller())."/ajaxProduct2"
   <table>
     <tr><td>模 板 名：</td><td><input type="text" name="name" value="{$One['name']}" class="text"></td></tr>
     <tr><td>指定代理：</td><td><select name="manager_id" lay-search><option value="0">不指定</option>{$Manager}</select></td></tr>
-    <tr><td>使用模板：</td><td><select name="template" lay-filter="template" lay-search>{$Template}</select></td></tr>
+    <tr><td>使用模板：</td><td><select name="template_id" lay-filter="template_id" lay-search>{$Template}</select></td></tr>
     <tr class="tip"><td></td><td><span class="view_url"></span></td></tr>
     <tr><td>皮肤样式：</td><td><select name="template_style_id" lay-search>{$TemplateStyle}</select></td></tr>
     <tr class="tip"><td></td><td>手机版2和手机版3推荐使用11号皮肤样式，手机版4推荐使用12号皮肤样式</td></tr>
@@ -24,7 +24,7 @@ CONFIG['AJAX2'] = '{:url("/".parse_name(request()->controller())."/ajaxProduct2"
     <tr><td>下单字段：</td><td class="field">{$Field}<p style="margin:10px 0 0 0;"><input type="button" value="全选" class="button all"> <input type="button" value="全部不选" class="button no"> <input type="button" value="默认字段" class="button default"></p></td></tr>
     <tr class="tip"><td></td><td>红色部分为默认字段</td></tr>
     <tr><td>支付方式：</td><td>{$Payment}</td></tr>
-    <tr><td>默认方式：</td><td><select name="payment_default" lay-search>{$PaymentDefault}</select></td></tr>
+    <tr><td>默认方式：</td><td><select name="payment_default_id" lay-search>{$PaymentDefault}</select></td></tr>
     <tr><td>订单查询：</td><td><div class="radio-box"><label><input type="radio" name="is_show_search" value="0" {if condition="$One['is_show_search']==0"}checked{/if}>关闭</label></div><div class="radio-box"><label><input type="radio" name="is_show_search" value="1" {if condition="$One['is_show_search']==1"}checked{/if}>开启</label></div></td></tr>
     <tr class="tip"><td></td><td>在<a href="{:url('/system/index')}" target="_blank">系统设置</a>模块中开启“订单查询”后，此设置才可生效</td></tr>
     <tr><td>发货通知：</td><td><div class="radio-box"><label><input type="radio" name="is_show_send" value="0" {if condition="$One['is_show_send']==0"}checked{/if}>关闭</label></div><div class="radio-box"><label><input type="radio" name="is_show_send" value="1" {if condition="$One['is_show_send']==1"}checked{/if}>开启</label></div></td></tr>
