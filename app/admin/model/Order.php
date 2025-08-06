@@ -176,8 +176,8 @@ class Order extends Model
                 'SUM(CASE WHEN `order_state_id`=5 THEN `price`*`count` ELSE 0 END) `sum5`,' .
                 'COUNT(CASE WHEN `order_state_id`=6 THEN `id` END) `count6`,' .
                 'SUM(CASE WHEN `order_state_id`=6 THEN `price`*`count` ELSE 0 END) `sum6`,' .
-                'FROM_UNIXTIME(`create_time`,\'' . $time . '\') `time`')
-                ->group('FROM_UNIXTIME(`create_time`,\'' . $time . '\')')
+                'DATE_FORMAT(`create_time`,\'' . $time . '\') `time`')
+                ->group('DATE_FORMAT(`create_time`,\'' . $time . '\')')
                 ->where($this->map()['where'], $this->map()['value'])
                 ->order([$order => 'DESC']);
             return $paginate ? $all->paginate(Config::get('app.page_size')) : $all->select()->toArray();
