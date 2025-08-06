@@ -3,7 +3,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2023 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2025 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -94,13 +94,11 @@ class DbManager
      */
     protected function modelMaker()
     {
-        Model::setDb($this);
-
-        if (is_object($this->event)) {
-            Model::setEvent($this->event);
-        }
-
         Model::maker(function (Model $model) {
+            $model->setOption('db', $this);
+            if (is_object($this->event)) {
+                $model->setOption('event', $this->event);
+            }
             $isAutoWriteTimestamp = $model->getAutoWriteTimestamp();
 
             if (is_null($isAutoWriteTimestamp)) {
@@ -213,12 +211,12 @@ class DbManager
     /**
      * 创建/切换数据库连接查询.
      *
-     * @param string|null $name  连接配置标识
+     * @param string|array|null $name  连接配置信息
      * @param bool        $force 强制重新连接
      *
      * @return ConnectionInterface
      */
-    public function connect(?string $name = null, bool $force = false)
+    public function connect(string|array|null $name = null, bool $force = false)
     {
         return $this->instance($name, $force);
     }
@@ -226,22 +224,23 @@ class DbManager
     /**
      * 创建数据库连接实例.
      *
-     * @param string|null $name  连接标识
+     * @param string|array|null $name  连接标识
      * @param bool        $force 强制重新连接
      *
      * @return ConnectionInterface
      */
-    protected function instance(?string $name = null, bool $force = false): ConnectionInterface
+    protected function instance(string|array|null $name = null, bool $force = false): ConnectionInterface
     {
         if (empty($name)) {
             $name = $this->getConfig('default', 'mysql');
         }
 
-        if ($force || !isset($this->instance[$name])) {
-            $this->instance[$name] = $this->createConnection($name);
+        $key = is_array($name) ? md5(json_encode($name)) : $name;
+        if ($force || !isset($this->instance[$key])) {
+            $this->instance[$key] = $this->createConnection($name);
         }
 
-        return $this->instance[$name];
+        return $this->instance[$key];
     }
 
     /**
@@ -264,13 +263,13 @@ class DbManager
     /**
      * 创建连接.
      *
-     * @param $name
+     * @param string|array $config
      *
      * @return ConnectionInterface
      */
-    protected function createConnection(string $name): ConnectionInterface
+    protected function createConnection(string|array $config): ConnectionInterface
     {
-        $config = $this->getConnectionConfig($name);
+        $config = is_array($config) ? $config : $this->getConnectionConfig($config);
 
         $type = !empty($config['type']) ? $config['type'] : 'mysql';
 

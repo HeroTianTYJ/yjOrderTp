@@ -8,6 +8,8 @@ use think\Model;
 
 class ValidateFile extends Model
 {
+    protected $name = 'text';
+
     //表单验证
     public function form()
     {

@@ -3,7 +3,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2023 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2025 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -161,43 +161,11 @@ abstract class Connection implements ConnectionInterface
     /**
      * 创建查询对象
      */
-    public function newQuery()
+    public function newQuery(): BaseQuery
     {
         $class = $this->getQueryClass();
 
-        /** @var BaseQuery $query */
-        $query = new $class($this);
-
-        $timeRule = $this->db->getConfig('time_query_rule');
-        if (!empty($timeRule)) {
-            $query->timeRule($timeRule);
-        }
-
-        return $query;
-    }
-
-    /**
-     * 指定表名开始查询.
-     *
-     * @param $table
-     *
-     * @return BaseQuery
-     */
-    public function table($table)
-    {
-        return $this->newQuery()->table($table);
-    }
-
-    /**
-     * 指定表名开始查询(不带前缀).
-     *
-     * @param $name
-     *
-     * @return BaseQuery
-     */
-    public function name($name)
-    {
-        return $this->newQuery()->name($name);
+        return new $class($this);
     }
 
     /**
@@ -319,8 +287,8 @@ abstract class Connection implements ConnectionInterface
      */
     protected function getCacheKey(BaseQuery $query, string $method = ''): string
     {
-        if (!empty($query->getOptions('key')) && empty($method)) {
-            $key = 'think_' . $this->getConfig('database') . '.' . $query->getTable() . '|' . $query->getOptions('key');
+        if (!empty($query->getOption('key')) && empty($method)) {
+            $key = 'think_' . $this->getConfig('database') . '.' . var_export($query->getTable(), true) . '|' . var_export($query->getOption('key'), true);
         } else {
             $key = $query->getQueryGuid();
         }
@@ -392,7 +360,7 @@ abstract class Connection implements ConnectionInterface
             str_replace(
                 [':' . $key . ' ', ':' . $key . ',', ':' . $key . ')'],
                 [$value . ' ', $value . ',', $value . ')'],
-                $sql);
+                $sql . ' ');
         }
 
         return rtrim($sql);
@@ -406,4 +374,10 @@ abstract class Connection implements ConnectionInterface
         // 关闭连接
         $this->close();
     }
+
+    public function __call($method, $args)
+    {
+        // 调用Query类方法
+        return call_user_func_array([$this->newQuery(), $method], $args);
+    }    
 }

@@ -3,17 +3,18 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2023 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2025 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
+declare (strict_types = 1);
 
 namespace think\model\relation;
 
 use Closure;
-use think\Model;
+use think\model\contract\Modelable as Model;
 
 /**
  * 远程一对一关联类.
@@ -39,9 +40,8 @@ class HasOneThrough extends HasManyThrough
         $relationModel = $this->query->relation($subRelation)->find();
 
         if ($relationModel) {
-            $relationModel->setParent(clone $this->parent);
         } else {
-            $default = $this->query->getOptions('default_model');
+            $default = $this->query->getOption('default_model');
             $relationModel = $this->getDefaultModel($default);
         }
 
@@ -74,7 +74,7 @@ class HasOneThrough extends HasManyThrough
 
         if (!empty($range)) {
             $this->query->removeWhereField($foreignKey);
-            $default = $this->query->getOptions('default_model');
+            $default = $this->query->getOption('default_model');
             $defaultModel = $this->getDefaultModel($default);
 
             $data = $this->eagerlyWhere([
@@ -88,8 +88,6 @@ class HasOneThrough extends HasManyThrough
                     $relationModel = $defaultModel;
                 } else {
                     $relationModel = $data[$result->$localKey];
-                    $relationModel->setParent(clone $result);
-                    $relationModel->exists(true);
                 }
 
                 // 设置关联属性
@@ -122,12 +120,10 @@ class HasOneThrough extends HasManyThrough
 
         // 关联模型
         if (!isset($data[$result->$localKey])) {
-            $default = $this->query->getOptions('default_model');
+            $default = $this->query->getOption('default_model');
             $relationModel = $this->getDefaultModel($default);
         } else {
             $relationModel = $data[$result->$localKey];
-            $relationModel->setParent(clone $result);
-            $relationModel->exists(true);
         }
 
         $result->setRelation($relation, $relationModel);
@@ -141,10 +137,11 @@ class HasOneThrough extends HasManyThrough
      * @param array   $subRelation 子关联
      * @param Closure $closure
      * @param array   $cache       关联缓存
+     * @param bool    $collection  是否数据集查询
      *
      * @return array
      */
-    protected function eagerlyWhere(array $where, string $key, array $subRelation = [], ?Closure $closure = null, array $cache = []): array
+    protected function eagerlyWhere(array $where, string $key, array $subRelation = [], ?Closure $closure = null, array $cache = [], bool $collection = false): array
     {
         // 预载入关联查询 支持嵌套预载入
         $keys = $this->through->where($where)->column($this->throughPk, $this->foreignKey);
@@ -161,7 +158,7 @@ class HasOneThrough extends HasManyThrough
         // 组装模型数据
         return array_map(function ($key) use ($list) {
             $set = $list->where($this->throughKey, '=', $key)->first();
-            return $set ? clone $set : null;
+            return $set ?: null;
         }, $keys);
     }
 }

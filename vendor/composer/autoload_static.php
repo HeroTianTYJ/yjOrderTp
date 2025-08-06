@@ -4,12 +4,14 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit118552ef2b3077b276422e248ece3c62
+class ComposerStaticInita9a26ec5f826e72569c88612dda42853
 {
     public static $files = array (
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
-        '35fab96057f1bf5e7aba31a8a6d5fdde' => __DIR__ . '/..' . '/topthink/think-orm/stubs/load_stubs.php',
         '15ec93fa4ce4b2d53816a1a5f2c514e2' => __DIR__ . '/..' . '/topthink/think-validate/src/helper.php',
+        '7448f3465e10b5f033e4babb31eb0b06' => __DIR__ . '/..' . '/topthink/think-orm/src/helper.php',
+        '35fab96057f1bf5e7aba31a8a6d5fdde' => __DIR__ . '/..' . '/topthink/think-orm/stubs/load_stubs.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
@@ -134,10 +136,10 @@ class ComposerStaticInit118552ef2b3077b276422e248ece3c62
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit118552ef2b3077b276422e248ece3c62::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit118552ef2b3077b276422e248ece3c62::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit118552ef2b3077b276422e248ece3c62::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit118552ef2b3077b276422e248ece3c62::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita9a26ec5f826e72569c88612dda42853::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita9a26ec5f826e72569c88612dda42853::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInita9a26ec5f826e72569c88612dda42853::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInita9a26ec5f826e72569c88612dda42853::$classMap;
 
         }, null, ClassLoader::class);
     }

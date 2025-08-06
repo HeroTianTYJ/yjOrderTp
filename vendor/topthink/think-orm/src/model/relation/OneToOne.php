@@ -3,7 +3,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2023 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2025 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -17,7 +17,7 @@ use think\db\BaseQuery as Query;
 use think\db\exception\DbException as Exception;
 use think\db\exception\InvalidArgumentException;
 use think\helper\Str;
-use think\Model;
+use think\model\contract\Modelable as Model;
 use think\model\Relation;
 
 /**
@@ -47,6 +47,30 @@ abstract class OneToOne extends Relation
     protected $relation;
 
     /**
+     * 获取一对多关联的最新一条数据.
+     *
+     * @param string $field 排序字段
+     *
+     * @return $this
+     */
+    public function firstOfMany(string $field = '') 
+    {
+        return $this->first($field);
+    }
+
+    /**
+     * 获取一对多关联的最旧一条数据.
+     *
+     * @param string $field 排序字段
+     *
+     * @return $this
+     */
+    public function lastOfMany(string $field = '')
+    {
+         return $this->last($field);
+    }
+
+    /**
      * 设置join类型.
      *
      * @param string $type JOIN类型
@@ -56,7 +80,6 @@ abstract class OneToOne extends Relation
     public function joinType(string $type)
     {
         $this->joinType = $type;
-
         return $this;
     }
 
@@ -80,8 +103,8 @@ abstract class OneToOne extends Relation
             $table = $query->getTable();
             $query->table([$table => $name]);
 
-            if ($query->getOptions('field')) {
-                $masterField = $query->getOptions('field');
+            if ($query->getOption('field')) {
+                $masterField = $query->getOption('field');
                 $query->removeOption('field');
             } else {
                 $masterField = true;
@@ -91,9 +114,16 @@ abstract class OneToOne extends Relation
         }
 
         // 预载入封装
-        $joinTable  = $this->query->getTable();
-        $joinAlias  = Str::snake($relation);
-        $joinType   = $joinType ?: $this->joinType;
+        $joinTable = $this->query->getTable();
+        $joinAlias = Str::snake($relation);
+        $joinType  = $joinType ?: $this->joinType;
+        if (true !== $field) {
+            $joinField = $field;
+        } elseif ($this->query->getOption('field')) {
+            $joinField = $this->query->getOption('field');
+        } else {
+            $joinField = $field;
+        }
 
         $query->via($joinAlias);
 
@@ -119,15 +149,16 @@ abstract class OneToOne extends Relation
             // 执行闭包查询
             $closure($query);
 
-            // 使用withField指定获取关联的字段
-            $withField = $this->query->getOptions('field');
+            // 使用field指定获取关联的字段
+            $withField = $query->getOption('field');
             if ($withField) {
-                $field = $withField;
+                $joinField = $withField;
             }
+            $query->removeOption('field');
         }
 
         $query->join([$joinTable => $joinAlias], $joinOn, $joinType)
-            ->tableField($field, $joinTable, $joinAlias, $joinAlias . '__');
+            ->tableField($joinField, $joinTable, $joinAlias, $joinAlias . '__');
     }
 
     /**
@@ -210,7 +241,7 @@ abstract class OneToOne extends Relation
      *
      * @return Model|false
      */
-    public function save(array|Model $data, bool $replace = true)
+    public function save(array | Model $data, bool $replace = true)
     {
         $model = $this->make();
 
@@ -224,7 +255,7 @@ abstract class OneToOne extends Relation
      *
      * @return Model
      */
-    public function make(array|Model $data = []): Model
+    public function make(array | Model $data = []): Model
     {
         if ($data instanceof Model) {
             $data = $data->getData();
@@ -251,16 +282,6 @@ abstract class OneToOne extends Relation
     }
 
     /**
-     * 获取绑定属性.
-     *
-     * @return array
-     */
-    public function getBindAttr(): array
-    {
-        return $this->bindAttr;
-    }
-
-    /**
      * 一对一 关联模型预查询拼装.
      *
      * @param string $model    模型名称
@@ -271,70 +292,14 @@ abstract class OneToOne extends Relation
      */
     protected function match(string $model, string $relation, Model $result): void
     {
-        // 重新组装模型数据
-        foreach ($result->getData() as $key => $val) {
-            if (str_contains($key, '__')) {
-                [$name, $attr] = explode('__', $key, 2);
-                if ($name == Str::snake($relation)) {
-                    $list[$relation][$attr] = $val;
-                    unset($result->$key);
-                }
-            }
-        }
-
-        if (isset($list[$relation])) {
-            $array = array_unique($list[$relation]);
-
-            if (count($array) == 1 && null === current($array)) {
-                $relationModel = null;
+        $data = $result->getRelation($relation);
+        if (!empty($data)) {
+            if ($this->bindAttr) {
+                $result->bindRelationAttr($data, $this->bindAttr);
             } else {
-                $relationModel = new $model($list[$relation]);
-                $relationModel->setParent(clone $result);
-                $relationModel->exists(true);
+                $relationModel = new $model($data);
+                $result->setRelation($relation, $relationModel);
             }
-
-            if (!empty($this->bindAttr)) {
-                $this->bindAttr($result, $relationModel);
-            }
-        } else {
-            $relationModel = null;
-        }
-
-        $result->setRelation($relation, $relationModel);
-    }
-
-    /**
-     * 绑定关联属性到父模型.
-     *
-     * @param Model $result 父模型对象
-     * @param Model $model  关联模型对象
-     *
-     * @throws Exception
-     *
-     * @return void
-     */
-    protected function bindAttr(Model $result, ?Model $model = null): void
-    {
-        foreach ($this->bindAttr as $key => $attr) {
-            if (is_numeric($key)) {
-                if (!is_string($attr)) {
-                    throw new InvalidArgumentException('bind attr must be string:' . $key);
-                }
-
-                $key = $attr;
-            }
-
-            if (null !== $result->getOrigin($key)) {
-                throw new Exception('bind attr has exists:' . $key);
-            }
-
-            if ($attr instanceof Closure) {
-                $value = $attr($model, $key, $result);
-            } else {
-                $value = $model?->getAttr($attr);
-            }
-
-            $result->setAttr($key, $value);
         }
     }
 
@@ -346,10 +311,10 @@ abstract class OneToOne extends Relation
      * @param array   $subRelation 子关联
      * @param Closure $closure
      * @param array   $cache       关联缓存
-     *
+     * @param bool    $collection  是否数据集查询
      * @return array
      */
-    protected function eagerlyWhere(array $where, string $key, array $subRelation = [], ?Closure $closure = null, array $cache = [])
+    protected function eagerlyWhere(array $where, string $key, array $subRelation = [], ?Closure $closure = null, array $cache = [], bool $collection = false)
     {
         // 预载入关联查询 支持嵌套预载入
         if ($closure) {
@@ -357,15 +322,20 @@ abstract class OneToOne extends Relation
             $closure($this->query);
         }
 
+        if ($collection) {
+            $this->query->removeOption('limit');
+        } else {
+            $this->query->limit(1);
+        }
+
         $list = $this->query
             ->where($where)
             ->with($subRelation)
             ->cache($cache[0] ?? false, $cache[1] ?? null, $cache[2] ?? null)
-            ->select();
+            ->lazy();
 
         // 组装模型数据
         $data = [];
-
         foreach ($list as $set) {
             if (!isset($data[$set->$key])) {
                 $data[$set->$key] = $set;

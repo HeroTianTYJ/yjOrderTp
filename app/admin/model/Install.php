@@ -8,6 +8,8 @@ use think\Model;
 
 class Install extends Model
 {
+    protected $name = 'text';
+
     //第二步表单验证
     public function step2()
     {

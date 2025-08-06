@@ -9,6 +9,8 @@ use think\Model;
 
 class System extends Model
 {
+    protected $name = 'text';
+
     //表单验证
     public function form()
     {

@@ -3,7 +3,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2023 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2025 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -33,13 +33,17 @@ trait JoinAndViewQuery
      */
     public function join(array | string | Raw $join, ?string $condition = null, string $type = 'INNER', array $bind = [])
     {
-        $table = $this->getJoinTable($join);
+        $table = $this->getJoinTable($join, $alias);
 
         if (!empty($bind) && $condition) {
             $this->bindParams($condition, $bind);
         }
 
-        $this->options['join'][] = [$table, strtoupper($type), $condition];
+        if ($alias) {
+            $this->options['join'][$alias] = [$table, strtoupper($type), $condition];
+        } else {
+            $this->options['join'][] = [$table, strtoupper($type), $condition];
+        }
 
         return $this;
     }
@@ -100,7 +104,6 @@ trait JoinAndViewQuery
         if (is_array($join)) {
             $table = $join;
             $alias = array_shift($join);
-
             return $table;
         }
 

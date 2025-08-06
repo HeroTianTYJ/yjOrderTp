@@ -10,6 +10,8 @@ use think\Model;
 
 class Common extends Model
 {
+    protected $name = 'text';
+
     //数据表信息
     public function info()
     {

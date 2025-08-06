@@ -3,7 +3,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2023 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2025 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -61,17 +61,15 @@ class Builder extends BaseBuilder
 
         foreach ($data as $key => $val) {
             $item = $this->parseKey($query, $key, true);
-            if ($val instanceof BackedEnum) {
-                $val = $val->value;
-            } elseif ($val instanceof UnitEnum) {
-                $val = $val->name;
+            if ($val instanceof UnitEnum) {
+                $val = $this->parseEnum($val);
             } elseif ($val instanceof Raw) {
                 $result[$item] = $this->parseRaw($query, $val);
                 continue;
             } elseif (is_null($val) && in_array($key, $fields, true)) {
                 $result[$item] = 'NULL';
                 continue;
-            } elseif (!is_scalar($val) && (in_array($key, (array) $query->getOptions('json')) || 'json' == $query->getFieldType($key))) {
+            } elseif (!is_scalar($val) && (in_array($key, (array) $query->getOption('json')) || 'json' == $query->getFieldType($key))) {
                 $val = json_encode($val);
             }
 
@@ -83,6 +81,16 @@ class Builder extends BaseBuilder
             } elseif (!str_contains($key, '.') && !in_array($key, $fields, true)) {
                 if ($options['strict']) {
                     throw new Exception('fields not exists:[' . $key . ']');
+                }
+            } elseif ($val instanceof Express) {
+                if ($val->getLazyTime() && in_array($val->getType(), ['+', '-'])) {
+                    $step = $query->lazyWrite($key, $val->getType() == '+' ? 'inc' : 'dec', $val->getStep(), $val->getLazyTime());
+                    if (false === $step) {
+                        continue;
+                    }
+                    $result[$item] = $item . ' + ' . $step;
+                } else {
+                    $result[$item] = $item . $this->parseExpress($query, $val);
                 }
             } elseif (is_array($val) && !empty($val) && is_string($val[0])) {
                 if (in_array(strtoupper($val[0]), ['INC', 'DEC'])) {
@@ -255,7 +263,8 @@ class Builder extends BaseBuilder
             throw new Exception('where express error:' . var_export($exp, true));
         }
 
-        $exp = strtoupper($exp);
+        $param = $val[2] ?? null;
+        $exp   = strtoupper($exp);
         if (isset($this->exp[$exp])) {
             $exp = $this->exp[$exp];
         }
@@ -270,10 +279,8 @@ class Builder extends BaseBuilder
         } elseif ($value instanceof Stringable) {
             // 对象数据写入
             $value = $value->__toString();
-        } elseif ($value instanceof BackedEnum) {
-            $value = $value->value;
         } elseif ($value instanceof UnitEnum) {
-            $value = $value->name;
+            $value = $this->parseEnum($value);
         }
 
         if (is_scalar($value) && !in_array($exp, ['EXP', 'NOT NULL', 'NULL', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN']) && !str_contains($exp, 'TIME')) {
@@ -287,7 +294,7 @@ class Builder extends BaseBuilder
         // 解析查询表达式
         foreach ($this->parser as $fun => $parse) {
             if (in_array($exp, $parse)) {
-                return $this->$fun($query, $key, $exp, $value, $field, $bindType, $val[2] ?? 'AND');
+                return $this->$fun($query, $key, $exp, $value, $field, $bindType, $param);
             }
         }
 
@@ -307,9 +314,10 @@ class Builder extends BaseBuilder
      *
      * @return string
      */
-    protected function parseLike(Query $query, string $key, string $exp, $value, $field, int $bindType, string $logic): string
+    protected function parseLike(Query $query, string $key, string $exp, $value, $field, int $bindType, ?string $logic = null): string
     {
         // 模糊匹配
+        $logic = $logic ?: 'AND';
         if (is_array($value)) {
             $array = [];
             foreach ($value as $item) {
@@ -385,6 +393,23 @@ class Builder extends BaseBuilder
     }
 
     /**
+     * 解析枚举类型值
+     *
+     * @param UnitEnum  $value
+     *
+     * @return mixed
+     */
+    protected function parseEnum(UnitEnum $value)
+    {
+        if ($value instanceof BackedEnum) {
+            $value = $value->value;
+        } else {
+            $value = $value->name;
+        }
+        return $value;
+    }
+
+    /**
      * IN查询.
      *
      * @param Query  $query    查询对象
@@ -404,7 +429,17 @@ class Builder extends BaseBuilder
         } elseif ($value instanceof Raw) {
             $value = $this->parseRaw($query, $value);
         } else {
-            $value = array_unique(is_array($value) ? $value : explode(',', (string) $value));
+            // 检查枚举类型
+            if (is_subclass_of($value, UnitEnum::class, false)) {
+                if (is_subclass_of($value, BackedEnum::class, false)) {
+                    $value = array_column($value::cases(), 'value');
+                } else {
+                    $value = array_column($value::cases(), 'name');
+                }
+            } else {
+                $value = is_array($value) ? $value : array_unique(explode(',', (string) $value));
+            }
+
             if (count($value) === 0) {
                 return 'IN' == $exp ? '0 = 1' : '1 = 1';
             }
@@ -412,14 +447,24 @@ class Builder extends BaseBuilder
             if ($query->isAutoBind()) {
                 $array = [];
                 foreach ($value as $v) {
+                    if ($v instanceof UnitEnum) {
+                        $v = $this->parseEnum($v);
+                    }
                     $name    = $query->bindValue($v, $bindType);
                     $array[] = ':' . $name;
                 }
                 $value = implode(',', $array);
-            } elseif (Connection::PARAM_STR == $bindType) {
-                $value = '\'' . implode('\',\'', $value) . '\'';
-            } else {
-                $value = implode(',', $value);
+            } else{
+                foreach ($value as &$v) {
+                    if ($v instanceof UnitEnum) {
+                        $v = $this->parseEnum($v);
+                    }
+                }
+                if (Connection::PARAM_STR == $bindType) {
+                    $value = '\'' . implode('\',\'', $value) . '\'';
+                } else {
+                    $value = implode(',', $value);
+                }
             }
 
             if (!str_contains($value, ',')) {
@@ -547,7 +592,7 @@ class Builder extends BaseBuilder
                     $sort = $val;
                 }
 
-                if (preg_match('/^[\w\.]+$/', $key)) {
+                if (preg_match('/^[\w\-\>\.]+$/', $key)) {
                     $sort    = strtoupper($sort);
                     $sort    = in_array($sort, ['ASC', 'DESC'], true) ? ' ' . $sort : '';
                     $array[] = $this->parseKey($query, $key, true) . $sort;
@@ -578,6 +623,19 @@ class Builder extends BaseBuilder
         }
 
         return $sql;
+    }
+
+    /**
+     * 分析Express对象
+     *
+     * @param Query $query 查询对象
+     * @param Express  $express  Express对象
+     *
+     * @return string
+     */
+    protected function parseExpress(Query $query, Express $express): string
+    {
+        return $express->getValue();
     }
 
     /**
