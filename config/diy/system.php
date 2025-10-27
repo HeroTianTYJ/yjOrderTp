@@ -12,7 +12,7 @@ return [
     'https' => '0',  //是否强制https
     'manager_enter' => 'admin.php',  //后台入口
     'index_php' => 'index.php/',  //隐藏index.php
-    'copyright_backend' => '<a href="https://www.yjrj.cn/" target="_blank">昱杰软件</a> © 版权所有',  //登录页版权
+    'copyright_backend' => '<a href="https://www.yjrj.cn/" target="_blank">昱杰软件</a><sup>®</sup> © 版权所有',  //登录页版权
     'order_time' => '0',  //防刷单间隔
     'order_search' => '0',  //订单查询
     'order_search_step' => '0',  //跨模板查询
