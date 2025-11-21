@@ -23,8 +23,8 @@ if ($_POST) {
 <meta charset="utf-8">
 <title>《昱杰订单管理系统（ThinkPHP版）》运行环境检测</title>
 <base href="<?php echo $webUrl; ?>">
-<script type="text/javascript" src="static/vendor/jquery.js"></script>
-<link rel="stylesheet" type="text/css" href="static/common/css/Basic.css">
+<script type="text/javascript" src="static/library/jquery/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="static/yj.admin.ui/css/basic.css">
 <script type="text/javascript">
 $(function () {
   $('.button').on('click', function () {
