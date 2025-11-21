@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="static/library/web_uploader/web_uploader.css?{:staticCache()}">
 <link rel="stylesheet" type="text/css" href="static/admin/css/{:parse_name(request()->controller())}.css?{:staticCache()}">
 <script type="text/javascript">
-CONFIG['UPLOAD_SERVER'] = '{:url("/common/qqwry")}';
+CONFIG['UPLOAD_SERVER'] = '{:url("/common/czdb")}';
 </script>{/block}
 
 {block name="main"}
@@ -107,7 +107,8 @@ CONFIG['UPLOAD_SERVER'] = '{:url("/common/qqwry")}';
     <tr><td>邮件内容：</td><td><textarea name="mail_send_content" class="textarea">{:config('system.mail_send_content')}</textarea></td><td>支持HTML</td></tr>
   </table>
   <table class="column none">
-    <tr><td><span class="qqwry">当前IP数据库更新日期为：{$IpVersion}</span> <span class="qqwry_picker" style="display:inline-block;width:115px;"></span> <a href="https://www.yjrj.cn/help/detail.html?id=37" target="_blank">最新版IP数据库获取方法</a></td></tr>
+    <tr><td>当前IPv4数据库更新日期为：<span class="czdb_v4_version">{$CzdbV4Version}</span> <span class="czdb_v4_picker" style="display:inline-block;"></span></td></tr>
+    <tr><td>当前IPv6数据库更新日期为：<span class="czdb_v6_version">{$CzdbV6Version}</span> <span class="czdb_v6_picker" style="display:inline-block;"></span></td></tr>
   </table>
   <table>
     <tr><td colspan="2" class="left"><input type="submit" value="确认修改" class="button"></td></tr>

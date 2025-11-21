@@ -3,36 +3,47 @@ $(function () {
   tabSwitch(function (index, length) {
     if (index === length - 1) {
       uploader.refresh();
+      uploader2.refresh();
     }
   });
 
   // 更新IP数据库
-  let uploader = WebUploader.create({
+  let uploadConfig = {
     auto: true,
     server: CONFIG['UPLOAD_SERVER'],
-    pick: {
-      id: '.qqwry_picker',
-      label: '更新IP数据库',
-      multiple: false
-    },
-    fileSingleSizeLimit: 20480000,
+    fileSingleSizeLimit: 51200000,
     accept: {
-      extensions: 'dat',
-      mimeTypes: '.dat'
+      extensions: 'czdb',
+      mimeTypes: '.czdb'
     },
     compress: false,
     resize: false,
     duplicate: true
-  });
+  };
+  uploadConfig.pick = {
+    id: '.czdb_v4_picker',
+    label: '更新',
+    multiple: false
+  };
+  uploadConfig.formData = {czdb_version: 0};
+  let uploader = WebUploader.create(uploadConfig);
   uploader.on('uploadSuccess', function (file, response) {
     let json = JSON.parse(response._raw);
-    if (json['status'] === 1) {
-      $('.qqwry').html('更新成功，当前IP数据库更新日期为：' + json['message']);
-    } else {
-      showTip(json['message'], 0);
-    }
+    json['status'] === 1 ? $('.czdb_v4_version').html(json['message']) : showTip(json['message'], 0);
   });
   uploader.on('error', uploadValidate);
+  uploadConfig.pick = {
+    id: '.czdb_v6_picker',
+    label: '更新',
+    multiple: false
+  };
+  uploadConfig.formData = {czdb_version: 1};
+  let uploader2 = WebUploader.create(uploadConfig);
+  uploader2.on('uploadSuccess', function (file, response) {
+    let json = JSON.parse(response._raw);
+    json['status'] === 1 ? $('.czdb_v6_version').html(json['message']) : showTip(json['message'], 0);
+  });
+  uploader2.on('error', uploadValidate);
 
   // 提交修改
   $('.form').on('submit', function (e) {

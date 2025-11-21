@@ -4,6 +4,7 @@ return [
     'session_key_admin' => '9ERniVGJIzC8V5e5eRHvuDR2kY7FYPsj3LycsiMu',  //主后台session key
     'pass_key' => 'uptfJ33SjUtjDj8WOaAqsOuTB433shHBxeILGEvu',  //密码的盐
     'reset_pass_key' => 'vjSNiDraUS1levQmYVT5DxT66566M8DoXT2xj1Ve',  //重置密码的密钥
+    'czdb_key' => 'CF6CxJdni0pNOOHxcwYMHg==',  //纯真数据库的密钥
 
     'openid' => 'odh0BtM-3KOuH9rbql8Rl4S_i3lY',  //OpenID
     'web_name' => '昱杰订单管理系统',  //站点名称

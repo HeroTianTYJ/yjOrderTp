@@ -6,7 +6,6 @@ use app\index\model;
 use think\facade\Config;
 use think\facade\Request;
 use think\facade\View;
-use yjrj\QQWry;
 
 class Order extends Base
 {
@@ -70,7 +69,7 @@ class Order extends Base
                     '<span style="color:' . $orderStateOne['color'] . ';">' . $orderStateOne['name'] . '</span>' :
                     '此状态已被删除';
 
-                $orderAll[$key]['ip'] = $value['ip'] . ' ' . QQWry::getAddress($value['ip']);
+                $orderAll[$key]['ip'] = $value['ip'] . ' ' . ipGeolocation($value['ip']);
 
                 $orderAll[$key]['pay_url'] = $this->payUrl($value['order_id']);
             }

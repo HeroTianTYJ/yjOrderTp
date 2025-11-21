@@ -7,7 +7,6 @@ use app\index\model;
 use Exception;
 use PHPMailer\PHPMailer;
 use think\facade\Config;
-use yjrj\QQWry;
 
 class SubOrder extends Base
 {
@@ -77,7 +76,7 @@ class SubOrder extends Base
             $orderAdd['address'] ?? '',
             $orderAdd['note'] ?? '',
             $orderAdd['email'] ?? '',
-            isset($orderAdd['ip']) ? $orderAdd['ip'] . ' ' . QQWry::getAddress($orderAdd['ip']) : '',
+            isset($orderAdd['ip']) ? $orderAdd['ip'] . ' ' . ipGeolocation($orderAdd['ip']) : '',
             isset($orderAdd['referrer']) ? '<a href="' . $orderAdd['referrer'] . '" target="_blank">' .
                 $orderAdd['referrer'] . '</a>' : '直接进入',
             Config::get('payment.' . $orderAdd['payment_id'])

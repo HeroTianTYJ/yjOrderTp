@@ -6,7 +6,6 @@ use app\admin\model;
 use think\facade\Config;
 use think\facade\Request;
 use think\facade\View;
-use yjrj\QQWry;
 
 class Visit extends Base
 {
@@ -30,7 +29,7 @@ class Visit extends Base
             $Visit = new model\Visit();
             $visitAll = $Visit->all2();
             foreach ($visitAll as $value) {
-                $output .= "\r\n" . '"' . $value['ip'] . ' -- ' . QQWry::getAddress($value['ip']) . '","' .
+                $output .= "\r\n" . '"' . $value['ip'] . ' -- ' . ipGeolocation($value['ip']) . '","' .
                     $value['url'] . '","' . $value['count'] . '","' . timeFormat($value['create_time']) . '","' .
                     timeFormat($value['last_visit_time']) . '",';
             }
@@ -67,7 +66,7 @@ class Visit extends Base
     private function listItem($item)
     {
         $item['truncate_url'] = keyword(truncate($item['url'], 0, 28));
-        $item['ip'] = keyword($item['ip']) . '<br>' . QQWry::getAddress($item['ip']);
+        $item['ip'] = keyword($item['ip']) . '<br>' . ipGeolocation($item['ip']);
         $item['create_time'] = timeFormat($item['create_time']);
         $item['last_visit_time'] = timeFormat($item['last_visit_time']);
         return $item;

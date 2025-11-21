@@ -10,7 +10,6 @@ use PHPMailer\PHPMailer;
 use think\facade\Config;
 use think\facade\Request;
 use think\facade\View;
-use yjrj\QQWry;
 
 class Order extends Base
 {
@@ -260,7 +259,7 @@ class Order extends Base
                         '","' . $value['province'] . ' ' . $value['city'] . ' ' . $value['county'] . ' ' .
                         $value['address'] . '","' . $value['note'] . '","' .
                         $value['email'] . '","' . ($value['ip'] ? $value['ip'] . ' -- ' .
-                            QQWry::getAddress($value['ip']) : '') . '","' . htmlspecialchars_decode($value['referrer'])
+                            ipGeolocation($value['ip']) : '') . '","' . htmlspecialchars_decode($value['referrer'])
                         . '","' . timeFormat($value['create_time']) . '","' .
                         Config::get('payment.' . $value['payment_id']) . '","\'' . $value['pay_id'] . '","' .
                         $payScene . '","' . timeFormat($value['pay_time']) . '","' . ($orderStateOne ?
@@ -297,7 +296,7 @@ class Order extends Base
             $item['address'];
         $item['address_truncate'] = keyword(truncate($item['address'], 0, 25));
         $item['email'] = keyword($item['email']);
-        $item['ip'] = '<span title="' . QQWry::getAddress($item['ip']) . '">' . keyword($item['ip']) . '</span>';
+        $item['ip'] = '<span title="' . ipGeolocation($item['ip']) . '">' . keyword($item['ip']) . '</span>';
         $item['create_time'] = timeFormat($item['create_time']);
         $item['payment'] = Config::get('payment.' . $item['payment_id']);
         $item['pay_id'] = keyword($item['pay_id']);
@@ -407,7 +406,7 @@ class Order extends Base
             Request::post('town2'),
             Request::post('address'),
             Request::post('note'),
-            Request::post('ip') . ' ' . QQWry::getAddress(Request::post('ip')),
+            Request::post('ip') . ' ' . ipGeolocation(Request::post('ip')),
             $payUrl['alipay'],
             $payUrl['wechat_pay'],
             Config::get('payment.' . Request::post('payment_id')),

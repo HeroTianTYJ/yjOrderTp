@@ -3,10 +3,10 @@
 namespace app\admin\controller;
 
 use app\admin\model;
+use czdb\DbSearcher;
 use think\facade\Config;
 use think\facade\Request;
 use think\facade\View;
-use yjrj\QQWry;
 use yjrj\Wechat;
 
 class System extends Base
@@ -26,6 +26,7 @@ return [
     'session_key_admin' => '" . Config::get('system.session_key_admin') . "',  //主后台session key
     'pass_key' => '" . Config::get('system.pass_key') . "',  //密码的盐
     'reset_pass_key' => '" . Config::get('system.reset_pass_key') . "',  //重置密码的密钥
+    'czdb_key' => '" . Config::get('system.czdb_key') . "',  //纯真数据库的密钥
 
     'openid' => '" . str_replace("'", "\'", Request::post('openid')) . "',  //OpenID
     'web_name' => '" . str_replace("'", "\'", Request::post('web_name')) . "',  //站点名称
@@ -107,7 +108,10 @@ return [
                 return apiResponse($systemForm, 0);
             }
         }
-        View::assign(['IpVersion' => QQWry::getVersion()]);
+        View::assign([
+            'CzdbV4Version' => (new DbSearcher(Config::get('file.czdb_v4'), Config::get('system.czdb_key')))->version(),
+            'CzdbV6Version' => (new DbSearcher(Config::get('file.czdb_v6'), Config::get('system.czdb_key')))->version()
+        ]);
         return $this->view();
     }
 

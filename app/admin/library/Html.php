@@ -162,6 +162,11 @@ class Html extends \app\common\library\Html
         self::selectArray($type, 'Type', $id);
     }
 
+    public static function typeRadio($type = [], $id = 0)
+    {
+        self::radioArray($type, 'type_id', 'Type', $id);
+    }
+
     public static function product($id = 0, $flag = 0, $price = false)
     {
         $html = '';

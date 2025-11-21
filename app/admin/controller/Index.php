@@ -7,7 +7,6 @@ use app\common\controller\Auth;
 use think\facade\Config;
 use think\facade\Session;
 use think\facade\View;
-use yjrj\QQWry;
 
 class Index extends Base
 {
@@ -50,8 +49,7 @@ class Index extends Base
             if (isDataPermission('profile', 'login_ip')) {
                 if ($loginRecordManagerTotalCount > 1) {
                     $loginRecordManagerOne = $LoginRecordManager->one();
-                    $ip = $loginRecordManagerOne['ip'] . ' - ' .
-                        QQWry::getAddress($loginRecordManagerOne['ip']);
+                    $ip = $loginRecordManagerOne['ip'] . ' - ' . ipGeolocation($loginRecordManagerOne['ip']);
                 } else {
                     $ip = '首次登录';
                 }

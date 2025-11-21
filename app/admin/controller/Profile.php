@@ -8,7 +8,6 @@ use think\facade\Request;
 use think\facade\Session;
 use think\facade\View;
 use yjrj\QqLogin;
-use yjrj\QQWry;
 use yjrj\Wechat;
 
 class Profile extends Base
@@ -71,7 +70,7 @@ class Profile extends Base
 
     private function listItem($item)
     {
-        $item['ip'] = keyword($item['ip']) . '<br>' . QQWry::getAddress($item['ip']);
+        $item['ip'] = keyword($item['ip']) . '<br>' . ipGeolocation($item['ip']);
         $item['create_time'] = timeFormat($item['create_time']);
         return $item;
     }

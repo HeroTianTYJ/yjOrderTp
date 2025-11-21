@@ -1,6 +1,7 @@
 <?php
 
 use app\admin\model;
+use czdb\DbSearcher;
 use think\facade\Config;
 use think\facade\Console;
 use think\facade\Request;
@@ -389,4 +390,16 @@ function loginLink()
             '"><span class="iconfont icon-qq color"></span></a>';
     }
     return $link;
+}
+
+//获取IP地理位置
+function ipGeolocation($ip)
+{
+    $DbSearcher = new DbSearcher(
+        Config::get(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ? 'file.czdb_v4' : 'file.czdb_v6'),
+        Config::get('system.czdb_key')
+    );
+    $ipGeolocation = $DbSearcher->search($ip);
+    $DbSearcher->close();
+    return $ipGeolocation;
 }

@@ -7,7 +7,6 @@ use qrCode\QrCode;
 use think\captcha\facade\Captcha;
 use think\facade\Config;
 use think\facade\Request;
-use yjrj\QQWry;
 
 class Common extends Base
 {
@@ -19,7 +18,7 @@ class Common extends Base
             if ($Visit->yesterday()) {
                 $output = '"IP","访问页面","当日次数","第一次","最后一次",';
                 foreach ($Visit->all() as $value) {
-                    $output .= "\r\n" . '"' . $value['ip'] . ' -- ' . QQWry::getAddress($value['ip']) . '","' .
+                    $output .= "\r\n" . '"' . $value['ip'] . ' -- ' . ipGeolocation($value['ip']) . '","' .
                         $value['url'] . '","' . $value['count'] . '","' . timeFormat($value['create_time']) . '","' .
                         timeFormat($value['last_visit_time']) . '",';
                 }

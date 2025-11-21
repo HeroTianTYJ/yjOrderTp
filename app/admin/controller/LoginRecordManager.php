@@ -7,7 +7,6 @@ use app\admin\library\Html;
 use think\facade\Config;
 use think\facade\Request;
 use think\facade\View;
-use yjrj\QQWry;
 
 class LoginRecordManager extends Base
 {
@@ -37,7 +36,7 @@ class LoginRecordManager extends Base
                 foreach ($loginRecordManagerAll as $value) {
                     $managerOne = $Manager->one($value['manager_id']);
                     $output .= "\r\n" . '"' . ($managerOne ? $managerOne['name'] : '此管理员已被删除') . '","' .
-                        $value['ip'] . ' -- ' . QQWry::getAddress($value['ip']) . '","' . timeFormat($value['create_time']) .
+                        $value['ip'] . ' -- ' . ipGeolocation($value['ip']) . '","' . timeFormat($value['create_time']) .
                         '",';
                 }
             }
@@ -56,7 +55,7 @@ class LoginRecordManager extends Base
 
     private function listItem($item)
     {
-        $item['ip'] = keyword($item['ip']) . '<br>' . QQWry::getAddress($item['ip']);
+        $item['ip'] = keyword($item['ip']) . '<br>' . ipGeolocation($item['ip']);
         $managerOne = (new model\Manager())->one($item['manager_id']);
         $item['manager'] = $managerOne ? $managerOne['name'] : '此管理员已被删除';
         $item['create_time'] = timeFormat($item['create_time']);

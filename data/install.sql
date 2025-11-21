@@ -23,7 +23,7 @@ INSERT INTO `yjorder_field`(`id`,`name`,`is_default`) VALUES('8','电子邮箱',
 CREATE TABLE `yjorder_login_record_manager` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `manager_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `ip` char(15) NOT NULL DEFAULT '',
+  `ip` char(39) NOT NULL DEFAULT '',
   `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
@@ -60,7 +60,7 @@ CREATE TABLE `yjorder_order` (
   `address` char(200) NOT NULL DEFAULT '',
   `note` char(255) NOT NULL DEFAULT '',
   `email` char(50) NOT NULL DEFAULT '',
-  `ip` char(15) NOT NULL DEFAULT '',
+  `ip` char(39) NOT NULL DEFAULT '',
   `referrer` char(255) NOT NULL DEFAULT '',
   `payment_id` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `pay_id` char(28) NOT NULL DEFAULT '',
@@ -330,7 +330,7 @@ CREATE TABLE `yjorder_text` (
 
 CREATE TABLE `yjorder_visit` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `ip` char(15) NOT NULL DEFAULT '',
+  `ip` char(39) NOT NULL DEFAULT '',
   `url` char(255) NOT NULL DEFAULT '',
   `count` smallint(5) unsigned NOT NULL DEFAULT '0',
   `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
