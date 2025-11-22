@@ -5,12 +5,9 @@ namespace app\admin\model;
 use app\admin\validate\System as validate;
 use think\facade\Config;
 use think\facade\Request;
-use think\Model;
 
-class System extends Model
+class System
 {
-    protected $name = 'text';
-
     //表单验证
     public function form()
     {

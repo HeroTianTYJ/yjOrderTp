@@ -4,12 +4,9 @@ namespace app\admin\model;
 
 use app\admin\validate\ValidateFile as validate;
 use think\facade\Request;
-use think\Model;
 
-class ValidateFile extends Model
+class ValidateFile
 {
-    protected $name = 'text';
-
     //表单验证
     public function form()
     {

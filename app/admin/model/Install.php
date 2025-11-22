@@ -4,12 +4,9 @@ namespace app\admin\model;
 
 use app\admin\validate\Install as validate;
 use think\facade\Request;
-use think\Model;
 
-class Install extends Model
+class Install
 {
-    protected $name = 'text';
-
     //第三步表单验证
     public function step3()
     {
