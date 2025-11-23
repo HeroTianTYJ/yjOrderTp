@@ -6,6 +6,7 @@
 CONFIG['PAGE_SIZE'] = {:config('app.page_size')};
 CONFIG['TOTAL'] = {$Total};
 CONFIG['LIST'] = window.location;
+CONFIG['MERGE'] = '{:url("/".parse_name(request()->controller())."/merge")}';
 CONFIG['ZIP'] = '{:url("/".parse_name(request()->controller())."/zip")}';
 CONFIG['DOWNLOAD'] = '{:url("/".parse_name(request()->controller())."/download")}';
 CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
@@ -19,6 +20,7 @@ CONFIG['DELETE'] = '{:url("/".parse_name(request()->controller())."/delete")}';
     <input type="hidden" name="ids">
   
     <div class="button">
+      {if condition="isPermission('merge')"}<input type="button" value="合并文件" class="button merge">{/if}
       {if condition="isPermission('zip')"}<input type="button" value="打包文件" class="button disabled must_select zip1" disabled>
       <input type="button" value="打包并删除源文件" class="button disabled must_select zip2" disabled>{/if}
       {if condition="isPermission('delete')"}<input type="button" value="批量删除" class="button disabled must_select delete" disabled>{/if}

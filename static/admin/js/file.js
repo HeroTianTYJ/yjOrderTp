@@ -5,6 +5,32 @@ $(function () {
   // 列表
   list(moduleName);
 
+  // 合并文件
+  $tool.find('.merge').on('click', function () {
+    ajaxMessageLayer(CONFIG['MERGE'], '合并文件', {}, function (index) {
+      $.ajax({
+        type: 'POST',
+        url: CONFIG['MERGE'] + (CONFIG['MERGE'].indexOf('?') > 0 ? '&' : '?') + 'action=do',
+        data: $('form.merge').serialize()
+      }).then(function (data) {
+        let json = JSON.parse(data);
+        showTip(json['message'], json['status']);
+        if (json['status'] === 1) {
+          layer.close(index);
+          setTimeout(function () {
+            window.location.reload(true);
+          }, 3000);
+        }
+      });
+    }, function () {
+      layui.use(['form'], function () {
+        layui.form.render('select');
+      });
+      iCheck();
+      $('.layui-layer-content').animate({scrollTop: 0});
+    });
+  });
+
   // 删除
   remove(moduleName);
 

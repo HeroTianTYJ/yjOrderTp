@@ -1,0 +1,6 @@
+<form method="post" action="" class="form layui-form {:request()->action()}" onsubmit="return false;">
+  <table>
+    <tr><td>文件类型：</td><td>{$Type}</td></tr>
+    <tr><td>合 并 后：</td><td><div class="radio-box"><label><input type="radio" name="is_delete" value="0" checked>保留源文件</label></div><div class="radio-box"><label><input type="radio" name="is_delete" value="1">删除源文件</label></div></td></tr>
+  </table>
+</form>

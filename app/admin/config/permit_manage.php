@@ -80,65 +80,66 @@ return [
     ],
     'File' => [
         'index' => 56,
-        'zip' => 57,
-        'download' => 58,
-        'delete' => 59
+        'merge' => 57,
+        'zip' => 58,
+        'download' => 59,
+        'delete' => 60
     ],
     'District' => [
-        'index' => 60,
-        'add' => 61,
-        'multi' => 62,
-        'update' => 63,
-        'delete' => 64
+        'index' => 61,
+        'add' => 62,
+        'multi' => 63,
+        'update' => 64,
+        'delete' => 65
     ],
     'Manager' => [
-        'index' => 65,
-        'add' => 66,
-        'update' => 67,
-        'delete' => 68,
-        'isActivation' => 69,
-        'wechatOpenId' => 70,
-        'qqOpenId' => 71
+        'index' => 66,
+        'add' => 67,
+        'update' => 68,
+        'delete' => 69,
+        'isActivation' => 70,
+        'wechatOpenId' => 71,
+        'qqOpenId' => 72
     ],
     'LoginRecordManager' => [
-        'index' => 72,
-        'output' => 73
+        'index' => 73,
+        'output' => 74
     ],
     'PermitGroup' => [
-        'index' => 74,
-        'add' => 75,
-        'update' => 76,
-        'delete' => 77,
-        'isDefault' => 78
+        'index' => 75,
+        'add' => 76,
+        'update' => 77,
+        'delete' => 78,
+        'isDefault' => 79
     ],
     'PermitManage' => [
-        'index' => 79,
-        'isDefault' => 80
+        'index' => 80,
+        'isDefault' => 81
     ],
     'PermitData' => [
-        'index' => 81,
-        'isDefault' => 82
+        'index' => 82,
+        'isDefault' => 83
     ],
     'System' => [
-        'index' => 83
-    ],
-    'ValidateFile' => [
         'index' => 84
     ],
+    'ValidateFile' => [
+        'index' => 85
+    ],
     'Smtp' => [
-        'index' => 85,
-        'add' => 86,
-        'update' => 87,
-        'delete' => 88,
-        'state' => 89
+        'index' => 86,
+        'add' => 87,
+        'update' => 88,
+        'delete' => 89,
+        'state' => 90
     ],
     'Database' => [
-        'index' => 90,
-        'optimize' => 91,
-        'repairAutoIncrement' => 92,
-        'schema' => 93
+        'index' => 91,
+        'optimize' => 92,
+        'repairAutoIncrement' => 93,
+        'schema' => 94
     ],
     'DatabaseBackup' => [
-        'index' => 94
+        'index' => 95
     ]
 ];
