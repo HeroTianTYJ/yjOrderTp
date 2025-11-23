@@ -15,6 +15,7 @@ class Install extends Base
         if (file_exists(ROOT_DIR . '/data/install.lock')) {
             $this->error('安装锁定，已经安装过了，如果您确定要重新安装，请到服务器上删除：./data/install.lock。', 0);
         }
+        $this->requestFilter();
     }
 
     public function index()
