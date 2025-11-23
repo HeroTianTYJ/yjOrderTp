@@ -7,6 +7,26 @@ use think\facade\Request;
 
 class Install
 {
+    //第二步表单验证
+    public function step2()
+    {
+        $data = [
+            'hostname' => Request::post('hostname'),
+            'hostport' => Request::post('hostport'),
+            'database' => Request::post('database'),
+            'username' => Request::post('username'),
+            'password' => Request::post('password'),
+            'prefix' => Request::post('prefix'),
+            'charset' => 'UTF8MB4'
+        ];
+        $validate = new validate();
+        if ($validate->only(['hostname', 'hostport', 'database', 'username', 'password', 'prefix'])->check($data)) {
+            return $data;
+        } else {
+            return $validate->getError();
+        }
+    }
+
     //第三步表单验证
     public function step3()
     {
@@ -15,7 +35,7 @@ class Install
             'manager_enter' => Request::post('manager_enter')
         ];
         $validate = new validate();
-        if ($validate->scene('step3')->check($data)) {
+        if ($validate->only(['web_name', 'manager_enter'])->check($data)) {
             if (substr(Request::post('manager_enter'), -4) != '.php') {
                 return '后台入口必须以.php结尾！';
             }

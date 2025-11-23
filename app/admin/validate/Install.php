@@ -29,8 +29,4 @@ class Install extends Base
         'web_name' => '站点名称不得为空！',
         'manager_enter' => '后台入口不得为空！',
     ];
-    protected $scene = [
-        'step2' => ['hostname', 'hostport', 'database', 'username', 'password', 'prefix'],
-        'step3' => ['web_name', 'manager_enter'],
-    ];
 }
