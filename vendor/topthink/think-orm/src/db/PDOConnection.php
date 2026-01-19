@@ -85,6 +85,8 @@ abstract class PDOConnection extends Connection
         'break_match_str' => [],
         // 自动参数绑定
         'auto_param_bind' => true,
+        // 数据库时区设置
+        'timezone'        => '',
     ];
 
     /**
@@ -586,6 +588,10 @@ abstract class PDOConnection extends Connection
                 $this->trigger('CONNECT:[ UseTime:' . number_format(microtime(true) - $startTime, 6) . 's ] ' . $config['dsn']);
             }
 
+            // 设置数据库时区
+            $this->setTimezone($this->links[$linkNum], $config['timezone']);
+
+            $this->db->trigger('after_connect', $this->links[$linkNum]);
             return $this->links[$linkNum];
         } catch (\PDOException $e) {
             if ($autoConnection) {
@@ -954,16 +960,22 @@ abstract class PDOConnection extends Connection
      * 使用游标查询记录.
      *
      * @param BaseQuery $query 查询对象
+     * @param bool $unbuffered 是否开启无缓冲查询（仅限mysql）
      *
      * @return \Generator
      */
-    public function cursor(BaseQuery $query)
+    public function cursor(BaseQuery $query, bool $unbuffered = false)
     {
         // 分析查询表达式
         $options = $query->parseOptions();
 
         // 生成查询SQL
         $sql = $this->builder->select($query);
+        
+        // 检查是否需要无缓冲查询（仅对MySQL且支持该方法时生效）
+        if ($unbuffered && method_exists($this, 'cursorUnbuffered')) {
+            return $this->cursorUnbuffered($query, $sql);
+        }
 
         // 执行查询操作
         return $this->getCursor($query, $sql, $query->getModel());
@@ -1999,5 +2011,44 @@ abstract class PDOConnection extends Connection
      */
     public function rollbackXa(string $xid): void
     {
+    }
+
+    /**
+     * 设置数据库时区.
+     *
+     * @param PDO   $pdo       PDO实例
+     * @param string $timezone 时区名称，如 'Asia/Shanghai' 或 '+08:00'
+     *
+     * @return void
+     */
+    protected function setTimezone(PDO $pdo, string $timezone): void
+    {
+        if (empty($timezone)) {
+            return;
+        }
+
+        try {
+            $sql = $this->getSetTimezoneSql($timezone);
+            if (!empty($sql)) {
+                $pdo->exec($sql);
+            }
+        } catch (\Exception $e) {
+            // 时区设置失败，记录日志但不中断连接
+            $this->db->log('Set timezone failed: ' . $e->getMessage(), 'warning');
+        }
+    }
+
+    /**
+     * 获取设置时区的SQL语句.
+     * 子类应重写此方法以提供数据库特定的时区设置SQL.
+     *
+     * @param string $timezone 时区名称
+     *
+     * @return string
+     */
+    protected function getSetTimezoneSql(string $timezone): string
+    {
+        // 默认实现，子类应重写此方法
+        return '';
     }
 }

@@ -4,14 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita9a26ec5f826e72569c88612dda42853
+class ComposerStaticInitd011e134d1acc4431ea1478829c15198
 {
     public static $files = array (
         '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
         '15ec93fa4ce4b2d53816a1a5f2c514e2' => __DIR__ . '/..' . '/topthink/think-validate/src/helper.php',
         '7448f3465e10b5f033e4babb31eb0b06' => __DIR__ . '/..' . '/topthink/think-orm/src/helper.php',
         '35fab96057f1bf5e7aba31a8a6d5fdde' => __DIR__ . '/..' . '/topthink/think-orm/stubs/load_stubs.php',
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
@@ -75,13 +74,13 @@ class ComposerStaticInita9a26ec5f826e72569c88612dda42853
         ),
         'think\\' => 
         array (
-            0 => __DIR__ . '/..' . '/topthink/framework/src/think',
-            1 => __DIR__ . '/..' . '/topthink/think-container/src',
-            2 => __DIR__ . '/..' . '/topthink/think-helper/src',
+            0 => __DIR__ . '/..' . '/topthink/think-filesystem/src',
+            1 => __DIR__ . '/..' . '/topthink/think-template/src',
+            2 => __DIR__ . '/..' . '/topthink/framework/src/think',
             3 => __DIR__ . '/..' . '/topthink/think-orm/src',
-            4 => __DIR__ . '/..' . '/topthink/think-template/src',
-            5 => __DIR__ . '/..' . '/topthink/think-validate/src',
-            6 => __DIR__ . '/..' . '/topthink/think-filesystem/src',
+            4 => __DIR__ . '/..' . '/topthink/think-validate/src',
+            5 => __DIR__ . '/..' . '/topthink/think-container/src',
+            6 => __DIR__ . '/..' . '/topthink/think-helper/src',
         ),
         'app\\' => 
         array (
@@ -136,10 +135,10 @@ class ComposerStaticInita9a26ec5f826e72569c88612dda42853
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita9a26ec5f826e72569c88612dda42853::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita9a26ec5f826e72569c88612dda42853::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr0 = ComposerStaticInita9a26ec5f826e72569c88612dda42853::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInita9a26ec5f826e72569c88612dda42853::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd011e134d1acc4431ea1478829c15198::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd011e134d1acc4431ea1478829c15198::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr0 = ComposerStaticInitd011e134d1acc4431ea1478829c15198::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInitd011e134d1acc4431ea1478829c15198::$classMap;
 
         }, null, ClassLoader::class);
     }
