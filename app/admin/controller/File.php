@@ -107,7 +107,7 @@ class File extends Base
                 }
                 $output = '';
                 foreach ($outputAll2 as $key => $value) {
-                    $temp = mb_convert_encoding(file_get_contents($dirOutput . $value), 'UTF-8', 'GB2312');
+                    $temp = mb_convert_encoding(file_get_contents($dirOutput . $value), 'UTF-8', 'GBK');
                     if ($key != 0) {
                         $temp = implode("\n", array_slice(explode("\n", $temp), 1));
                     }
