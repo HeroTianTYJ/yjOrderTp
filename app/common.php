@@ -1,9 +1,7 @@
 <?php
 
-use app\admin\model;
 use czdb\DbSearcher;
 use think\facade\Config;
-use think\facade\Console;
 use think\facade\Request;
 use think\facade\Route;
 use think\facade\Session;
@@ -237,13 +235,17 @@ function getUserIp()
     return '127.0.0.1';
 }
 
-//生成数据表缓存
+//删除数据表缓存
 function databaseSchema()
 {
-    $Common = new model\Common();
-    foreach ($Common->info() as $value) {
-        if (trim(Console::call('optimize:schema', ['--table', $value['Name']])->fetch()) != '<info>Succeed!</info>') {
-            return false;
+    $cache = ROOT_DIR . '/runtime/cache';
+    if (is_dir($cache)) {
+        foreach (scandir($cache) as $value) {
+            if (preg_match('/[a-z0-9]{32}\.php$/', $value)) {
+                if (!unlink($cache . '/' . $value)) {
+                    return false;
+                }
+            }
         }
     }
     return true;
