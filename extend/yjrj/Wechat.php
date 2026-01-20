@@ -51,16 +51,12 @@ class Wechat
         exit;
     }
 
-    public function getUserInfo($authOnly = false, $lang = 'zh_CN')
+    public function getUserInfo($code = '', $authOnly = true, $lang = 'zh_CN')
     {
-        $code = $_GET['code'] ?? '';
-        if ($code) {
-            $result = $this->sendGet(self::SNS_URL_PREFIX . '/oauth2/access_token?appid=' . $this->appId . '&secret=' .
-                $this->appSecret . '&code=' . $code . '&grant_type=authorization_code');
-            return $authOnly ? $result : $this->sendGet(self::SNS_URL_PREFIX . '/userinfo?access_token=' .
-                $result['access_token'] . '&openid=' . $result['openid'] . '&lang=' . $lang);
-        }
-        return false;
+        $result = $this->sendGet(self::SNS_URL_PREFIX . '/oauth2/access_token?appid=' . $this->appId . '&secret=' .
+            $this->appSecret . '&code=' . $code . '&grant_type=authorization_code');
+        return $authOnly ? $result : $this->sendGet(self::SNS_URL_PREFIX . '/userinfo?access_token=' .
+            $result['access_token'] . '&openid=' . $result['openid'] . '&lang=' . $lang);
     }
 
     public function getAccessToken()

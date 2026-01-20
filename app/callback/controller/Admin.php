@@ -34,7 +34,7 @@ class Admin extends Login
                 ]);
             }
             $Manager = new model\Manager();
-            $userInfo = $Wechat->getUserInfo();
+            $userInfo = $Wechat->getUserInfo(Request::get('code'));
             $managerWechatLogin = isset($userInfo['unionid']) ?
                 $Manager->wechatLogin($userInfo['unionid']) :
                 $Manager->wechatLogin2($userInfo['openid']);
@@ -76,7 +76,7 @@ class Admin extends Login
                 ]);
             }
             $Manager = new model\Manager();
-            $userInfo = $Wechat->getUserInfo();
+            $userInfo = $Wechat->getUserInfo(Request::get('code'));
             if (
                 isset($userInfo['unionid']) ?
                     $Manager->wechatLogin($userInfo['unionid']) :
