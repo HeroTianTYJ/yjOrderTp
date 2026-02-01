@@ -149,7 +149,9 @@ class WechatPay
         $curl = curl_init();
         curl_setopt_array($curl, $option);
         $content = json_decode(curl_exec($curl), true);
-        curl_close($curl);
+        if (version_compare(PHP_VERSION, '8.5.0', '<')) {
+            curl_close($curl);
+        }
         return $content[$field] ?? $content;
     }
 }

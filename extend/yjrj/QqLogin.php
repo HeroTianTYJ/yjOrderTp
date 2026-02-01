@@ -73,7 +73,9 @@ class QqLogin
         $curl = curl_init();
         curl_setopt_array($curl, $option);
         $content = curl_exec($curl);
-        curl_close($curl);
+        if (version_compare(PHP_VERSION, '8.5.0', '<')) {
+            curl_close($curl);
+        }
         return $content;
     }
 }
