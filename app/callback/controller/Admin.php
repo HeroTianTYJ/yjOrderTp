@@ -33,8 +33,11 @@ class Admin extends Login
                     'is_mp' => false
                 ]);
             }
-            $Manager = new model\Manager();
             $userInfo = $Wechat->getUserInfo(Request::get('code'));
+            if ($Wechat->errMsg) {
+                return $this->failed('微信登录失败，请重试，错误信息：' . $Wechat->errMsg);
+            }
+            $Manager = new model\Manager();
             $managerWechatLogin = isset($userInfo['unionid']) ?
                 $Manager->wechatLogin($userInfo['unionid']) :
                 $Manager->wechatLogin2($userInfo['openid']);
@@ -75,8 +78,11 @@ class Admin extends Login
                     'is_mp' => false
                 ]);
             }
-            $Manager = new model\Manager();
             $userInfo = $Wechat->getUserInfo(Request::get('code'));
+            if ($Wechat->errMsg) {
+                return $this->failed('微信绑定失败，请重试，错误信息：' . $Wechat->errMsg, 0);
+            }
+            $Manager = new model\Manager();
             if (
                 isset($userInfo['unionid']) ?
                     $Manager->wechatLogin($userInfo['unionid']) :
