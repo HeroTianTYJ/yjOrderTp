@@ -123,7 +123,7 @@ return [
         ]);
         $Wechat->getAccessToken();
         $html = '<meta charset="utf-8">';
-        if ($Wechat->errMsg == 'no access') {
+        if ($Wechat->errMsg == '') {
             $html .= '<p>IP白名单配置正常，无需再配置</p>';
         } elseif (preg_match('/invalid ip (.*) ipv6 (.*), not in whitelist rid:/', $Wechat->errMsg, $ip)) {
             $html .= '<p>IPv4地址：' . $ip[1] . '</p><p>IPv6地址：' . $ip[2] . '（如果IPv6地址前包含::ffff:，则无需配置IPv6地址）</p>';

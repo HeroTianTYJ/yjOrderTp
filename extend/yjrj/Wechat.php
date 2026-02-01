@@ -6,7 +6,7 @@ use think\facade\Config;
 
 class Wechat
 {
-    public string $errMsg = 'no access';
+    public string $errMsg = '';
 
     private string $appId;
     private string $appSecret;
