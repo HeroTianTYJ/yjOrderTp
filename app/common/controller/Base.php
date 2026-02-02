@@ -56,7 +56,7 @@ class Base
             'LocationContent' => $locationUrl ? '如果您的浏览器没有自动跳转，请点击这里' : '点击这里返回上一页',
             'LocationSecond' => $locationSecond
         ]);
-        return $this->view('../../common/view/public/tip', 404);
+        return Response::create('../../common/view/public/tip', 'view', 404);
     }
     protected function error($tipContent = '', $locationSecond = 5, $locationUrl = '')
     {
@@ -95,9 +95,9 @@ let CONFIG = {
     }
 
     //模板引入方法重写
-    protected function view($template = '', $code = 200)
+    protected function view($template = '')
     {
-        return Response::create($template, 'view', $code);
+        return View::fetch($template);
     }
 
     //加载自定义配置文件

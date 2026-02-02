@@ -74,7 +74,7 @@ class Base extends \app\common\controller\Base
     }
 
     //模板引入方法重写
-    protected function view($template = '', $code = 200)
+    protected function view($template = '')
     {
         $run = '';
         if (Config::get('app.demo')) {
@@ -82,7 +82,7 @@ class Base extends \app\common\controller\Base
 <script type="text/javascript" src="https://hm.baidu.com/hm.js?c6bb5df23fe4ee546e63006da2093d81" async></script>';
         }
         View::assign(['Run' => $run]);
-        return parent::view($template, $code);
+        return parent::view($template);
     }
 
     //后台导航
