@@ -29,7 +29,7 @@ CONFIG['UPLOAD_SERVER'] = '{:url("/common/czdb")}';
 
 <form method="post" action="" class="form layui-form">
   <table class="column">
-    <tr><td>软件机器码：</td><td><input type="text" value="{:md5(passEncode($_SERVER['HTTP_HOST']))}" class="text" readonly></td><td>此码会根据域名的变动而变动</td></tr>
+    <tr><td>软件机器码：</td><td><input type="text" value="{:md5(passEncode(request()->server('HTTP_HOST')))}" class="text" readonly></td><td>此码会根据域名的变动而变动</td></tr>
     <tr><td>OpenID：</td><td><input type="text" name="openid" value="{:config('system.openid')}" class="text"></td></tr>
     <tr><td>站点名称：</td><td><input type="text" name="web_name" value="{:config('system.web_name')}" class="text"></td></tr>
     <tr><td>管理员邮箱：</td><td><input type="text" name="admin_mail" value="{:config('system.admin_mail')}" class="text"></td><td>多个邮箱请用“,”隔开，不得与<a href="{:url('/smtp/index')}">SMTP服务器</a>模块中的邮箱重复。<a href="https://www.yjrj.cn/help/detail.html?id=1" target="_blank">如何设置短信提醒？</a></td></tr>

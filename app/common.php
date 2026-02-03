@@ -56,9 +56,9 @@ function downloadFileToLocal($content, $filename)
 {
     ob_end_clean();
     header('Content-Encoding:none');
-    header('Content-Type:application/octet' . (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') ? '' : '-') . 'stream');
+    header('Content-Type:application/octet' . (strpos(Request::server('HTTP_USER_AGENT'), 'MSIE') ? '' : '-') . 'stream');
     header('Content-Disposition:' .
-        (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') ? 'inline' : 'attachment') . ';filename=' . $filename);
+        (strpos(Request::server('HTTP_USER_AGENT'), 'MSIE') ? 'inline' : 'attachment') . ';filename=' . $filename);
     header('Content-Length:' . strlen($content));
     header('Pragma:no-cache');
     header('Expires:0');
@@ -228,8 +228,8 @@ function sendSms($mobile, $content)
 function getUserIp()
 {
     foreach (['HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'] as $key) {
-        if (!empty($_SERVER[$key])) {
-            return filter_var(explode(',', $_SERVER[$key])[0], FILTER_VALIDATE_IP) ?: '127.0.0.1';
+        if (Request::server($key)) {
+            return filter_var(explode(',', Request::server($key))[0], FILTER_VALIDATE_IP) ?: '127.0.0.1';
         }
     }
     return '127.0.0.1';
@@ -344,30 +344,30 @@ function permitDataIntersect($permitData = [])
 //获取用户设备
 function device()
 {
-    if (strstr($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger')) {
-        if (strstr(strtolower($_SERVER['HTTP_USER_AGENT']), 'miniprogram')) {
+    if (strstr(Request::server('HTTP_USER_AGENT'), 'MicroMessenger')) {
+        if (strstr(strtolower(Request::server('HTTP_USER_AGENT')), 'miniprogram')) {
             return 'wxxcx';
-        } elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'OpenHarmony')) {
+        } elseif (strstr(Request::server('HTTP_USER_AGENT'), 'OpenHarmony')) {
             return 'harmonyWechat';
-        } elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'Android')) {
+        } elseif (strstr(Request::server('HTTP_USER_AGENT'), 'Android')) {
             return 'androidWechat';
-        } elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'iPhone OS')) {
+        } elseif (strstr(Request::server('HTTP_USER_AGENT'), 'iPhone OS')) {
             return 'iphoneWechat';
-        } elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'Windows NT')) {
+        } elseif (strstr(Request::server('HTTP_USER_AGENT'), 'Windows NT')) {
             return 'windowsWechat';
-        } elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'Mac OS')) {
+        } elseif (strstr(Request::server('HTTP_USER_AGENT'), 'Mac OS')) {
             return 'macWechat';
         }
     } else {
-        if (strstr($_SERVER['HTTP_USER_AGENT'], 'OpenHarmony')) {
+        if (strstr(Request::server('HTTP_USER_AGENT'), 'OpenHarmony')) {
             return 'harmony';
-        } elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'Android')) {
+        } elseif (strstr(Request::server('HTTP_USER_AGENT'), 'Android')) {
             return 'android';
-        } elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'iPhone OS')) {
+        } elseif (strstr(Request::server('HTTP_USER_AGENT'), 'iPhone OS')) {
             return 'iphone';
-        } elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'Windows NT')) {
+        } elseif (strstr(Request::server('HTTP_USER_AGENT'), 'Windows NT')) {
             return 'windows';
-        } elseif (strstr($_SERVER['HTTP_USER_AGENT'], 'Mac OS')) {
+        } elseif (strstr(Request::server('HTTP_USER_AGENT'), 'Mac OS')) {
             return 'mac';
         }
     }

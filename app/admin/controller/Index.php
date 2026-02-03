@@ -5,6 +5,7 @@ namespace app\admin\controller;
 use app\admin\model;
 use app\common\controller\Auth;
 use think\facade\Config;
+use think\facade\Request;
 use think\facade\Session;
 use think\facade\View;
 
@@ -85,7 +86,7 @@ class Index extends Base
             }
             if (isDataPermission('order', 'count')) {
                 $authValidate = (new Auth())->validate('orderCount');
-                $url = 'https://www.yjrj.cn/mp/member.php?keyword=' . md5(passEncode($_SERVER['HTTP_HOST']));
+                $url = 'https://www.yjrj.cn/mp/member.php?keyword=' . md5(passEncode(Request::server('HTTP_HOST')));
                 $data['订单'][] = ['剩余订单量', $authValidate['state'] == 1 ?
                     $authValidate['content'] . ($authValidate['content'] != '不限量' ?
                         '（<a href="' . $url . '" target="_blank">充值</a>）' : '') :
