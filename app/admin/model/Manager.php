@@ -53,9 +53,9 @@ class Manager extends Model
                 $map['where'] .= ' AND (`wechat_open_id`<>\'\' OR `wechat_union_id`<>\'\')';
             }
             if (Request::get('qq', -1) == 0) {
-                $map['where'] .= ' AND `qq_open_id`=\'\'';
+                $map['where'] .= ' AND `qq_open_id`=\'\' AND `qq_union_id`=\'\'';
             } elseif (Request::get('qq') == 1) {
-                $map['where'] .= ' AND `qq_open_id`<>\'\'';
+                $map['where'] .= ' AND (`qq_open_id`<>\'\' OR `qq_union_id`<>\'\')';
             }
             if (Request::get('create_time1')) {
                 $map['where'] .= ' AND `create_time`>=:create_time1';
@@ -66,7 +66,7 @@ class Manager extends Model
                 $map['value']['create_time2'] = Request::get('create_time2') . ' 23:59:59';
             }
             return $this->field('id,name,level_id,is_activation,permit_group_id,order_permit_id,wechat_open_id,' .
-                'wechat_union_id,qq_open_id,create_time')
+                'wechat_union_id,qq_open_id,qq_union_id,create_time')
                 ->where($map['where'], $map['value'])
                 ->order(['create_time' => 'DESC'])
                 ->paginate(Config::get('app.page_size'));
@@ -97,8 +97,8 @@ class Manager extends Model
             ];
             $validate = new validate();
             if ($validate->only(['name', 'pass'])->check($data)) {
-                return $this->field('id,name,pass,level_id,is_activation,permit_group_id,order_permit_id,wechat_open_id,' .
-                    'wechat_union_id,qq_open_id')
+                return $this->field('id,name,pass,level_id,is_activation,permit_group_id,order_permit_id,' .
+                    'wechat_open_id,wechat_union_id,qq_open_id,qq_union_id')
                     ->where(['name' => Request::post('name')])
                     ->find();
             } else {
@@ -115,7 +115,7 @@ class Manager extends Model
     {
         try {
             return $this->field('id,name,pass,level_id,is_activation,permit_group_id,order_permit_id,wechat_open_id,' .
-                'wechat_union_id,qq_open_id,create_time')
+                'wechat_union_id,qq_open_id,qq_union_id,create_time')
                 ->where(['id' => $id ?: Request::post('id')])
                 ->find();
         } catch (Exception $e) {
@@ -247,7 +247,7 @@ class Manager extends Model
             $data['wechat_open_id'] = $data['wechat_union_id'] = '';
         }
         if (Request::post('qq_open_id')) {
-            $data['qq_open_id'] = '';
+            $data['qq_open_id'] = $data['qq_union_id'] = '';
         }
         $validate = new validate();
         if ($validate->only($scene)->check($data)) {
@@ -289,16 +289,17 @@ class Manager extends Model
     }
 
     //绑定和解绑微信
-    public function wechatOpenId($wechatOpenId = '', $wechatUnionId = '', $id = 0)
+    public function wechatOpenId($id = 0, $wechatOpenId = '', $wechatUnionId = '')
     {
         return $this->where(['id' => $id ?: Request::post('id')])
             ->update(['wechat_open_id' => $wechatOpenId, 'wechat_union_id' => $wechatUnionId]);
     }
 
     //绑定和解绑QQ
-    public function qqOpenId($qqOpenId = '', $id = 0)
+    public function qqOpenId($id = 0, $qqOpenId = '', $qqUnionId = '')
     {
-        return $this->where(['id' => $id ?: Request::post('id')])->update(['qq_open_id' => $qqOpenId]);
+        return $this->where(['id' => $id ?: Request::post('id')])
+            ->update(['qq_open_id' => $qqOpenId, 'qq_union_id' => $qqUnionId]);
     }
 
     //删除

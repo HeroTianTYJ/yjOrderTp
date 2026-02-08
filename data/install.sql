@@ -39,6 +39,7 @@ CREATE TABLE `yjorder_manager` (
   `wechat_open_id` char(28) NOT NULL DEFAULT '',
   `wechat_union_id` char(28) NOT NULL DEFAULT '',
   `qq_open_id` char(32) NOT NULL DEFAULT '',
+  `qq_union_id` char(32) NOT NULL DEFAULT '',
   `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;

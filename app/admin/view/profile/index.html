@@ -22,7 +22,7 @@
     <tr><td>新 密 码：</td><td><input type="password" name="pass" class="text"></td><td>留空则不修改</td></tr>
     <tr><td>重复密码：</td><td><input type="password" name="repass" class="text"></td></tr>
     <tr><td>微信绑定：</td><td><span class="wechat_yes {if condition="!$One['wechat_open_id']&&!$One['wechat_union_id']"}none{/if}">是 | <div class="check-box"><label><input type="checkbox" name="wechat_open_id" value="1">解除绑定</label></div></span><span class="wechat_no {if condition="$One['wechat_open_id']||$One['wechat_union_id']"}none{/if}">否 | <a href="javascript:" onclick="window.open('{:url('/'.parse_name(request()->controller()).'/wechat')}','wechat')">点此绑定</a></span></td></tr>
-    <tr><td>QQ绑定：</td><td><span class="qq_yes {if condition="!$One['qq_open_id']"}none{/if}">是 | <div class="check-box"><label><input type="checkbox" name="qq_open_id" value="1">解除绑定</label></div></span><span class="qq_no {if condition="$One['qq_open_id']"}none{/if}">否 | <a href="javascript:" onclick="window.open('{:url('/'.parse_name(request()->controller()).'/qq')}','qq')">点此绑定</a></span></td></tr>
+    <tr><td>QQ绑定：</td><td><span class="qq_yes {if condition="!$One['qq_open_id']&&!$One['qq_union_id']"}none{/if}">是 | <div class="check-box"><label><input type="checkbox" name="qq_open_id" value="1">解除绑定</label></div></span><span class="qq_no {if condition="$One['qq_open_id']||$One['qq_union_id']"}none{/if}">否 | <a href="javascript:" onclick="window.open('{:url('/'.parse_name(request()->controller()).'/qq')}','qq')">点此绑定</a></span></td></tr>
     <tr><td>注册时间：</td><td>{$One['create_time']|timeFormat}</td></tr>
     <tr><td colspan="2" class="left"><input type="submit" value="确认修改" class="button"></td></tr>
   </table>

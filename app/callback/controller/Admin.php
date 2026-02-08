@@ -85,19 +85,21 @@ class Admin extends Login
             $Manager = new model\Manager();
             if (
                 isset($userInfo['unionid']) ?
-                    $Manager->wechatLogin($userInfo['unionid']) :
-                    $Manager->wechatLogin2($userInfo['openid'])
+                    $Manager->wechatLogin($userInfo['unionid']) : $Manager->wechatLogin2($userInfo['openid'])
             ) {
-                return $this->failed('此微信已绑定了其它账号，无法再绑定此账号！', 0);
+                return $this->failed('此微信号已绑定了其它账号，无法再绑定此账号！', 0);
             }
             if (
                 $Manager->wechatOpenId(
+                    Session::get(Config::get('system.session_key_admin') . '.manage_info.id'),
                     $userInfo['openid'],
-                    $userInfo['unionid'] ?? '',
-                    Session::get(Config::get('system.session_key_admin') . '.manage_info.id')
+                    $userInfo['unionid'] ?? ''
                 )
             ) {
-                return in_array(device(), ['harmonyWechat', 'androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat']) ?
+                return in_array(
+                    device(),
+                    ['harmonyWechat', 'androidWechat', 'iphoneWechat', 'windowsWechat', 'macWechat']
+                ) ?
                     $this->succeed(Config::get('url.web1') . Config::get('system.manager_enter') .
                         '/profile/index.html') :
                     '<script type="text/javascript">window.opener.location.reload();window.close();</script>';
@@ -111,13 +113,22 @@ class Admin extends Login
 
     public function qqLogin()
     {
-        if (Request::get('state') && Request::get('code')) {
-            $openid = (new QqLogin([
+        if (Request::get('code') && Request::get('state')) {
+            $QqLogin = new QqLogin([
                 'app_id' => Config::get('system.qq_app_id'),
                 'app_key' => Config::get('system.qq_app_key'),
-                'redirect_uri' => Config::get('url.web1') . 'callback.php/admin/qqLogin.html'
-            ]))->getOpenid();
-            $managerQqLogin = (new model\Manager())->qqLogin($openid);
+                'redirect_uri' => Config::get('url.web1') . 'callback.php/admin/qqLogin.html',
+                'bridge' => Config::get('system.qq_bridge_domain') ? Config::get('system.qq_bridge_domain') .
+                    Config::get('system.index_php') . 'bridge/qq.html' : ''
+            ]);
+            $userInfo = $QqLogin->getUserInfo(Request::get('code'), Request::get('state'));
+            if ($QqLogin->error) {
+                return $this->failed('QQ登录失败，请重试，错误信息：' . $QqLogin->error);
+            }
+            $Manager = new model\Manager();
+            $managerQqLogin = isset($userInfo['unionid']) ?
+                $Manager->qqLogin($userInfo['unionid']) :
+                $Manager->qqLogin2($userInfo['openid']);
             if ($managerQqLogin) {
                 $loginDo = $this->loginDo($managerQqLogin);
                 if ($loginDo != '1') {
@@ -125,10 +136,11 @@ class Admin extends Login
                 }
                 return $this->succeed(Config::get('url.web1') . Config::get('system.manager_enter'), '登录成功，跳转中。。。');
             } else {
-                Session::set(
-                    Config::get('system.session_key_admin') . '.login_info',
-                    ['type' => 'qq', 'openid' => $openid]
-                );
+                $loginInfo = ['type' => 'qq', 'openid' => $userInfo['openid']];
+                if (isset($userInfo['unionid'])) {
+                    $loginInfo['unionid'] = $userInfo['unionid'];
+                }
+                Session::set(Config::get('system.session_key_admin') . '.login_info', $loginInfo);
                 return $this->succeed(
                     Config::get('url.web1') . Config::get('system.manager_enter'),
                     '您的QQ号尚未绑定管理员账号，即将跳转到绑定页面。。。'
@@ -141,19 +153,29 @@ class Admin extends Login
 
     public function qqBind()
     {
-        if (Request::get('state') && Request::get('code')) {
-            $Manager = new model\Manager();
-            $openId = (new QqLogin([
+        if (Request::get('code') && Request::get('state')) {
+            $QqLogin = new QqLogin([
                 'app_id' => Config::get('system.qq_app_id'),
                 'app_key' => Config::get('system.qq_app_key'),
-                'redirect_uri' => Config::get('url.web1') . 'callback.php/admin/qqBind.html'
-            ]))->getOpenid();
-            if ($Manager->qqLogin($openId)) {
-                return $this->failed('此QQ已绑定了其它账号，无法再绑定此账号！', 0);
+                'redirect_uri' => Config::get('url.web1') . 'callback.php/admin/qqBind.html',
+                'bridge' => Config::get('system.qq_bridge_domain') ? Config::get('system.qq_bridge_domain') .
+                    Config::get('system.index_php') . 'bridge/qq.html' : ''
+            ]);
+            $userInfo = $QqLogin->getUserInfo(Request::get('code'), Request::get('state'));
+            if ($QqLogin->error) {
+                return $this->failed('QQ绑定失败，请重试，错误信息：' . $QqLogin->error, 0);
+            }
+            $Manager = new model\Manager();
+            if (
+                isset($userInfo['unionid']) ?
+                    $Manager->qqLogin($userInfo['unionid']) : $Manager->qqLogin2($userInfo['openid'])
+            ) {
+                return $this->failed('此QQ号已绑定了其它账号，无法再绑定此账号！', 0);
             }
             return $Manager->qqOpenId(
-                $openId,
-                Session::get(Config::get('system.session_key_admin') . '.manage_info.id')
+                Session::get(Config::get('system.session_key_admin') . '.manage_info.id'),
+                $userInfo['openid'],
+                $userInfo['unionid'] ?? ''
             ) ?
                 '<script type="text/javascript">window.opener.location.reload();window.close();</script>' :
                 $this->failed('QQ绑定失败，请重试！', 0);

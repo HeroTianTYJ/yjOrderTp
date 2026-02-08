@@ -70,7 +70,7 @@ CONFIG['UPLOAD_SERVER'] = '{:url("/common/czdb")}';
     <tr><td></td><td class="tip" colspan="2">4、<a href="https://www.yjrj.cn/18" target="_blank">点击此处</a>登录到微信支付商户平台的开发配置中，在“支付授权目录”设置项中添加{:config('url.web1')}{:config('system.index_php')}pay/wechatPay/order_id/。</td></tr>
   </table>
   <table class="column none">
-    <tr><td class="left tip" colspan="3" style="word-break:break-all;"><a href="https://www.yjrj.cn/19" target="_blank">申请教程</a>，申请时，请将网站地址填写为：<span class="green">{:config('url.web3')}</span>，网站回调地址填写为：<span class="green">{:config('url.web1')}callback.php/admin/qqLogin.html;{:config('url.web1')}callback.php/admin/qqBind.html</span>。申请通过后，查看应用详情，将获取到的APP ID和APP Key填入下方表单中。</td></tr>
+    <tr><td class="left tip" colspan="3" style="word-break:break-all;"><a href="https://www.yjrj.cn/19" target="_blank">申请教程</a>，申请时，请将网站地址填写为：<span class="green">{:config('url.web3')}</span>，网站回调地址填写为：<span class="green">{:config('url.web1')}callback.php/admin/qqLogin.html;{:config('url.web1')}callback.php/admin/qqBind.html</span>。申请通过后，查看应用详情，将获取到的APP ID和APP Key填入下方表单中，然后在应用详情中点击“应用接口”，将unionid接口开启。</td></tr>
     <tr><td>APP ID：</td><td><input type="text" name="qq_app_id" value="{:config('system.qq_app_id')}" class="text"></td><td></td></tr>
     <tr><td>APP Key：</td><td><input type="text" name="qq_app_key" value="{:config('system.qq_app_key')}" class="text"></td><td></td></tr>
   </table>
