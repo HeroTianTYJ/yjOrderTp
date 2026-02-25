@@ -23,6 +23,7 @@ INSERT INTO `yjorder_field`(`id`,`name`,`is_default`) VALUES('8','电子邮箱',
 CREATE TABLE `yjorder_login_record_manager` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `manager_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `way_id` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
   `ip` char(39) NOT NULL DEFAULT '',
   `create_time` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   PRIMARY KEY (`id`)

@@ -21,7 +21,7 @@ class Login extends Base
                 if (passEncode(Request::post('pass')) != $managerLogin['pass']) {
                     return apiResponse('账号或密码不正确！', 0);
                 }
-                $loginDo = $this->loginDo($managerLogin);
+                $loginDo = $this->loginDo($managerLogin, Config::get('login_way.id.pass'));
                 if ($loginDo != '1') {
                     return $loginDo;
                 }
@@ -88,7 +88,7 @@ class Login extends Base
         )) ? 1 : 0;
     }
 
-    protected function loginDo($managerLogin)
+    protected function loginDo($managerLogin, $loginWayId = 0)
     {
         return (new Auth())->login($managerLogin);
     }

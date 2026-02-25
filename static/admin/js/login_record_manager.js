@@ -6,6 +6,10 @@ $(function () {
 
   // 搜索
   layui.use(['form'], function () {
+    // 登录方式
+    layui.form.on('select(way_id)', function (data) {
+      window.location.href = searchUrl('way_id=' + data.value);
+    });
     // 管理员
     layui.form.on('select(manager_id)', function (data) {
       window.location.href = searchUrl('manager_id=' + data.value);
@@ -35,5 +39,5 @@ $(function () {
 });
 
 function listItem (item) {
-  return '<tr class="item' + item['id'] + '"><td>' + item['manager'] + '</td><td>' + item['ip'] + '</td><td>' + item['create_time'] + '</td></tr>';
+  return '<tr class="item' + item['id'] + '"><td>' + item['manager'] + '</td><td>' + item['way'] + '</td><td>' + item['ip'] + '</td><td>' + item['create_time'] + '</td></tr>';
 }

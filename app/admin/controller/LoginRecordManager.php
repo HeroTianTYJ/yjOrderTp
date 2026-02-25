@@ -17,18 +17,18 @@ class LoginRecordManager extends Base
             foreach ($loginRecordManagerAll as $key => $value) {
                 $loginRecordManagerAll[$key] = $this->listItem($value);
             }
-            return $loginRecordManagerAll->items() ?
-                apiResponse('', 1, $loginRecordManagerAll->items()) : '';
+            return $loginRecordManagerAll->items() ? apiResponse('', 1, $loginRecordManagerAll->items()) : '';
         }
         View::assign(['Total' => $loginRecordManagerAll->total()]);
         Html::manager(Request::get('manager_id'));
+        Html::loginWay(Request::get('way_id'));
         return $this->view();
     }
 
     public function output()
     {
         if (Request::isAjax()) {
-            $output = '"管理员","登录IP","登录时间",';
+            $output = '"管理员","登录方式","登录IP","登录时间",';
             $LoginRecordManager = new model\LoginRecordManager();
             $loginRecordManagerAll = $LoginRecordManager->all2();
             if (count($loginRecordManagerAll)) {
@@ -36,13 +36,17 @@ class LoginRecordManager extends Base
                 foreach ($loginRecordManagerAll as $value) {
                     $managerOne = $Manager->one($value['manager_id']);
                     $output .= "\r\n" . '"' . ($managerOne ? $managerOne['name'] : '此管理员已被删除') . '","' .
-                        $value['ip'] . ' -- ' . ipGeolocation($value['ip']) . '","' . timeFormat($value['create_time']) .
-                        '",';
+                        ($value['way_id'] ? Config::get('login_way.name.' . $value['way_id'], '未知') : '-') . '","' .
+                        $value['ip'] . ' -- ' . ipGeolocation($value['ip']) . '","' .
+                        timeFormat($value['create_time']) . '",';
                 }
             }
-            $output = mb_convert_encoding($output, 'GBK', 'UTF-8');
-            $file = Config::get('dir.output') . 'login_manager_' . date('YmdHis') . '.csv';
-            if (file_put_contents(ROOT_DIR . '/' . $file, $output)) {
+            if (
+                file_put_contents(
+                    ROOT_DIR . '/' . Config::get('dir.output') . 'login_manager_' . date('YmdHis') . '.csv',
+                    mb_convert_encoding($output, 'GBK', 'UTF-8')
+                )
+            ) {
                 $LoginRecordManager->truncate();
                 return apiResponse('登录记录导出成功！');
             } else {
@@ -55,9 +59,10 @@ class LoginRecordManager extends Base
 
     private function listItem($item)
     {
-        $item['ip'] = keyword($item['ip']) . '<br>' . ipGeolocation($item['ip']);
         $managerOne = (new model\Manager())->one($item['manager_id']);
         $item['manager'] = $managerOne ? $managerOne['name'] : '此管理员已被删除';
+        $item['way'] = $item['way_id'] ? Config::get('login_way.name.' . $item['way_id'], '未知') : '-';
+        $item['ip'] = keyword($item['ip']) . '<br>' . ipGeolocation($item['ip']);
         $item['create_time'] = timeFormat($item['create_time']);
         return $item;
     }

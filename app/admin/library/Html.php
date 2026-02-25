@@ -264,4 +264,9 @@ class Html extends \app\common\library\Html
     {
         self::selectDataset((new model\OrderState())->all2(), 'OrderState', $id);
     }
+
+    public static function loginWay($id = 0)
+    {
+        self::selectArray(Config::get('login_way.name'), 'LoginWay', $id);
+    }
 }

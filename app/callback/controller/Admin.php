@@ -40,7 +40,7 @@ class Admin extends Login
             $Manager = new model\Manager();
             $managerOauthLogin = $Manager->oauthLogin('wechat', $userInfo['openid'], $userInfo['unionid'] ?? '');
             if ($managerOauthLogin) {
-                $loginDo = $this->loginDo($managerOauthLogin);
+                $loginDo = $this->loginDo($managerOauthLogin, Config::get('login_way.id.wechat'));
                 if ($loginDo != '1') {
                     return $loginDo;
                 }
@@ -122,7 +122,7 @@ class Admin extends Login
             $Manager = new model\Manager();
             $managerOauthLogin = $Manager->oauthLogin('qq', $userInfo['openid'], $userInfo['unionid']);
             if ($managerOauthLogin) {
-                $loginDo = $this->loginDo($managerOauthLogin);
+                $loginDo = $this->loginDo($managerOauthLogin, Config::get('login_way.id.qq'));
                 if ($loginDo != '1') {
                     return $loginDo;
                 }

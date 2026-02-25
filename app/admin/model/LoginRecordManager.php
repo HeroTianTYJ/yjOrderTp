@@ -33,7 +33,11 @@ class LoginRecordManager extends Model
                     $map['value']['manager_id'] = Request::get('manager_id');
                 }
             }
-            return $this->field('id,manager_id,ip,create_time')
+            if (Request::get('way_id')) {
+                $map['where'] .= ' AND `way_id`=:way_id';
+                $map['value']['way_id'] = Request::get('way_id');
+            }
+            return $this->field('id,manager_id,way_id,ip,create_time')
                 ->where($map['where'], $map['value'])
                 ->order(['create_time' => 'DESC'])
                 ->paginate(Config::get('app.page_size'));
@@ -47,7 +51,10 @@ class LoginRecordManager extends Model
     public function all2()
     {
         try {
-            return $this->field('manager_id,ip,create_time')->order(['create_time' => 'DESC'])->select()->toArray();
+            return $this->field('manager_id,way_id,ip,create_time')
+                ->order(['create_time' => 'DESC'])
+                ->select()
+                ->toArray();
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -59,10 +66,10 @@ class LoginRecordManager extends Model
     {
         try {
             return $this->field('ip,create_time')
-                   ->where(['manager_id' => Session::get(Config::get('system.session_key_admin') . '.manage_info.id')])
-                   ->order(['create_time' => 'DESC'])
-                   ->limit(1, 1)
-                   ->select()[0];
+                ->where(['manager_id' => Session::get(Config::get('system.session_key_admin') . '.manage_info.id')])
+                ->order(['create_time' => 'DESC'])
+                ->limit(1, 1)
+                ->select()[0];
         } catch (Exception $e) {
             echo $e->getMessage();
             return [];
@@ -70,9 +77,14 @@ class LoginRecordManager extends Model
     }
 
     //添加
-    public function add($managerId)
+    public function add($managerId = 0, $wayId = 0)
     {
-        return $this->insertGetId(['manager_id' => $managerId, 'ip' => getUserIp(), 'create_time' => now()]);
+        return $this->insertGetId([
+            'manager_id' => $managerId,
+            'way_id' => $wayId,
+            'ip' => getUserIp(),
+            'create_time' => now()
+        ]);
     }
 
     //清空表

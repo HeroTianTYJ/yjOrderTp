@@ -103,7 +103,7 @@ let CONFIG = {
     //加载自定义配置文件
     protected function loadConfig()
     {
-        foreach (['dir', 'file', 'pay_scene', 'payment', 'static', 'system', 'url'] as $value) {
+        foreach (['dir', 'file', 'login_way', 'pay_scene', 'payment', 'static', 'system', 'url'] as $value) {
             if (!Config::get($value)) {
                 Config::load('diy/' . $value, $value);
             }

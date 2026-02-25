@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use app\admin\library\Html;
 use app\admin\model;
 use think\facade\Config;
 use think\facade\Request;
@@ -35,10 +36,10 @@ class Profile extends Base
             foreach ($loginRecordManagerAll as $key => $value) {
                 $loginRecordManagerAll[$key] = $this->listItem($value);
             }
-            return $loginRecordManagerAll->items() ?
-                apiResponse('', 1, $loginRecordManagerAll->items()) : '';
+            return $loginRecordManagerAll->items() ? apiResponse('', 1, $loginRecordManagerAll->items()) : '';
         }
         View::assign(['Total' => $loginRecordManagerAll->total()]);
+        Html::loginWay(Request::get('way_id'));
         return $this->view();
     }
 
@@ -70,6 +71,7 @@ class Profile extends Base
 
     private function listItem($item)
     {
+        $item['way'] = $item['way_id'] ? Config::get('login_way.name.' . $item['way_id'], '未知') : '-';
         $item['ip'] = keyword($item['ip']) . '<br>' . ipGeolocation($item['ip']);
         $item['create_time'] = timeFormat($item['create_time']);
         return $item;

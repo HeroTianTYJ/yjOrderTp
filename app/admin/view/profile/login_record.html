@@ -14,7 +14,7 @@ CONFIG['LIST'] = window.location;
     <h2>登录记录</h2>
   
     <form method="get" action="" class="search layui-form" onsubmit="return false;">
-      <div class="search-text"><input type="text" name="keyword" value="{:input('get.keyword')}" class="text"><span class="iconfont icon-search"></span></div>
+      <select name="way_id" lay-search lay-filter="way_id"><option value="0">查看所有登录方式</option>{$LoginWay}</select> <div class="search-text"><input type="text" name="keyword" value="{:input('get.keyword')}" class="text"><span class="iconfont icon-search"></span></div>
     </form>
   
     <p class="clear"></p>
@@ -24,7 +24,7 @@ CONFIG['LIST'] = window.location;
 <div class="list">
   {if condition="$Total>0"}
   <table>
-    <thead><tr class="row1"><th style="width:450px;">登录IP</th><th style="width:160px;">登录时间</th></tr></thead>
+    <thead><tr class="row1"><th style="width:100px;">登录方式</th><th style="width:450px;">登录IP</th><th style="width:160px;">登录时间</th></tr></thead>
     <tbody class="items"></tbody>
   </table>
 
