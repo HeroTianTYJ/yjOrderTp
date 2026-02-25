@@ -3,6 +3,7 @@
 namespace yjrj;
 
 use think\facade\Config;
+use think\facade\Session;
 
 class Wechat
 {
@@ -10,18 +11,18 @@ class Wechat
 
     private string $appId;
     private string $appSecret;
-    private string $bridge;
+    private string $proxyUri;
     private bool $isMp;
 
     private const API_URL_PREFIX = 'https://api.weixin.qq.com/cgi-bin';
     private const SNS_URL_PREFIX = 'https://api.weixin.qq.com/sns';
     private const OPEN_URL_PREFIX = 'https://open.weixin.qq.com/connect';
 
-    public function __construct($config)
+    public function __construct($config = [])
     {
         $this->appId = $config['app_id'] ?? '';
         $this->appSecret = $config['app_secret'] ?? '';
-        $this->bridge = $config['bridge'] ?? '';
+        $this->proxyUri = $config['proxy_uri'] ?? '';
         $this->isMp = $config['is_mp'] ?? true;
     }
 
@@ -40,19 +41,26 @@ class Wechat
         return $config;
     }
 
-    public function oauthRedirect($redirectUrl, $state = '', $scope = 'userinfo')
+    public function oauthRedirect($redirectUri, $state = '', $scope = 'userinfo')
     {
-        header('Location:' . ($this->bridge ? $this->bridge . (strstr($this->bridge, '?') ? '&' : '?') . 'callback=' .
-                urlencode($redirectUrl) . '&scope=' . $scope : self::OPEN_URL_PREFIX . ($this->isMp ?
-                    '/oauth2/authorize?appid=' . $this->appId . '&redirect_uri=' . urlencode($redirectUrl) .
-                    '&response_type=code&scope=snsapi_' . $scope : '/qrconnect?appid=' . $this->appId .
-                    '&redirect_uri=' . urlencode($redirectUrl) . '&response_type=code&scope=snsapi_login') . '&state=' .
-                $state . '#wechat_redirect'));
-        exit;
+        if (!$state) {
+            $state = getKey(32);
+            Session::set('wechat_login_state', $state);
+        }
+        header('Location:' . ($this->proxyUri ? $this->proxyUri . (strstr($this->proxyUri, '?') ? '&' : '?') .
+                'callback=' . urlencode($redirectUri) . '&state=' . $state . '&scope=' . $scope :
+                self::OPEN_URL_PREFIX . ($this->isMp ? '/oauth2/authorize?appid=' . $this->appId . '&redirect_uri=' .
+                    urlencode($redirectUri) . '&response_type=code&scope=snsapi_' . $scope : '/qrconnect?appid=' .
+                    $this->appId . '&redirect_uri=' . urlencode($redirectUri) .
+                    '&response_type=code&scope=snsapi_login') . '&state=' . $state . '#wechat_redirect'));
     }
 
-    public function getUserInfo($code = '', $authOnly = true, $lang = 'zh_CN')
+    public function getUserInfo($code = '', $state = '', $authOnly = true, $lang = 'zh_CN')
     {
+        if ($state != Session::get('wechat_login_state')) {
+            $this->errMsg = 'state error';
+            return '';
+        }
         $result = $this->sendGet(self::SNS_URL_PREFIX . '/oauth2/access_token?appid=' . $this->appId . '&secret=' .
             $this->appSecret . '&code=' . $code . '&grant_type=authorization_code');
         return $authOnly ? $result : $this->sendGet(self::SNS_URL_PREFIX . '/userinfo?access_token=' .
@@ -149,19 +157,19 @@ return [
         return $content;
     }
 
-    private function getData($result, $returnField = false)
+    private function getData($result, $returnField = '')
     {
         if ($result) {
             $data = json_decode($result, true);
             if (!empty($data['errcode'])) {
                 $this->errMsg = $data['errmsg'];
-                return false;
+                return '';
             }
             if ($returnField) {
-                return $data[$returnField] ?? false;
+                return $data[$returnField] ?? '';
             }
             return $data;
         }
-        return false;
+        return '';
     }
 }

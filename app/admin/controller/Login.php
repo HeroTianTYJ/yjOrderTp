@@ -58,7 +58,7 @@ class Login extends Base
             'app_id' => Config::get('system.qq_app_id'),
             'app_key' => Config::get('system.qq_app_key'),
             'redirect_uri' => Config::get('url.web1') . 'callback.php/admin/qqLogin.html'
-        ]))->login();
+        ]))->oauthRedirect();
     }
 
     public function logout()

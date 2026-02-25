@@ -11,7 +11,7 @@ class QqLogin
     private string $appId;
     private string $appKey;
     private string $redirectUri;
-    private string $bridge;
+    private string $proxyUri;
 
     private const API_URL_PREFIX = 'https://graph.qq.com/oauth2.0';
     private const USER_URL_PREFIX = 'https://graph.qq.com/user/get_user_info';
@@ -21,23 +21,30 @@ class QqLogin
         $this->appId = $config['app_id'] ?? '';
         $this->appKey = $config['app_key'] ?? '';
         $this->redirectUri = $config['redirect_uri'];
-        $this->bridge = $config['bridge'] ?? '';
+        $this->proxyUri = $config['proxy_uri'] ?? '';
     }
 
-    public function login($state = '')
+    public function oauthRedirect($state = '')
     {
-        $state = $state ?: getKey(32);
-        Session::set('qq_login_state', $state);
-        header('Location:' . ($this->bridge ? $this->bridge . (strstr($this->bridge, '?') ? '&' : '?') . 'callback=' .
-                urlencode($this->redirectUri) . '&state=' . $state : self::API_URL_PREFIX .
+        if (!$state) {
+            $state = getKey(32);
+            Session::set('qq_login_state', $state);
+        }
+        header('Location:' . ($this->proxyUri ? $this->proxyUri . (strstr($this->proxyUri, '?') ? '&' : '?') .
+                'callback=' . urlencode($this->redirectUri) . '&state=' . $state : self::API_URL_PREFIX .
                 '/authorize?response_type=code&client_id=' . $this->appId . '&redirect_uri=' .
                 urlencode($this->redirectUri) . '&state=' . $state));
     }
 
     public function getUserInfo($code = '', $state = '', $authOnly = true)
     {
+        if ($state != Session::get('qq_login_state')) {
+            $this->error = 'state error';
+            return '';
+        }
+        Session::delete('qq_login_state');
         $userInfo = [];
-        $accessToken = $this->getAccessToken($code, $state);
+        $accessToken = $this->getAccessToken($code);
         if ($accessToken) {
             $data = $this->getData($this->curlGet(self::API_URL_PREFIX . '/me?access_token=' . $accessToken .
                 '&unionid=1'));
@@ -57,15 +64,10 @@ class QqLogin
         return $userInfo;
     }
 
-    private function getAccessToken($code = '', $state = '')
+    private function getAccessToken($code = '')
     {
-        if ($state != Session::get('qq_login_state')) {
-            $this->error = 'state error';
-            return '';
-        }
-        Session::delete('qq_login_state');
         $data = $this->curlGet(self::API_URL_PREFIX . '/token?grant_type=authorization_code&client_id=' . $this->appId .
-            '&redirect_uri=' . urlencode($this->bridge ?: $this->redirectUri) . '&client_secret=' . $this->appKey .
+            '&redirect_uri=' . urlencode($this->proxyUri ?: $this->redirectUri) . '&client_secret=' . $this->appKey .
             '&code=' . $code);
         if (substr($data, 0, 11) == 'callback( {') {
             $this->getData($data);
