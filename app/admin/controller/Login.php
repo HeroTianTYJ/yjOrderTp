@@ -90,6 +90,6 @@ class Login extends Base
 
     protected function loginDo($managerLogin, $loginWayId = 0)
     {
-        return (new Auth())->login($managerLogin);
+        return (new Auth())->login($managerLogin, $loginWayId);
     }
 }
